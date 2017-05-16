@@ -1,0 +1,132 @@
+<div>
+
+  <center>
+
+    <h2>Formulario Solicitudes</h2>
+
+      <form novalidate name="form" class="css-form">
+
+        <label>
+          <input required ng-pattern ="/^[a-zA-Z\s]*$/" type="text" ng-model="$ctrl.solicitud.nombre" name="sNombre" placeholder="Nombre"/><br />
+        </label>
+
+        <div ng-show="form.$submitted || form.sNombre.$touched">
+          <div ng-show="form.sNombre.$error.required">Digame su Nombre</div>
+        </div>
+
+        <label>
+          <input required ng-pattern ="/^[a-zA-Z\s]*$/" type="text" ng-model="$ctrl.solicitud.descripcion" name="sDescripcion" placeholder="Descripcion"/><br />
+        </label>
+
+        <div ng-show="form.$submitted || form.sDescripcion.$touched">
+          <div ng-show="form.sDescripcion.$error.required">Digame su Descripcion</div>
+        </div>
+
+        <label>
+          <input required type="date" ng-model="$ctrl.solicitud.fechaRecibida" name="sFechaRecibida" placeholder="fechaRecibida"/><br />
+        </label>
+
+        <div ng-show="form.$submitted || form.sFechaRecibida.$touched">
+          <div ng-show="form.sFechaRecibida.$error.required">Digame su fechaRecibida</div>
+        </div>
+
+        <label>
+          <input required ng-pattern ="/^[a-zA-Z\s]*$/" type="text" ng-model="$ctrl.solicitud.cliente" name="sCliente" placeholder="Cliente"/><br />
+        </label>
+
+        <div ng-show="form.$submitted || form.sCliente.$touched">
+          <div ng-show="form.sCliente.$error.required">Digame su Cliente</div>
+        </div>
+
+        <label>
+          <input required ng-pattern ="/^[a-zA-Z\s]*$/" type="text" ng-model="$ctrl.solicitud.brm" name="sBrm" placeholder="BRM"/><br />
+        </label>
+
+        <div ng-show="form.$submitted || form.sBrm.$touched">
+          <div ng-show="form.sBrm.$error.required">Digame su BRM</div>
+        </div>
+
+        <label>
+          <input required ng-pattern ="/^[a-zA-Z\s]*$/" type="text" ng-model="$ctrl.solicitud.adm" name="sAdm" placeholder="ADM"/><br />
+        </label>
+
+        <div ng-show="form.$submitted || form.sAdm.$touched">
+          <div ng-show="form.sAdm.$error.required">Digame su ADM</div>
+        </div>
+
+        <label>
+          <input required ng-pattern ="/^[a-zA-Z\s]*$/" type="text" ng-model="$ctrl.solicitud.perfil" name="sPerfil" placeholder="Perfil"/><br />
+        </label>
+
+        <div ng-show="form.$submitted || form.sPerfil.$touched">
+          <div ng-show="form.sPerfil.$error.required">Digame su Perfil</div>
+        </div>
+
+        <label>
+          <input required ng-pattern ="/^[a-zA-Z\s]*$/" type="text" ng-model="$ctrl.solicitud.reqObligatorios" name="sReqObligatorios" placeholder="ReqObligatorios"/><br />
+        </label>
+
+        <div ng-show="form.$submitted || form.sReqObligatorios.$touched">
+          <div ng-show="form.sReqObligatorios.$error.required">Digame sus ReqObligatorios</div>
+        </div>
+
+        <label>
+          <input required ng-pattern ="/^[a-zA-Z\s]*$/" type="text" ng-model="$ctrl.solicitud.reqDeseables" name="sReqDeseables" placeholder="ReqDeseables"/><br />
+        </label>
+
+        <div ng-show="form.$submitted || form.sReqDeseables.$touched">
+          <div ng-show="form.sReqDeseables.$error.required">Digame sus ReqDeseables</div>
+        </div>
+
+        <label>
+          <input required ng-pattern ="/^[a-zA-Z\s]*$/" type="text" ng-model="$ctrl.solicitud.consultorasContactadas" name="sConsultorasContactadas" placeholder="ConsultorasContactadas"/><br />
+        </label>
+
+        <div ng-show="form.$submitted || form.sConsultorasContactadas.$touched">
+          <div ng-show="form.sConsultorasContactadas.$error.required">Digame sus ConsultorasContactadas</div>
+        </div>
+
+        <br />
+
+        <label>Estado:
+
+          <input type="radio" ng-model="$ctrl.solicitud.estado" name = "sEstado" value="abierta" > Abierta
+          <input type="radio" ng-model="$ctrl.solicitud.estado" name = "sEstado" value="cerradaC"> Cerrrada cliente
+          <input type="radio" ng-model="$ctrl.solicitud.estado" name = "sEstado" value="cerradaI"> Cerrada incorporacion
+          <input type="radio" ng-model="$ctrl.solicitud.estado" name = "sEstado" value="standby" checked> Standby
+        </label>
+
+        <br /><br />
+
+        <label>Ingles:
+      <select ng-model="$ctrl.solicitud.ingles" name="Ingles">
+        <option value="Bajo">Bajo</option>
+        <option value="Medio" checked>Medio</option>
+        <option value="Alto">Alto</option>
+      </select>
+    </label>
+    <br /><br />
+
+    <label>Viajar:
+      <input type="radio" ng-model="$ctrl.solicitud.viajar" name = "sViajar" value="si" checked>Si
+      <input type="radio" ng-model="$ctrl.solicitud.viajar" name = "sViajar" value="no">No<br>
+    </label>
+    <br />
+
+<label>Guardias:
+      <input type="radio" ng-model="$ctrl.solicitud.guardias" name = "sGuardias" value="si" checked>Si
+      <input type="radio" ng-model="$ctrl.solicitud.guardias" name = "sGuardias" value="no">No<br>
+    </label>
+    <br />
+
+        <input type="button" ng-click="$ctrl.reset(form)" value="Resetear solicitud" />
+        <input type="submit" ng-click="$ctrl.update($ctrl.solicitud)" value="Enviar Solicitud" />
+
+      </form>
+
+  <pre>solicitud = {{$ctrl.solicitud | json}}</pre>
+  <pre>master = {{$ctrl.master | json}}</pre>
+
+  </center>
+
+</div>
