@@ -1,0 +1,56 @@
+
+
+<center>
+  <h3>Listado de solicitudes</h3>
+  <br />
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-xs-2 col-md-2"><b>Id Solicitud</b></div>
+      <div class="col-xs-2 col-md-2"><b>Nombre completo</b></div>
+      <div class="col-xs-2 col-md-2"><b>Cliente</b></div>
+      <div class="col-md-4 .hidden-xs .hidden-sm"><b>Descripción</b></div>
+    </div>
+    <br />
+    <div class="row" ng-repeat="elem in $ctrl.arraySolicitudes | limitTo : 10 : ($ctrl.currentPage-1)*$ctrl.maxSize">
+      <div class="col-xs-2 col-md-2">{{ elem.id }}</div>
+      <div class="col-xs-2 col-md-2">{{ elem.nombre }}</div>
+      <div class="col-xs-2 col-md-2">{{ elem.cliente }}</div>
+      <div class="col-md-4 .hidden-xs .hidden-sm">{{ elem.descripcion }}</div>
+      <div class="col-xs-2 col-md-2">
+        <!-- boton con dropdown -->
+        <div class="btn-group" uib-dropdown>
+          <button id="split-button" type="button" class="btn btn-accion">Detalles</button>
+          <button type="button" class="btn btn-accion" uib-dropdown-toggle>
+            <span class="caret"></span>
+          </button>
+          <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="split-button">
+            <li role="menuitem"><a href="#">Modificar</a></li>
+            <li role="menuitem"><a href="#">Borrar</a></li>
+            <li class="divider"></li>
+              <li role="menuitem"><a href="#">Cambiar estado</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <ul
+    uib-pagination boundary-links="true"
+    total-items="$ctrl.totalItems"
+    ng-model="$ctrl.currentPage"
+    class="pagination-sm"
+    max-size="maxSize"
+    boundary-links="true"
+    num-pages="$ctrl.numPages"
+    previous-text="&lsaquo;"
+    next-text="&rsaquo;"
+    first-text="&laquo;"
+    last-text="&raquo;"></ul>
+  </div>
+
+
+
+
+
+
+<div ng-controller="PaginationDemoCtrl">
+    <ul uib-pagination boundary-links="true" total-items="bigTotalItems" ng-model="bigCurrentPage" class="pagination-sm" max-size="maxSize"  boundary-links="true" num-pages="numPages" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></ul>
+</div>
