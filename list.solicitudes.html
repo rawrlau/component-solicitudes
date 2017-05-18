@@ -2,17 +2,21 @@
 
 <center>
   <h3>Listado de solicitudes</h3>
+  <input ng-init="arrayFiltrado = $ctrl.arraySolicitudes" ng-model="filtro" ng-change="arrayFiltrado = ($ctrl.arraySolicitudes | filter: filtro)" placeholder="Busqueda" /><br />
   <br />
   <div class="container-fluid">
     <div class="row">
       <div class="col-xs-2 col-md-2"><b>Id Solicitud</b></div>
-      <div class="col-xs-2 col-md-2"><b>Nombre completo</b></div>
+      <div class="col-xs-2 col-md-2"><b>Nombre completo </b></div>
       <div class="col-xs-2 col-md-2"><b>Cliente</b></div>
       <div class="col-md-4 .hidden-xs .hidden-sm"><b>Descripción</b></div>
     </div>
     <br />
-    <div class="row" ng-repeat="elem in $ctrl.arraySolicitudes | limitTo : 10 : ($ctrl.currentPage-1)*$ctrl.maxSize">
-      <div class="col-xs-2 col-md-2">{{ elem.id }}</div>
+
+    <!-- ng-class="orderBy != column.name?'short':(orderReverse?'down':'up')" -->
+
+    <div class="row" ng-repeat="elem in arrayFiltrado | limitTo : $ctrl.maxSize : ($ctrl.currentPage-1)*$ctrl.maxSize">
+      <div class="col-xs-2 col-md-2" >{{ elem.id }}</div>
       <div class="col-xs-2 col-md-2">{{ elem.nombre }}</div>
       <div class="col-xs-2 col-md-2">{{ elem.cliente }}</div>
       <div class="col-md-4 .hidden-xs .hidden-sm">{{ elem.descripcion }}</div>
@@ -32,25 +36,19 @@
         </div>
       </div>
     </div>
-    <ul
-    uib-pagination boundary-links="true"
-    total-items="$ctrl.totalItems"
-    ng-model="$ctrl.currentPage"
-    class="pagination-sm"
-    max-size="maxSize"
-    boundary-links="true"
-    num-pages="$ctrl.numPages"
-    previous-text="&lsaquo;"
-    next-text="&rsaquo;"
-    first-text="&laquo;"
-    last-text="&raquo;"></ul>
+    <div class="pagination">
+      <ul
+      uib-pagination boundary-links="true"
+      total-items="arrayFiltrado.length"
+      ng-model="$ctrl.currentPage"
+      class="pagination-sm"
+      max-size="maxSize"
+      boundary-links="true"
+      num-pages="$ctrl.numPages"
+      previous-text="&lsaquo;"
+      next-text="&rsaquo;"
+      first-text="&laquo;"
+      last-text="&raquo;"></ul>
+    </div>
+
   </div>
-
-
-
-
-
-
-<div ng-controller="PaginationDemoCtrl">
-    <ul uib-pagination boundary-links="true" total-items="bigTotalItems" ng-model="bigCurrentPage" class="pagination-sm" max-size="maxSize"  boundary-links="true" num-pages="numPages" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></ul>
-</div>

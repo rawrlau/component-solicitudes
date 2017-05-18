@@ -4,7 +4,10 @@ angular.module('ghr.solicitudes', ['ui.bootstrap'])
     controller: solicitudesController
   }).component('componenteList', {
     templateUrl: '../bower_components/component-solicitudes/list.solicitudes.html',
-    controller: generarSolicitudes
+    controller: generarSolicitudes,
+    bindings: {
+      atrNombre: '<filtro'
+    }
   });
 
   function generarSolicitudes() {
