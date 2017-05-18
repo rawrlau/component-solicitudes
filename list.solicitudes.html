@@ -1,21 +1,39 @@
-
-
 <center>
   <h3>Listado de solicitudes</h3>
-  <input ng-init="arrayFiltrado = $ctrl.arraySolicitudes" ng-model="filtro" ng-change="arrayFiltrado = ($ctrl.arraySolicitudes | filter: filtro)" placeholder="Busqueda" /><br />
+  <input ng-init="arrayFiltrado = $ctrl.arraySolicitudes;" ng-model="filtro" ng-change="arrayFiltrado = ($ctrl.arraySolicitudes | filter: filtro)" placeholder="Busqueda" /><br />
   <br />
   <div class="container-fluid">
     <div class="row">
-      <div class="col-xs-2 col-md-2"><b>Id Solicitud</b></div>
-      <div class="col-xs-2 col-md-2"><b>Nombre completo </b></div>
-      <div class="col-xs-2 col-md-2"><b>Cliente</b></div>
-      <div class="col-md-4 .hidden-xs .hidden-sm"><b>Descripción</b></div>
+      <div class="col-xs-2 col-md-2"><b>Id </b>
+        <span
+        ng-init="clase1 = 'glyphicon glyphicon-sort';"
+        ng-class="!order.endsWith('id') ? clase1 : (order.startsWith('-') ? 'glyphicon glyphicon-sort-by-attributes-alt' : 'glyphicon glyphicon-sort-by-attributes')"
+        ng-click="order = (order == 'id') ? '-id' : 'id';"/>
+      </div>
+      <div class="col-xs-2 col-md-2"><b>Nombre </b>
+        <span
+        ng-init="clase2 = 'glyphicon glyphicon-sort';"
+        ng-class="!order.endsWith('nombre') ? clase2 : (order.startsWith('-') ? 'glyphicon glyphicon-sort-by-attributes-alt' : 'glyphicon glyphicon-sort-by-attributes')"
+        ng-click="order = (order == 'nombre') ? '-nombre' : 'nombre';"/>
+      </div>
+      <div class="col-xs-2 col-md-2"><b>Cliente </b>
+        <span
+        ng-init="clase3 = 'glyphicon glyphicon-sort'"
+        ng-class="!order.endsWith('cliente') ? clase3 : (order.startsWith('-') ? 'glyphicon glyphicon-sort-by-attributes-alt' : 'glyphicon glyphicon-sort-by-attributes')"
+        ng-click="order = (order == 'cliente') ? '-cliente' : 'cliente';"/>
+      </div>
+      <div class="col-md-4 .hidden-xs .hidden-sm"><b>Descripción </b>
+      </div>
     </div>
     <br />
 
-    <!-- ng-class="orderBy != column.name?'short':(orderReverse?'down':'up')" -->
+    <!-- glyphicon glyphicon-sort
+    glyphicon glyphicon-sort-by-attributes
+    glyphicon glyphicon-sort-by-attributes-alt -->
 
-    <div class="row" ng-repeat="elem in arrayFiltrado | limitTo : $ctrl.maxSize : ($ctrl.currentPage-1)*$ctrl.maxSize">
+    <!-- ng-class="orderBy != column.name?'sort':(orderReverse?'down':'up')" -->
+
+    <div class="row" ng-repeat="elem in arrayFiltrado | orderBy: order | limitTo : $ctrl.maxSize : ($ctrl.currentPage-1)*$ctrl.maxSize">
       <div class="col-xs-2 col-md-2" >{{ elem.id }}</div>
       <div class="col-xs-2 col-md-2">{{ elem.nombre }}</div>
       <div class="col-xs-2 col-md-2">{{ elem.cliente }}</div>
