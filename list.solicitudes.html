@@ -2,7 +2,7 @@
   <h1 class="h1">Lista de Solicitudes</h1>
   <div class="row form-group">
     <div class="col-sm-offset-6 col-sm-6">
-      <input class="form-control" ng-init="arrayFiltrado = $ctrl.arraySolicitudes; orderByColumn = undefined; orderReverse = false;" ng-model="filtro" ng-change="arrayFiltrado = ($ctrl.arraySolicitudes | filter: filtro)" placeholder="Filtro por nombre" /> </div>
+      <input class="form-control" ng-init="arrayFiltrado = $ctrl.arraySolicitudes; orderByColumn = undefined; orderReverse = false;" ng-model="filtro" ng-change="arrayFiltrado = ($ctrl.arraySolicitudes | filter: filtro)" placeholder="Buscar" /> </div>
   </div>
     <table class="table table-responsive table-striped">
       <thead>
@@ -11,7 +11,7 @@
             <span>{{cabecera.split('_').join(' ')}}</span>
             <span class="glyphicon" ng-class="$ctrl.orderByPropiedad != cabecera ? 'glyphicon-sort' : ($ctrl.orderReverse ? 'glyphicon-sort-by-attributes-alt' : 'glyphicon-sort-by-attributes')"></span>
           </th>
-          <th>Descripción</th>
+          <th class="hidden-xs">Descripción</th>
           <th>Acción</th>
         </tr>
         <!-- <tr>
@@ -62,7 +62,6 @@
     </table>
 
     <div class="pagination">
-      <ul uib-pagination boundary-links="true" total-items="arrayFiltrado.length" ng-model="$ctrl.currentPage" class="pagination-sm" max-size="maxSize" boundary-links="true" num-pages="$ctrl.numPages" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;"
-        last-text="&raquo;"></ul>
+      <ul uib-pagination total-items="arrayFiltrado.length" ng-model="$ctrl.currentPage" max-size="5" class="pagination-sm" boundary-link-numbers="true"></ul>
     </div>
 </div>

@@ -70,7 +70,7 @@ angular.module('ghr.solicitudes', ['ui.bootstrap'])
     // Creamos un numero determinado de objeto solicitud
   function crearSolicitudes() {
     var arraySolicitudes = [];
-    for (var i = 1; i <= 101; i++) {
+    for (var i = 1; i <= 104; i++) {
       arraySolicitudes.push(crearSolicitud(i));
     }
     return arraySolicitudes;
