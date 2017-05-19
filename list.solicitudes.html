@@ -7,7 +7,7 @@
     <table class="table table-responsive table-striped">
       <thead>
         <tr ng-init="$ctrl.orderByPropiedad=''; cabeceras=['id','nombre','cliente']">
-          <th ng-repeat = "cabecera in cabeceras" class="col-xs-2 col-sm-2 col-md-2" ng-click="$ctrl.orderByPropiedad == cabecera ? $ctrl.orderReverse = !$ctrl.orderReverse : $ctrl.orderReverse = false; $ctrl.reverse=$ctrl.orderReverse ? '-':''; $ctrl.orderByPropiedad=cabecera">
+          <th ng-repeat = "cabecera in cabeceras" ng-click="$ctrl.orderByPropiedad == cabecera ? $ctrl.orderReverse = !$ctrl.orderReverse : $ctrl.orderReverse = false; $ctrl.reverse=$ctrl.orderReverse ? '-':''; $ctrl.orderByPropiedad=cabecera">
             <span>{{cabecera.split('_').join(' ')}}</span>
             <span class="glyphicon" ng-class="$ctrl.orderByPropiedad != cabecera ? 'glyphicon-sort' : ($ctrl.orderReverse ? 'glyphicon-sort-by-attributes-alt' : 'glyphicon-sort-by-attributes')"></span>
           </th>
