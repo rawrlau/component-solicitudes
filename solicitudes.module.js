@@ -33,7 +33,7 @@ angular.module('ghr.solicitudes', ['ui.bootstrap'])
   }
 
   // Arrays para rellenar nuestro objeto solicitud con valores aleatorios
-  var nombres = ['Adrian', 'Hector', 'Dani', 'Miguel', 'Alex', 'Rodri', 'Marta', 'Alejandro', 'Alvaro'];
+  var nombre = ['Adrian', 'Hector', 'Dani', 'Miguel', 'Alex', 'Rodri', 'Marta', 'Alejandro', 'Alvaro'];
   var descripcion = ['descripcion1', 'descripcion2', 'descripcion3', 'descripcion4', 'descripcion5', 'descripcion6', 'descripcion7', 'descripcion8', 'descripcion9'];
   var cliente = ['BBVA', 'El Corte Ingles', 'Clientazo'];
   var brm = ['arm1', 'arm2', 'arm3', 'arm4', 'arm5', 'arm6'];
@@ -80,7 +80,7 @@ angular.module('ghr.solicitudes', ['ui.bootstrap'])
   function crearSolicitud(id) {
     var solicitud = {
       id: id,
-      nombre: obtenerValor(nombres),
+      nombre: obtenerValor(nombre),
       descripcion: obtenerValor(descripcion),
       fechaRecibida: obtenerFecha(),
       cliente: obtenerValor(cliente),
