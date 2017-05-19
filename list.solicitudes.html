@@ -1,56 +1,68 @@
-
-
-<center>
-  <h3>Listado de solicitudes</h3>
-  <br />
-  <div class="container-fluid">
-    <div class="row">
-      <div class="col-xs-2 col-md-2"><b>Id Solicitud</b></div>
-      <div class="col-xs-2 col-md-2"><b>Nombre completo</b></div>
-      <div class="col-xs-2 col-md-2"><b>Cliente</b></div>
-      <div class="col-md-4 .hidden-xs .hidden-sm"><b>Descripción</b></div>
-    </div>
-    <br />
-    <div class="row" ng-repeat="elem in $ctrl.arraySolicitudes | limitTo : 10 : ($ctrl.currentPage-1)*$ctrl.maxSize">
-      <div class="col-xs-2 col-md-2">{{ elem.id }}</div>
-      <div class="col-xs-2 col-md-2">{{ elem.nombre }}</div>
-      <div class="col-xs-2 col-md-2">{{ elem.cliente }}</div>
-      <div class="col-md-4 .hidden-xs .hidden-sm">{{ elem.descripcion }}</div>
-      <div class="col-xs-2 col-md-2">
-        <!-- boton con dropdown -->
-        <div class="btn-group" uib-dropdown>
-          <button id="split-button" type="button" class="btn btn-accion">Detalles</button>
-          <button type="button" class="btn btn-accion" uib-dropdown-toggle>
-            <span class="caret"></span>
-          </button>
-          <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="split-button">
-            <li role="menuitem"><a href="#">Modificar</a></li>
-            <li role="menuitem"><a href="#">Borrar</a></li>
-            <li class="divider"></li>
-              <li role="menuitem"><a href="#">Cambiar estado</a></li>
-          </ul>
-        </div>
-      </div>
-    </div>
-    <ul
-    uib-pagination boundary-links="true"
-    total-items="$ctrl.totalItems"
-    ng-model="$ctrl.currentPage"
-    class="pagination-sm"
-    max-size="maxSize"
-    boundary-links="true"
-    num-pages="$ctrl.numPages"
-    previous-text="&lsaquo;"
-    next-text="&rsaquo;"
-    first-text="&laquo;"
-    last-text="&raquo;"></ul>
+<div class="container-fluid">
+  <h1 class="h1">Lista de Solicitudes</h1>
+  <div class="row form-group">
+    <div class="col-sm-offset-6 col-sm-6">
+      <input class="form-control" ng-init="arrayFiltrado = $ctrl.arraySolicitudes; orderByColumn = undefined; orderReverse = false;" ng-model="filtro" ng-change="arrayFiltrado = ($ctrl.arraySolicitudes | filter: filtro)" placeholder="Filtro por nombre" /> </div>
   </div>
+    <table class="table table-responsive table-striped">
+      <thead>
+        <tr ng-init="$ctrl.orderByPropiedad=''; cabeceras=['id','nombre','cliente']">
+          <th ng-repeat = "cabecera in cabeceras" class="col-xs-2 col-sm-2 col-md-2" ng-click="$ctrl.orderByPropiedad == cabecera ? $ctrl.orderReverse = !$ctrl.orderReverse : $ctrl.orderReverse = false; $ctrl.reverse=$ctrl.orderReverse ? '-':''; $ctrl.orderByPropiedad=cabecera">
+            <span>{{cabecera.split('_').join(' ')}}</span>
+            <span class="glyphicon" ng-class="$ctrl.orderByPropiedad != cabecera ? 'glyphicon-sort' : ($ctrl.orderReverse ? 'glyphicon-sort-by-attributes-alt' : 'glyphicon-sort-by-attributes')"></span>
+          </th>
+          <th>Descripción</th>
+          <th>Acción</th>
+        </tr>
+        <!-- <tr>
+          <th ng-click=" orderReverse = (orderByColumn ==='id' || orderByColumn ==='-id') ? !orderReverse: orderReverse; orderByColumn = orderByColumn ==='id'? '-id':'id';"><b>Id </b>
+            <span class="glyphicon" name="ordenarId" ng-class="(orderByColumn != 'id' && orderByColumn != '-id') ? 'glyphicon-sort':(orderReverse?'glyphicon-sort-by-attributes-alt':'glyphicon-sort-by-attributes')"></span>
+          </th>
+          <th ng-click=" orderReverse = (orderByColumn ==='nombre' || orderByColumn ==='-nombre') ? !orderReverse: orderReverse; orderByColumn = orderByColumn ==='nombre'? '-nombre':'nombre';"><b>Nombre </b>
+            <span class="glyphicon" name="ordenarNombre" ng-class="(orderByColumn!='nombre'&& orderByColumn!='-nombre') ? 'glyphicon-sort':(orderReverse?'glyphicon-sort-by-attributes-alt':'glyphicon-sort-by-attributes')"></span>
+          </th>
+          <th ng-click=" orderReverse = (orderByColumn ==='cliente' || orderByColumn ==='-cliente') ? !orderReverse: orderReverse ; orderByColumn = orderByColumn ==='cliente'? '-cliente':'cliente';"><b>Cliente </b>
+            <span class="glyphicon" name="ordenarCliente" ng-class="(orderByColumn!='cliente' && orderByColumn!='-cliente') ? 'glyphicon-sort':(orderReverse?'glyphicon-sort-by-attributes-alt':'glyphicon-sort-by-attributes')"></span>
+          </th>
+          <th class="hidden-xs">Descripción</th>
+          <th>Acción</th>
+        </tr> -->
+      </thead>
 
+      <tr ng-repeat="elem in arrayFiltrado | orderBy : ($ctrl.reverse+$ctrl.orderByPropiedad) | limitTo : 10 : ($ctrl.currentPage-1)*$ctrl.maxSize">
+        <td>
+          {{ elem.id }}
+        </td>
+        <td>
+          {{ elem.nombre }}
+        </td>
+        <td>
+          {{ elem.cliente }}
+        </td>
+        <td class="hidden-xs">
+          {{ elem.descripcion }}
+        </td>
+        <td>
+          <!-- boton con dropdown -->
+          <div class="btn-group" uib-dropdown>
+            <button id="split-button" type="button" class="btn btn-primary">Ver</button>
+            <button type="button" class="btn btn-primary" uib-dropdown-toggle>
+                <span class="caret"></span>
+              </button>
+            <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="split-button">
+              <li role="menuitem"><a href="#">Ver</a></li>
+              <li role="menuitem"><a href="#">Editar</a></li>
+              <li role="menuitem"><a href="#">Editar estado</a></li>
+              <li class="divider"></li>
+              <li role="menuitem"><a href="#">Eliminar</a></li>
+            </ul>
+          </div>
+        </td>
+      </tr>
+    </table>
 
-
-
-
-
-<div ng-controller="PaginationDemoCtrl">
-    <ul uib-pagination boundary-links="true" total-items="bigTotalItems" ng-model="bigCurrentPage" class="pagination-sm" max-size="maxSize"  boundary-links="true" num-pages="numPages" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></ul>
+    <div class="pagination">
+      <ul uib-pagination boundary-links="true" total-items="arrayFiltrado.length" ng-model="$ctrl.currentPage" class="pagination-sm" max-size="maxSize" boundary-links="true" num-pages="$ctrl.numPages" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;"
+        last-text="&raquo;"></ul>
+    </div>
 </div>
