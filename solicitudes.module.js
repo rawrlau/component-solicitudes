@@ -2,7 +2,7 @@ angular.module('ghr.solicitudes', ['ui.bootstrap'])
   .component('componentSolicitudes', {
     templateUrl: '../bower_components/component-solicitudes/form.solicitudes.html',
     controller: solicitudesController
-  }).component('componenteList', {
+  }).component('ghrSolicitudesList', {
     templateUrl: '../bower_components/component-solicitudes/list.solicitudes.html',
     controller: generarSolicitudes
   });
