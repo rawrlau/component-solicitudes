@@ -11,7 +11,6 @@ angular.module('ghr.solicitudes', ['ui.bootstrap'])
     const vm = this;
     vm.arraySolicitudes = crearSolicitudes();
     vm.maxSize = 10; // Numero maximo de elementos
-    vm.totalItems = vm.arraySolicitudes.length; // Total de items del generador
     vm.currentPage = 1;
   }
 
