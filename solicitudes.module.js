@@ -2,7 +2,7 @@ angular.module('ghr.solicitudes', ['ui.bootstrap'])
   .component('componentSolicitudes', {
     templateUrl: '../bower_components/component-solicitudes/form.solicitudes.html',
     controller: solicitudesController
-  }).component('componenteList', {
+  }).component('ghrSolicitudesList', {
     templateUrl: '../bower_components/component-solicitudes/list.solicitudes.html',
     controller: generarSolicitudes,
     bindings: {
@@ -14,7 +14,6 @@ angular.module('ghr.solicitudes', ['ui.bootstrap'])
     const vm = this;
     vm.arraySolicitudes = crearSolicitudes();
     vm.maxSize = 10; // Numero maximo de elementos
-    vm.totalItems = vm.arraySolicitudes.length; // Total de items del generador
     vm.currentPage = 1;
   }
 
@@ -37,7 +36,7 @@ angular.module('ghr.solicitudes', ['ui.bootstrap'])
   }
 
   // Arrays para rellenar nuestro objeto solicitud con valores aleatorios
-  var nombres = ['Adrian', 'Hector', 'Dani', 'Miguel', 'Alex', 'Rodri', 'Marta', 'Alejandro', 'Alvaro'];
+  var nombre = ['Adrian', 'Hector', 'Dani', 'Miguel', 'Alex', 'Rodri', 'Marta', 'Alejandro', 'Alvaro'];
   var descripcion = ['descripcion1', 'descripcion2', 'descripcion3', 'descripcion4', 'descripcion5', 'descripcion6', 'descripcion7', 'descripcion8', 'descripcion9'];
   var cliente = ['BBVA', 'El Corte Ingles', 'Clientazo'];
   var brm = ['arm1', 'arm2', 'arm3', 'arm4', 'arm5', 'arm6'];
@@ -74,7 +73,7 @@ angular.module('ghr.solicitudes', ['ui.bootstrap'])
     // Creamos un numero determinado de objeto solicitud
   function crearSolicitudes() {
     var arraySolicitudes = [];
-    for (var i = 1; i <= 101; i++) {
+    for (var i = 1; i <= 104; i++) {
       arraySolicitudes.push(crearSolicitud(i));
     }
     return arraySolicitudes;
@@ -84,7 +83,7 @@ angular.module('ghr.solicitudes', ['ui.bootstrap'])
   function crearSolicitud(id) {
     var solicitud = {
       id: id,
-      nombre: obtenerValor(nombres),
+      nombre: obtenerValor(nombre),
       descripcion: obtenerValor(descripcion),
       fechaRecibida: obtenerFecha(),
       cliente: obtenerValor(cliente),
