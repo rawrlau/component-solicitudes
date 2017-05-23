@@ -6,11 +6,7 @@ angular.module('ghr.solicitudes', ['ui.bootstrap'])
   }).component('ghrSolicitudesList', {
     templateUrl: '../bower_components/component-solicitudes/list.solicitudes.html',
     controller: generarSolicitudes
-  });
-
-  //Factoria de solicitudes
-  angular.module('ghr.solicitudes')
-  .factory('solicitudesFactory', function solicitudesFactory(){
+  }).factory('solicitudesFactory', function solicitudesFactory(){
 
     //Funcion para generar nuestro objeto solicitud
     function crearSolicitud(id) {
