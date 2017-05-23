@@ -28,7 +28,6 @@
           <th>Acción</th>
         </tr> -->
       </thead>
-
       <tr ng-repeat="elem in arrayFiltrado | orderBy : ($ctrl.reverse+$ctrl.orderByPropiedad) | limitTo : 10 : ($ctrl.currentPage-1)*$ctrl.maxSize">
         <td>
           {{ elem.id }}
@@ -43,25 +42,26 @@
           {{ elem.descripcion }}
         </td>
         <td>
-          <!-- boton con dropdown -->
-          <div class="btn-group" uib-dropdown>
-            <button id="split-button" type="button" class="btn btn-primary">Ver</button>
-            <button type="button" class="btn btn-primary" uib-dropdown-toggle>
-                <span class="caret"></span>
-              </button>
-            <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="split-button">
-              <li role="menuitem"><a href="#">Ver</a></li>
-              <li role="menuitem"><a href="#">Editar</a></li>
-              <li role="menuitem"><a href="#">Editar estado</a></li>
-              <li class="divider"></li>
-              <li role="menuitem"><a href="#">Eliminar</a></li>
-            </ul>
-          </div>
-        </td>
-      </tr>
+                    <div class="btn-group" uib-dropdown class="modal-demo">
+                        <button id="split-button" type="button" class="btn btn-primary">Ver</button>
+                        <button type="button" class="btn btn-primary" uib-dropdown-toggle>
+                            <span class="caret"></span>
+                            <span class="sr-only">Split button!</span>
+                        </button>
+                        <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="split-button">
+                            <li role="menuitem"><a href="#">Ver</a></li>
+                            <li role="menuitem"><a href="#">Editar</a></li>
+                            <li role="menuitem"><a href="#">Editar estado</a></li>
+                            <li class="divider"></li>
+                            <li role="menuitem"><a href="#" ng-click="$ctrl.openComponentModal(elem.id)">Eliminar</a></li>
+                        </ul>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+      </thead>
     </table>
-
     <div class="pagination">
-      <ul uib-pagination total-items="arrayFiltrado.length" ng-model="$ctrl.currentPage" max-size="5" class="pagination-sm" boundary-link-numbers="true"></ul>
+        <ul uib-pagination total-items="$ctrl.totalItems" ng-model="$ctrl.currentPage" max-size="5" class="pagination-sm" boundary-link-numbers="true"></ul>
     </div>
 </div>
