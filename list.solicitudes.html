@@ -4,64 +4,63 @@
     <div class="col-sm-offset-6 col-sm-6">
       <input class="form-control" ng-init="arrayFiltrado = $ctrl.arraySolicitudes; orderByColumn = undefined; orderReverse = false;" ng-model="filtro" ng-change="arrayFiltrado = ($ctrl.arraySolicitudes | filter: filtro)" placeholder="Buscar" /> </div>
   </div>
-    <table class="table table-responsive table-striped">
-      <thead>
-        <tr ng-init="$ctrl.orderByPropiedad=''; cabeceras=['id','nombre','cliente']">
-          <th ng-repeat = "cabecera in cabeceras" ng-click="$ctrl.orderByPropiedad == cabecera ? $ctrl.orderReverse = !$ctrl.orderReverse : $ctrl.orderReverse = false; $ctrl.reverse=$ctrl.orderReverse ? '-':''; $ctrl.orderByPropiedad=cabecera">
-            <span>{{cabecera.split('_').join(' ')}}</span>
-            <span class="glyphicon" ng-class="$ctrl.orderByPropiedad != cabecera ? 'glyphicon-sort' : ($ctrl.orderReverse ? 'glyphicon-sort-by-attributes-alt' : 'glyphicon-sort-by-attributes')"></span>
-          </th>
-          <th class="hidden-xs">Descripción</th>
-          <th>Acción</th>
-        </tr>
-        <!-- <tr>
-          <th ng-click=" orderReverse = (orderByColumn ==='id' || orderByColumn ==='-id') ? !orderReverse: orderReverse; orderByColumn = orderByColumn ==='id'? '-id':'id';"><b>Id </b>
-            <span class="glyphicon" name="ordenarId" ng-class="(orderByColumn != 'id' && orderByColumn != '-id') ? 'glyphicon-sort':(orderReverse?'glyphicon-sort-by-attributes-alt':'glyphicon-sort-by-attributes')"></span>
-          </th>
-          <th ng-click=" orderReverse = (orderByColumn ==='nombre' || orderByColumn ==='-nombre') ? !orderReverse: orderReverse; orderByColumn = orderByColumn ==='nombre'? '-nombre':'nombre';"><b>Nombre </b>
-            <span class="glyphicon" name="ordenarNombre" ng-class="(orderByColumn!='nombre'&& orderByColumn!='-nombre') ? 'glyphicon-sort':(orderReverse?'glyphicon-sort-by-attributes-alt':'glyphicon-sort-by-attributes')"></span>
-          </th>
-          <th ng-click=" orderReverse = (orderByColumn ==='cliente' || orderByColumn ==='-cliente') ? !orderReverse: orderReverse ; orderByColumn = orderByColumn ==='cliente'? '-cliente':'cliente';"><b>Cliente </b>
-            <span class="glyphicon" name="ordenarCliente" ng-class="(orderByColumn!='cliente' && orderByColumn!='-cliente') ? 'glyphicon-sort':(orderReverse?'glyphicon-sort-by-attributes-alt':'glyphicon-sort-by-attributes')"></span>
-          </th>
-          <th class="hidden-xs">Descripción</th>
-          <th>Acción</th>
-        </tr> -->
-      </thead>
+  <table class="table table-responsive table-striped">
+    <thead>
+      <tr ng-init="$ctrl.orderByPropiedad=''; cabeceras=['id','nombre','cliente']">
+        <th ng-repeat="cabecera in cabeceras" ng-click="$ctrl.orderByPropiedad == cabecera ? $ctrl.orderReverse = !$ctrl.orderReverse : $ctrl.orderReverse = false; $ctrl.reverse=$ctrl.orderReverse ? '-':''; $ctrl.orderByPropiedad=cabecera">
+          <span>{{cabecera.split('_').join(' ')}}</span>
+          <span class="glyphicon" ng-class="$ctrl.orderByPropiedad != cabecera ? 'glyphicon-sort' : ($ctrl.orderReverse ? 'glyphicon-sort-by-attributes-alt' : 'glyphicon-sort-by-attributes')"></span>
+        </th>
+        <th class="hidden-xs">Descripción</th>
+        <th>Acción</th>
+      </tr>
+    </thead>
 
-      <tr ng-repeat="elem in arrayFiltrado | orderBy : ($ctrl.reverse+$ctrl.orderByPropiedad) | limitTo : 10 : ($ctrl.currentPage-1)*$ctrl.maxSize">
-        <td>
-          {{ elem.id }}
-        </td>
-        <td>
-          {{ elem.nombre }}
-        </td>
-        <td>
-          {{ elem.cliente }}
-        </td>
-        <td class="hidden-xs">
-          {{ elem.descripcion }}
-        </td>
-        <td>
-          <!-- boton con dropdown -->
-          <div class="btn-group" uib-dropdown>
-            <button id="split-button" type="button" class="btn btn-primary">Ver</button>
-            <button type="button" class="btn btn-primary" uib-dropdown-toggle>
+    <tr ng-repeat="elem in arrayFiltrado | orderBy : ($ctrl.reverse+$ctrl.orderByPropiedad) | limitTo : 10 : ($ctrl.currentPage-1)*$ctrl.maxSize track by elem.id">
+      <td>
+        {{ elem.id }}
+      </td>
+      <td>
+        {{ elem.nombre }}
+      </td>
+      <td>
+        {{ elem.cliente }}
+      </td>
+      <td class="hidden-xs">
+        {{ elem.descripcion }}
+      </td>
+      <td>
+        <!-- boton con dropdown -->
+        <div class="btn-group" uib-dropdown>
+          <button id="split-button" type="button" class="btn btn-primary">Ver</button>
+          <button type="button" class="btn btn-primary" uib-dropdown-toggle>
                 <span class="caret"></span>
               </button>
-            <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="split-button">
-              <li role="menuitem"><a href="#">Ver</a></li>
-              <li role="menuitem"><a href="#">Editar</a></li>
-              <li role="menuitem"><a href="#">Editar estado</a></li>
-              <li class="divider"></li>
-              <li role="menuitem"><a href="#">Eliminar</a></li>
-            </ul>
-          </div>
-        </td>
-      </tr>
-    </table>
+          <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="split-button">
+            <li role="menuitem"><a href="#">Ver</a></li>
+            <li role="menuitem"><a href="#">Editar</a></li>
+            <li role="menuitem"><a href="#">Editar estado</a></li>
+            <li class="divider"></li>
+            <li role="menuitem"><a href="#" ng-click="$ctrl.openComponentModal(elem.id)">Eliminar</a></li>
+            <script type="text/ng-template" id="myModalContent.html">
+              <div class="modal-header">
+                <h3 class="modal-title" id="modal-title">Eliminando 'Entidad' {{ $ctrl.seleccionado }}</h3>
+              </div>
+              <div class="modal-body" id="modal-body">
+                <p>¿Está usted seguro?</p>
+              </div>
+              <div class="modal-footer">
+                <button class="btn" type="button" ng-click="$ctrl.cancelar()">Cancelar</button>
+                <button class="btn btn-danger" type="button" ng-click="$ctrl.eliminar($ctrl.seleccionado)">Eliminar</button>
+              </div>
+            </script>
+          </ul>
+        </div>
+      </td>
+    </tr>
+  </table>
 
-    <div class="pagination">
-      <ul uib-pagination total-items="arrayFiltrado.length" ng-model="$ctrl.currentPage" max-size="5" class="pagination-sm" boundary-link-numbers="true"></ul>
-    </div>
+  <div class="pagination">
+    <ul uib-pagination total-items="arrayFiltrado.length" ng-model="$ctrl.currentPage" max-size="5" class="pagination-sm" boundary-link-numbers="true"></ul>
+  </div>
 </div>
