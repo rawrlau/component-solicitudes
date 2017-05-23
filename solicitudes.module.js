@@ -1,3 +1,4 @@
+//Modulo ghr.solicitudes con su componente para el formulario y su listado
 angular.module('ghr.solicitudes', ['ui.bootstrap'])
   .component('componentSolicitudes', {
     templateUrl: '../bower_components/component-solicitudes/form.solicitudes.html',
@@ -8,14 +9,14 @@ angular.module('ghr.solicitudes', ['ui.bootstrap'])
   });
 
 
-//Controlador de lista
+//Controller para generar nuestras solicitudes y gestionar el borrado de la solicitud
 function generarSolicitudes($uibModal, $log) {
   var vm = this;
   vm.arraySolicitudes = crearSolicitudes();
   vm.maxSize = 10; // Numero maximo de elementos
   vm.currentPage = 1;
 
-//Gestiona modal(Ventana de confirmacion de borrado)
+//Se encarga de abrir nuestra ventana modal en base al id obtenido
   vm.openComponentModal = function (id) {
     var modalInstance = $uibModal.open({
       component: 'modalComponentBorrarSolicitudes',
@@ -26,6 +27,7 @@ function generarSolicitudes($uibModal, $log) {
       }
     });
 
+    //Instance para borrar una entidad concreta de solicitudes
     modalInstance.result.then(function (selectedItem) {
       var solicitudEliminar;
       vm.selected = selectedItem;
@@ -45,7 +47,7 @@ function generarSolicitudes($uibModal, $log) {
   };
 }
 
-//Gestiona el formulario
+//Controller que se encarga de gestionar nuestro formulario de solicitudes
 function solicitudesController() {
   var vm = this;
   vm.master = {};
@@ -131,7 +133,7 @@ function crearSolicitud(id) {
   return solicitud;
 }
 
-//Modal
+//Controlador ModalInstanceCtrl para confirmar y cancelar nuestra peticion peticion
 angular.module('ghr.solicitudes').controller('ModalInstanceCtrl', function ($uibModalInstance, $log) {
   var $ctrl = this;
   vm.ok = function (value) {
@@ -142,8 +144,9 @@ angular.module('ghr.solicitudes').controller('ModalInstanceCtrl', function ($uib
   };
 });
 
+//Modulo para nuestra ventana modal con su controller para eliminar y cancelar
 angular.module('ghr.solicitudes').component('modalComponentBorrarSolicitudes', {
-  templateUrl: 'myModalContent.html',
+  templateUrl: '../bower_components/component-solicitudes/myModalContent.html',
   bindings: {
     resolve: '<',
     close: '&',

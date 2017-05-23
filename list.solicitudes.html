@@ -1,5 +1,6 @@
+<!-- Plantilla Html para la gestion de nuestro listado de solicitudes -->
 <div class="container-fluid">
-  <h1 class="h1">Lista de Solicitudes</h1>
+  <h1 class="h1">Listado de Solicitudes</h1>
   <div class="row form-group">
     <div class="col-sm-offset-6 col-sm-6">
       <input class="form-control" ng-init="arrayFiltrado = $ctrl.arraySolicitudes; orderByColumn = undefined; orderReverse = false;" ng-model="filtro" ng-change="arrayFiltrado = ($ctrl.arraySolicitudes | filter: filtro)" placeholder="Buscar" /> </div>
@@ -15,7 +16,7 @@
         <th>Acción</th>
       </tr>
     </thead>
-
+    <!-- Recorrido para mostrar nuestro listado con sus filtros correspondientes -->
     <tr ng-repeat="elem in arrayFiltrado | orderBy : ($ctrl.reverse+$ctrl.orderByPropiedad) | limitTo : 10 : ($ctrl.currentPage-1)*$ctrl.maxSize track by elem.id">
       <td>
         {{ elem.id }}
@@ -30,36 +31,24 @@
         {{ elem.descripcion }}
       </td>
       <td>
-        <!-- boton con dropdown -->
+        <!-- Boton para desplegar las opciones de nuestra Solicitud -->
         <div class="btn-group" uib-dropdown>
           <button id="split-button" type="button" class="btn btn-primary">Ver</button>
           <button type="button" class="btn btn-primary" uib-dropdown-toggle>
-                <span class="caret"></span>
-              </button>
+          <span class="caret"></span>
+          </button>
           <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="split-button">
             <li role="menuitem"><a href="#">Ver</a></li>
             <li role="menuitem"><a href="#">Editar</a></li>
             <li role="menuitem"><a href="#">Editar estado</a></li>
             <li class="divider"></li>
             <li role="menuitem"><a href="#" ng-click="$ctrl.openComponentModal(elem.id)">Eliminar</a></li>
-            <script type="text/ng-template" id="myModalContent.html">
-              <div class="modal-header">
-                <h3 class="modal-title" id="modal-title">Eliminando 'Entidad' {{ $ctrl.seleccionado }}</h3>
-              </div>
-              <div class="modal-body" id="modal-body">
-                <p>¿Está usted seguro?</p>
-              </div>
-              <div class="modal-footer">
-                <button class="btn" type="button" ng-click="$ctrl.cancelar()">Cancelar</button>
-                <button class="btn btn-danger" type="button" ng-click="$ctrl.eliminar($ctrl.seleccionado)">Eliminar</button>
-              </div>
-            </script>
           </ul>
         </div>
       </td>
     </tr>
   </table>
-
+  <!-- Gestion de nuestra paginacion adaptada -->
   <div class="pagination">
     <ul uib-pagination total-items="arrayFiltrado.length" ng-model="$ctrl.currentPage" max-size="5" class="pagination-sm" boundary-link-numbers="true"></ul>
   </div>
