@@ -7,7 +7,7 @@ angular.module('ghr.solicitudes', ['ui.bootstrap'])
     templateUrl: '../bower_components/component-solicitudes/list.solicitudes.html',
     controller: generarSolicitudes
   }).factory('solicitudesFactory', function solicitudesFactory() {
-    
+
     // Arrays para rellenar nuestro objeto solicitud con valores aleatorios
     var nombre = ['Adrian', 'Hector', 'Dani', 'Miguel', 'Alex', 'Rodri', 'Marta', 'Alejandro', 'Alvaro'];
     var descripcion = ['descripcion1', 'descripcion2', 'descripcion3', 'descripcion4', 'descripcion5', 'descripcion6', 'descripcion7', 'descripcion8', 'descripcion9'];
