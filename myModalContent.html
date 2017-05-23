@@ -1,11 +1,11 @@
 <!-- Plantilla para la gestion de nuestra ventana modal -->
 <div class="modal-header">
-    <h3 class="modal-title" id="modal-title">Eliminar Solicitud</h3>
+  <h3 class="modal-title" id="modal-title">Eliminar Solicitud {{ $ctrl.seleccionado }}</h3>
 </div>
 <div class="modal-body" id="modal-body">
-    <p>¿Está seguro? Una vez realizada la operacion no se podrán revertir los cambios.</p>
+  <p>¿Está seguro? Una vez realizada la operacion no se podrán revertir los cambios.</p>
 </div>
 <div class="modal-footer">
-    <button class="btn" type="button" ng-click="$ctrl.cancelar()">Cancelar</button>
-    <button class="btn btn-danger" type="button" ng-click="$ctrl.eliminar($ctrl.seleccionado)">Eliminar</button>
+  <button class="btn" type="button" ng-click="$ctrl.cancelar()">Cancelar</button>
+  <button class="btn btn-danger" type="button" ng-click="$ctrl.eliminar($ctrl.seleccionado)">Eliminar</button>
 </div>
