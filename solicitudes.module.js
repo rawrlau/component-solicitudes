@@ -8,7 +8,6 @@ angular.module('ghr.solicitudes', ['ui.bootstrap'])
     controller: generarSolicitudes
   });
 
-
 //Controller para generar nuestras solicitudes y gestionar el borrado de la solicitud
 function generarSolicitudes($uibModal, $log) {
   var vm = this;
