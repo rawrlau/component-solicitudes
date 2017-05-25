@@ -9,7 +9,7 @@ angular.module('ghr.solicitudes', ['ui.bootstrap'])
   }).factory('solicitudesFactory', function solicitudesFactory() {
     // Arrays para rellenar nuestro objeto solicitud con valores aleatorios
     var nombre = ['Adrian', 'Hector', 'Dani', 'Miguel', 'Alex', 'Rodri', 'Marta', 'Alejandro', 'Alvaro'];
-    var descripcion = ['descripcion1', 'descripcion2', 'descripcion3', 'descripcion4', 'descripcion5', 'descripcion6', 'descripcion7', 'descripcion8', 'descripcion9'];
+    var descripcion = ['descripcionuno', 'descripciondos', 'descripciontres', 'descripcioncuatro', 'descripcioncinco'];
     var cliente = ['BBVA', 'El Corte Ingles', 'Clientazo'];
     var brm = ['arm1', 'arm2', 'arm3', 'arm4', 'arm5', 'arm6'];
     var adm = ['adm1', 'adm2', 'adm3', 'adm4', 'adm5', 'adm6'];
