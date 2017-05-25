@@ -68,6 +68,28 @@
       <br /><input class="radio-inline" type="radio" ng-model="$ctrl.solicitudEditar.estado" name="sEstado" value="standby" ng-checked="$ctrl.solicitudEditar.estado === 'standby'"> Standby
       <br />
     </div>
+
+    <!-- <div class="btn-group" uib-dropdown >
+                  <button type="button" class="btn btn-default"  uib-dropdown-toggle ng-model="$ctrl.solicitudEditarEditar.estado">
+                      Estado : {{ $ctrl.solicitudEditar.estado }} <span class="caret"></span>
+                      <span class="sr-only">Split button!</span>
+                  </button>
+                  <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="split-button">
+                      <li role="menuitem">
+                          <a href="#" ng-model="$ctrl.solicitudEditarEditar.estado" ng-selected="$ctrl.solicitudEditar.estado === 'abierta'">Abierta</a>
+                      </li>
+                      <li role="menuitem">
+                          <a href="#" ng-model="$ctrl.solicitudEditarEditar.estado" ng-selected="$ctrl.solicitudEditar.estado === 'abiertaCliente'">cerradaCliente</a>
+                      </li>
+                      <li role="menuitem">
+                          <a href="#" ng-model="$ctrl.solicitudEditarEditar.estado" ng-selected="$ctrl.solicitudEditar.estado === 'abiertaIncorporacion'">cerradaIncorporacion</a>
+                      </li>
+                      <li role="menuitem">
+                          <a href="#" ng-model="$ctrl.solicitudEditarEditar.estado" ng-selected="$ctrl.solicitudEditar.estado === 'standby'">standby</a>
+                      </li>
+                  </ul>
+              </div> -->
+
     <div class="form-group col-md-1">
       <label>Viajar: </label>
       <br /><input class="radio-inline" type="radio" ng-model="$ctrl.solicitudEditar.viajar" name="sViajar"  value="S" ng-checked="$ctrl.solicitudEditar.viajar === 'S'">Si
@@ -82,7 +104,13 @@
     <center>
     <div class="form-group col-md-12">
     <input type="button" class="btn btn-default" ng-click="$ctrl.reset(formSolicitudes)" value="Resetear solicitud" />
-    <input type="submit" class="btn btn-success" ng-click="$ctrl.updateOrCreate($ctrl.solicitudEditar, formSolicitudes)" value="Enviar Solicitud" />
+    <input type="submit" class="btn btn-success" ng-model="exito" ng-click="$ctrl.updateOrCreate($ctrl.solicitudEditar, formSolicitudes)" value="Enviar Solicitud" />
+
+    <div ng-show="exito" class="alert alert-success">
+      <strong>Exito!</strong> Su solicitud ha sido dada de alta.
+    </div>
+
+
   </div>
   </form>
   <!-- <br />
