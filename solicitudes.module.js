@@ -102,7 +102,7 @@ angular.module('ghr.solicitudes', ['ui.bootstrap', 'toastr'])
           return response.data;
         },
         function onFailure(reason) {
-            toastr.error('No se ha podido realizar la operacion, por favor compruebe su conexion a internet e intentelo más tarde.', '¡Error!');
+          toastr.error('No se ha podido realizar la operacion, por favor compruebe su conexion a internet e intentelo más tarde.', '¡Error!');
         });
       },
       create: function create(solicitud) {
@@ -111,6 +111,7 @@ angular.module('ghr.solicitudes', ['ui.bootstrap', 'toastr'])
           url: serviceUrl,
           data: solicitud
         }).then(function onSuccess(response) {
+          toastr.success('¡Solicitud creada satisfactoriamente!', '¡Ok!');
           return response.data;
         },
         function onFailure(reason) {
@@ -134,6 +135,7 @@ angular.module('ghr.solicitudes', ['ui.bootstrap', 'toastr'])
           url: serviceUrl + '/' + id,
           data: solicitud
         }).then(function onSuccess(response) {
+          toastr.success('¡Solicitud modificada satisfactoriamente!', '¡Ok!');
           return response.data;
         },
         function onFailure(reason) {
@@ -233,7 +235,6 @@ function controladorFormulario(toastr,solicitudesFactory, $stateParams, $log, $s
         solicitudesFactory.create(vm.solicitudEditar).then(
           function (solicitud) {
             $state.go($state.current, {id: solicitud.id});
-            toastr.success('¡Solicitud creada satisfactoriamente!', '¡Ok!');
           });
       } else {
         for (var elemento in form.$$controls) {
@@ -243,8 +244,7 @@ function controladorFormulario(toastr,solicitudesFactory, $stateParams, $log, $s
         }
         solicitudesFactory.update(vm.solicitudEditar.id, vm.solicitudEditar).then(
           function (response) {
-            vm.solicitudEditar = angular.copy(vm. vcsolicitudEditar);
-            toastr.success('¡Solicitud modificada satisfactoriamente!', '¡Ok!');
+            vm.solicitudEditar = angular.copy(vm.solicitudEditar);
           }
         );
       }
