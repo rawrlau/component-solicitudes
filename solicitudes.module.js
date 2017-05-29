@@ -1,5 +1,5 @@
 // Modulo ghr.solicitudes con su componente para el formulario y su listado
-angular.module('ghr.solicitudes', ['ui.bootstrap'])
+angular.module('ghr.solicitudes', ['ui.bootstrap', 'toastr'])
   .component('ghrSolicitudesForm', {
     templateUrl: '../bower_components/component-solicitudes/form.solicitudes.html',
     controller: controladorFormulario
@@ -144,7 +144,7 @@ angular.module('ghr.solicitudes', ['ui.bootstrap'])
   });
 
 // Controller para generar nuestras solicitudes y gestionar el borrado de la solicitud
-function solicitudesListController($uibModal, $log, solicitudesFactory, $filter) {
+function solicitudesListController($uibModal, $log, solicitudesFactory, $filter, toastr) {
   var vm = this;
 
   // solicitudesFactory.getAll().then(
@@ -196,7 +196,7 @@ function solicitudesListController($uibModal, $log, solicitudesFactory, $filter)
 }
 
 // Controller que se encarga de gestionar nuestro formulario de solicitudes
-function controladorFormulario(solicitudesFactory, $stateParams, $log, $state) {
+function controladorFormulario(toastr,solicitudesFactory, $stateParams, $log, $state) {
   var vm = this;
   vm.master = {};
   vm.id = $stateParams.id;
@@ -218,6 +218,7 @@ function controladorFormulario(solicitudesFactory, $stateParams, $log, $state) {
         solicitudesFactory.create(vm.solicitudEditar).then(
           function (solicitud) {
             $state.go($state.current, {id: solicitud.id});
+            toastr.success('¡Solicitud creada satisfactoriamente!', '¡Éxito!');
           });
       } else {
         for (var elemento in form.$$controls) {
@@ -227,10 +228,14 @@ function controladorFormulario(solicitudesFactory, $stateParams, $log, $state) {
         }
         solicitudesFactory.update(vm.solicitudEditar.id, vm.solicitudEditar).then(
           function (response) {
-            vm.solicitudEditar = angular.copy(vm.solicitudEditar);
+            vm.solicitudEditar = angular.copy(vm. vcsolicitudEditar);
+            toastr.success('¡Solicitud modificada satisfactoriamente!', '¡Éxito!');
           }
         );
       }
+    }
+    else {
+      toastr.warning('¡Debe rellenar los campos obligatorios!', '¡Cuidado!');
     }
   };
 
