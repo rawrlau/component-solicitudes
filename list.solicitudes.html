@@ -2,11 +2,11 @@
   <h1 class="h1">Lista de Solicitudes</h1>
   <div class="row form-group">
     <div class="col-sm-offset-6 col-sm-5 col-xs-10">
-      <input class="form-control" ng-init="arrayFiltrado = $ctrl.arraySolicitudes; orderByColumn = undefined; orderReverse = false;" ng-model="filtro" ng-change="arrayFiltrado = ($ctrl.arraySolicitudes | filter: filtro)" placeholder="Buscar" />
-     </div>
-     <div class="col-sm-1 col-xs-1">
-       <a ui-sref="app.solicitudesForm({id: 0})"><button  type="button" class="btn btn-primary">Nuevo</button></a>
-     </div>
+      <input class="form-control" ng-init="orderByColumn = undefined; orderReverse = false;" ng-model="$ctrl.filtro" ng-change="$ctrl.actualizarArraySolicitudes()" placeholder="Buscar" />
+    </div>
+    <div class="col-sm-1 col-xs-1">
+      <a ui-sref="app.solicitudesForm({id: 0})"><button  type="button" class="btn btn-primary">Nuevo</button></a>
+    </div>
   </div>
   <table class="table table-responsive table-striped">
     <thead>
@@ -19,7 +19,7 @@
         <th>Acción</th>
       </tr>
     </thead>
-    <tr ng-repeat="elem in arrayFiltrado | orderBy : ($ctrl.reverse+$ctrl.orderByPropiedad) | limitTo : 10 : ($ctrl.currentPage-1)*$ctrl.maxSize track by elem.id">
+    <tr ng-repeat="elem in $ctrl.arrayFiltrado | orderBy : ($ctrl.reverse+$ctrl.orderByPropiedad) | limitTo : 10 : ($ctrl.currentPage-1)*$ctrl.maxSize track by elem.id">
       <td>
         {{ elem.id }}
       </td>
@@ -62,7 +62,8 @@
       </td>
     </tr>
   </table>
+
   <div class="pagination">
-    <ul uib-pagination total-items="arrayFiltrado.length" ng-model="$ctrl.currentPage" max-size="5" class="pagination-sm" boundary-link-numbers="true"></ul>
+    <ul uib-pagination total-items="$ctrl.arrayFiltrado.length" ng-model="$ctrl.currentPage" max-size="5" class="pagination-sm" boundary-link-numbers="true"></ul>
   </div>
 </div>
