@@ -5,11 +5,14 @@ angular.module('ghr.solicitudes', ['ui.bootstrap'])
     controller: controladorFormulario
   }).component('ghrSolicitudesList', {
     templateUrl: '../bower_components/component-solicitudes/list.solicitudes.html',
-    controller: generarSolicitudes
-  }).factory('solicitudesFactory', function solicitudesFactory() {
+    controller: solicitudesListController
+  })
+  .constant('solBaseUrl', 'http://localhost:3003/api/')
+  .constant('solEntidad', 'solicitudes')
+  .factory('solicitudesFactory', function solicitudesFactory($http, solBaseUrl, solEntidad) {
     // Arrays para rellenar nuestro objeto solicitud con valores aleatorios
     var nombre = ['Adrian', 'Hector', 'Dani', 'Miguel', 'Alex', 'Rodri', 'Marta', 'Alejandro', 'Alvaro'];
-    var descripcion = ['descripcionuno', 'descripciondos', 'descripciontres', 'descripcioncuatro', 'descripcioncinco'];
+    var descripcion = ['descripcion1', 'descripcion2', 'descripcion3', 'descripcion4', 'descripcion5', 'descripcion6', 'descripcion7', 'descripcion8', 'descripcion9'];
     var cliente = ['BBVA', 'El Corte Ingles', 'Clientazo'];
     var brm = ['arm1', 'arm2', 'arm3', 'arm4', 'arm5', 'arm6'];
     var adm = ['adm1', 'adm2', 'adm3', 'adm4', 'adm5', 'adm6'];
@@ -21,6 +24,7 @@ angular.module('ghr.solicitudes', ['ui.bootstrap'])
     var ingles = ['Bajo', 'Medio', 'Alto'];
     var consultorasContactadas = ['Consultora1', 'Consultora2', 'Consultora3', 'Consultora4', 'Consultora5'];
     var estado = ['abierta', 'cerradaCliente', 'cerradaIncorporacion', 'standby'];
+
     // Funcion que crea un objeto solicitud y lo rellena con un valor aleatorio
     function crearSolicitud(id) {
       var solicitud = {
@@ -28,7 +32,7 @@ angular.module('ghr.solicitudes', ['ui.bootstrap'])
         nombre: obtenerValor(nombre),
         descripcion: obtenerValor(descripcion),
         fechaRecibida: new Date(obtenerFecha()),
-        // fechaRecibida: new Date(new Date().getTime() - linearGenerator(0, 999999999999)),
+        // fechaRecibida: new Date(new Date().getTime() - distribucionLineal(100)),
         cliente: obtenerValor(cliente),
         brm: obtenerValor(brm),
         adm: obtenerValor(adm),
@@ -43,6 +47,7 @@ angular.module('ghr.solicitudes', ['ui.bootstrap'])
       };
       return solicitud;
     }
+
     // Con este metodo obtenemos una fecha aleatoria para nuestro campo fechaRecibida
     function obtenerFecha() {
       var date = new Date();
@@ -50,16 +55,19 @@ angular.module('ghr.solicitudes', ['ui.bootstrap'])
       var mes = Math.floor(Math.random() * 13);
       date.setDate(date.getDate() + dia);
       date.setMonth(date.getMonth() + mes);
-      return date.getDate() + '/' + date.getMonth() + '/' + date.getFullYear();
+      return date.getMonth() + '/' + date.getDate() + '/' + date.getFullYear();
     }
+
     // Obtenemos un valor aleatorio
     function distribucionLineal(rango) {
       return Math.floor(Math.random() * rango);
     }
+
     // Rellenamos el array con nuestro valor aleatorio
     function obtenerValor(array) {
       return array[distribucionLineal(array.length)];
     }
+
     // Creamos un numero determinado de objeto solicitud
     function crearSolicitudes() {
       var arraySolicitudes = [];
@@ -68,6 +76,7 @@ angular.module('ghr.solicitudes', ['ui.bootstrap'])
       }
       return arraySolicitudes;
     }
+
     function _getReferenceById(id) {
       var solicitud;
       for (var i = 0; (i < arraySolicitudes.length) && (solicitud == undefined); i++) {
@@ -79,71 +88,87 @@ angular.module('ghr.solicitudes', ['ui.bootstrap'])
     }
     // return crearSolicitudes();
     var arraySolicitudes = crearSolicitudes();
+    var serviceUrl = solBaseUrl + solEntidad;
     return {
+
       // Read and return all entities
       getAll: function getAll() {
-        return angular.copy(arraySolicitudes);
+        // return angular.copy(arraySolicitudes);
+        return $http({
+          method: 'GET',
+          url: serviceUrl
+        })
+        .then(function onSuccess(response) {
+          return response.data;
+        },
+        function onFailure(reason) {
+
+        });
       },
       create: function create(solicitud) {
-        console.log('estoy creando una solicitud' + JSON.stringify(solicitud));
-        solicitud.id = arraySolicitudes.length + 1;
-        arraySolicitudes.push(angular.copy(solicitud));
-        console.log(arraySolicitudes);
+        return $http({
+          method: 'POST',
+          url: serviceUrl,
+          data: solicitud
+        }).then(function onSuccess(response) {
+          return response.data;
+        });
       },
       read: function read(id) {
-        // var solicitud;
-        // for (var i = 0; (i < arraySolicitudes.length) && (solicitud == undefined); i++) {
-        //   if (arraySolicitudes[i].id == id) {
-        //     solicitud = angular.copy(arraySolicitudes[i]);
-        //   }
-        // }
-        // return solicitud;
-        return angular.copy(_getReferenceById(id));
+        return $http({
+          method: 'GET',
+          url: serviceUrl + '/' + id
+        }).then(function onSuccess(response) {
+          return response.data;
+        });
       },
-      update: function update(solicitud) {
-        if (!solicitud.id) {
-          throw 'El objeto carece de id y no se puede actualizar' + JSON.stringify(solicitud);
-        }
-        // var salida = false;
-        // for (var i = 0; i < arraySolicitudes.length && salida == false; i++) {
-        //   if (arraySolicitudes[i].id == solicitud.id) {
-        //     arraySolicitudes[i] = angular.copy(solicitud);
-        //     salida = true;
-        //   }
-        // }
-        // return angular.copy(arraySolicitudes[i]);
-        oldSolicitud = _getReferenceById(solicitud.id);
-        if (oldSolicitud) {
-          var indice = arraySolicitudes.indexOf(oldSolicitud);
-          var newSolicitud = arraySolicitudes[indice] = angular.copy(solicitud);
-          return angular.copy(newSolicitud);
-        }
-        throw 'El objeto no existe y no se puede actualizar' + JSON.stringify(solicitud);
+      update: function update(id, solicitud) {
+        return $http({
+          method: 'PATCH',
+          url: serviceUrl + '/' + id,
+          data: solicitud
+        }).then(function onSuccess(response) {
+          return response.data;
+        });
       },
-      delete: function _delete(solicitud) {
-        if (!solicitud.id) {
-          throw 'El objeto carece de id y no se puede actualizar' + JSON.stringify(solicitud);
+      delete: function _delete(id) {
+        if (!id) {
+          throw solEntidad + 'invalida.';
         }
-        oldSolicitud = _getReferenceById(solicitud.id);
-        if (oldSolicitud) {
-          var indice = arraySolicitudes.indexOf(oldSolicitud);
-          if (indice > -1) {
-            console.log('Antes de borrar' + arraySolicitudes);
-            arraySolicitudes.splice(indice, 1);
-            console.log('Despues de borrar' + arraySolicitudes);
-          } else {
-            throw 'El objeto no existe y no se puede borrar' + JSON.stringify(solicitud);
-          }
-        }
+        return $http({
+          method: 'DELETE',
+          url: serviceUrl + '/' + id
+        });
       }
     };
   });
+
 // Controller para generar nuestras solicitudes y gestionar el borrado de la solicitud
-function generarSolicitudes($uibModal, $log, solicitudesFactory) {
+function solicitudesListController($uibModal, $log, solicitudesFactory, $filter) {
   var vm = this;
-  vm.arraySolicitudes = solicitudesFactory.getAll();
+
+  // solicitudesFactory.getAll().then(
+  //   function onSuccess(response) {
+  //     vm.arraySolicitudes = response.data;
+  //     console.log(response);
+  //     console.log(vm.arraySolicitudes);
+  //     vm.totalItems = vm.arraySolicitudes.length;
+  //   });
+  //
+  function actualizarArraySolicitudes() {
+    vm.arrayFiltrado = $filter('filter')(vm.arraySolicitudes, vm.filtro);
+  }
+  vm.actualizarArraySolicitudes = actualizarArraySolicitudes;
+  solicitudesFactory.getAll().then(
+    function onSuccess(response) {
+      vm.arraySolicitudes = response;
+      vm.arrayFiltrado = vm.arraySolicitudes;
+      vm.totalItems = vm.arraySolicitudes.length;
+    });
+  // vm.arraySolicitudes = solicitudesFactory.getAll();
   vm.maxSize = 10; // Numero maximo de elementos
   vm.currentPage = 1;
+
   // Se encarga de abrir nuestra ventana modal en base al id obtenido
   vm.openComponentModal = function (id) {
     var modalInstance = $uibModal.open({
@@ -154,45 +179,67 @@ function generarSolicitudes($uibModal, $log, solicitudesFactory) {
         }
       }
     });
+
     // Instance para borrar una entidad concreta de solicitudes
-    modalInstance.result.then(function (selectedItem) {
-      var solicitudEliminar;
-      vm.selected = selectedItem;
-      console.log('selected' + vm.selected);
-      $log.log('Tamaño', vm.arraySolicitudes.length);
-      $log.log('Eliminando, ', selectedItem);
-      for (var i = 0; i < vm.arraySolicitudes.length; i++) {
-        if (vm.arraySolicitudes[i].id === selectedItem) {
-          solicitudEliminar = vm.arraySolicitudes[i];
-        }
+    modalInstance.result.then(function (solicitudId) {
+      solicitudesFactory.delete(solicitudId).then(function onSuccess(deletedCount) {
+        solicitudesFactory.getAll().then(function (solicitudes) {
+          vm.arraySolicitudes = solicitudes;
+          actualizarArraySolicitudes();
+        });
       }
-      vm.arraySolicitudes.splice(vm.arraySolicitudes.indexOf(solicitudEliminar), 1);
-      $log.log('Tamaño', vm.arraySolicitudes.length);
+      );
     }, function (reason) {
-      vm.selected = reason;
+
     });
   };
 }
+
 // Controller que se encarga de gestionar nuestro formulario de solicitudes
 function controladorFormulario(solicitudesFactory, $stateParams, $log, $state) {
   var vm = this;
   vm.master = {};
   vm.id = $stateParams.id;
-  vm.arraySolicitudes = solicitudesFactory.getAll();
-  console.log(solicitudesFactory.read(vm.id));
-  vm.solicitudEditar = solicitudesFactory.read(vm.id);
   $log.log(vm.solicitudEditar);
+
+  if ($stateParams.id != 0) {
+    solicitudesFactory.read($stateParams.id).then(
+      function (solicitud) {
+        vm.solicitudEditar = angular.copy(vm.master = solicitud);
+      }
+    );
+  }
+
   vm.updateOrCreate = function (solicitudEditar, form) {
-    // if ($('form').$valid) {
     if (form.$valid) {
       if (vm.id == 0) {
-        solicitudesFactory.create(vm.solicitudEditar);
-        $state.go($state.current, {id: vm.solicitudEditar.id});
+        delete vm.solicitudEditar.id;
+        solicitudesFactory.create(vm.solicitudEditar).then(
+          function (solicitud) {
+            $state.go($state.current, {id: solicitud.id});
+          });
       } else {
-        solicitudesFactory.update(vm.solicitudEditar);
+        // if (form.$dirty) {
+        //   console.log('estoy dirty');
+        // }
+        solicitudesFactory.update(vm.solicitudEditar.id).then(
+          function (solicitud) {
+            if (form.$dirty) {
+              console.log('estoy dirty');
+
+            }
+
+            for (var elem in form) {
+              if (elem.$dirty) {
+                console.log('hola');
+              }
+            }
+          }
+        );
       }
     }
   };
+
   vm.reset = function (form) {
     if (form) {
       form.$setPristine();
@@ -200,8 +247,8 @@ function controladorFormulario(solicitudesFactory, $stateParams, $log, $state) {
     }
     vm.solicitud = angular.copy(vm.master);
   };
-  vm.reset();
 }
+
 // Controlador ModalInstanceCtrl para confirmar y cancelar nuestra peticion
 angular.module('ghr.solicitudes').controller('ModalInstanceCtrl', function ($uibModalInstance, $log) {
   var $ctrl = this;
@@ -212,6 +259,7 @@ angular.module('ghr.solicitudes').controller('ModalInstanceCtrl', function ($uib
     $uibModalInstance.dismiss(reason);
   };
 });
+
 // Modulo para nuestra ventana modal con su controller para eliminar y cancelar
 angular.module('ghr.solicitudes').component('modalComponentBorrarSolicitudes', {
   templateUrl: '../bower_components/component-solicitudes/myModalContent.html',
@@ -223,17 +271,17 @@ angular.module('ghr.solicitudes').component('modalComponentBorrarSolicitudes', {
   controller: function (solicitudesFactory) {
     var vm = this;
     vm.arraySolicitudes = solicitudesFactory.getAll();
-    // console.log(solicitudesFactory.read(1));
-    // vm.solicitudEditar = solicitudesFactory.read(1);
+
     vm.$onInit = function () {
       vm.seleccionado = vm.resolve.seleccionado;
     };
+
     vm.eliminar = function (solicitud) {
-      solicitudesFactory.delete(solicitudesFactory.read(solicitud));
       vm.close({
         $value: solicitud
       });
     };
+
     vm.cancelar = function () {
       vm.dismiss({
         $value: 'cancel'
