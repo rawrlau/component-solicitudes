@@ -9,7 +9,7 @@ angular.module('ghr.solicitudes', ['ui.bootstrap', 'toastr'])
   })
   .constant('solBaseUrl', 'http://localhost:3003/api/')
   .constant('solEntidad', 'solicitudes')
-  .factory('solicitudesFactory', function solicitudesFactory($http, solBaseUrl, solEntidad) {
+  .factory('solicitudesFactory', function solicitudesFactory(toastr, $http, solBaseUrl, solEntidad) {
     // Arrays para rellenar nuestro objeto solicitud con valores aleatorios
     var nombre = ['Adrian', 'Hector', 'Dani', 'Miguel', 'Alex', 'Rodri', 'Marta', 'Alejandro', 'Alvaro'];
     var descripcion = ['descripcion1', 'descripcion2', 'descripcion3', 'descripcion4', 'descripcion5', 'descripcion6', 'descripcion7', 'descripcion8', 'descripcion9'];
@@ -102,7 +102,7 @@ angular.module('ghr.solicitudes', ['ui.bootstrap', 'toastr'])
           return response.data;
         },
         function onFailure(reason) {
-
+            toastr.error('No se ha podido realizar la operacion, por favor compruebe su conexion a internet e intentelo más tarde.', '¡Error!');
         });
       },
       create: function create(solicitud) {
@@ -112,6 +112,9 @@ angular.module('ghr.solicitudes', ['ui.bootstrap', 'toastr'])
           data: solicitud
         }).then(function onSuccess(response) {
           return response.data;
+        },
+        function onFailure(reason) {
+            toastr.error('No se ha podido realizar la operacion, por favor compruebe su conexion a internet e intentelo más tarde.', '¡Error!');
         });
       },
       read: function read(id) {
@@ -120,6 +123,9 @@ angular.module('ghr.solicitudes', ['ui.bootstrap', 'toastr'])
           url: serviceUrl + '/' + id
         }).then(function onSuccess(response) {
           return response.data;
+        },
+        function onFailure(reason) {
+            toastr.error('No se ha podido realizar la operacion, por favor compruebe su conexion a internet e intentelo más tarde.', '¡Error!');
         });
       },
       update: function update(id, solicitud) {
@@ -129,6 +135,9 @@ angular.module('ghr.solicitudes', ['ui.bootstrap', 'toastr'])
           data: solicitud
         }).then(function onSuccess(response) {
           return response.data;
+        },
+        function onFailure(reason) {
+            toastr.error('No se ha podido realizar la operacion, por favor compruebe su conexion a internet e intentelo más tarde.', '¡Error!');
         });
       },
       delete: function _delete(id) {
@@ -138,6 +147,12 @@ angular.module('ghr.solicitudes', ['ui.bootstrap', 'toastr'])
         return $http({
           method: 'DELETE',
           url: serviceUrl + '/' + id
+        }).then(function onSuccess(response) {
+          toastr.success('¡Solicitud eliminada satisfactoriamente!', '¡Ok!');
+          return response.data;
+        },
+        function onFailure(reason) {
+            toastr.error('No se ha podido realizar la operacion, por favor compruebe su conexion a internet e intentelo más tarde.', '¡Error!');
         });
       }
     };
@@ -218,7 +233,7 @@ function controladorFormulario(toastr,solicitudesFactory, $stateParams, $log, $s
         solicitudesFactory.create(vm.solicitudEditar).then(
           function (solicitud) {
             $state.go($state.current, {id: solicitud.id});
-            toastr.success('¡Solicitud creada satisfactoriamente!', '¡Éxito!');
+            toastr.success('¡Solicitud creada satisfactoriamente!', '¡Ok!');
           });
       } else {
         for (var elemento in form.$$controls) {
@@ -229,7 +244,7 @@ function controladorFormulario(toastr,solicitudesFactory, $stateParams, $log, $s
         solicitudesFactory.update(vm.solicitudEditar.id, vm.solicitudEditar).then(
           function (response) {
             vm.solicitudEditar = angular.copy(vm. vcsolicitudEditar);
-            toastr.success('¡Solicitud modificada satisfactoriamente!', '¡Éxito!');
+            toastr.success('¡Solicitud modificada satisfactoriamente!', '¡Ok!');
           }
         );
       }
@@ -267,7 +282,7 @@ angular.module('ghr.solicitudes').component('modalComponentBorrarSolicitudes', {
     close: '&',
     dismiss: '&'
   },
-  controller: function (solicitudesFactory) {
+  controller: function (toastr, solicitudesFactory) {
     var vm = this;
     vm.arraySolicitudes = solicitudesFactory.getAll();
 
