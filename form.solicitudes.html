@@ -1,96 +1,42 @@
 <div class="container-fluid">
   <h2>Formulario Solicitudes</h2>
-  <form novalidate name="formSolicitudes" class="form-group">
-
+  <form name="formSolicitudes" class="form-group">
     <div class="form-horizontal form-group col-md-4">
       <label>Nombre: </label>
-      <input class="form-control"type="text" ng-model="$ctrl.solicitudEditar.nombre" name="sNombre" placeholder="Nombre"/><br/>
+      <input class="form-control" type="text" ng-model="$ctrl.solicitudEditar.nombre" name="sNombre" placeholder="Nombre" /><br/>
     </div>
-    <div ng-show="form.$submitted || form.sNombre.$touched">
-      <div ng-show="form.sNombre.$error.required">Digame su Nombre</div>
-    </div>
-
     <div class="form-group col-md-4">
       <label>Descripcion: </label>
-      <input class="form-control" type="text" ng-model="$ctrl.solicitudEditar.descripcion" name="sDescripcion" placeholder="Descripcion"/><br/>
+      <input class="form-control" type="text" ng-model="$ctrl.solicitudEditar.descripcion" name="sDescripcion" placeholder="Descripcion"  /><br/>
     </div>
-    <div ng-show="form.$submitted || form.sDescripcion.$touched">
-      <div ng-show="form.sDescripcion.$error.required">Digame su Descripcion</div>
-    </div>
-
     <div class="form-group col-md-4">
       <label>Fecha Recepción: </label>
-      <input class="form-control" type="date" ng-model="$ctrl.solicitudEditar.fechaRecibida" name="sFechaRecibida" placeholder="fechaRecibida"/><br />
+      <input  class="form-control" type="date" ng-model="$ctrl.solicitudEditar.fechaRecibida" name="sFechaRecibida" placeholder="fechaRecibida"/><br />
     </div>
-    <div ng-show="form.$submitted || form.sFechaRecibida.$touched">
-      <div ng-show="form.sFechaRecibida.$error.required">Digame su fechaRecibida</div>
-    </div>
-
     <div class="form-group col-md-4">
       <label>Cliente: </label>
-      <input class="form-control" type="text" ng-model="$ctrl.solicitudEditar.cliente" name="sCliente" placeholder="Cliente"/><br />
+      <input  class="form-control" type="text" ng-model="$ctrl.solicitudEditar.cliente" name="sCliente" placeholder="Cliente"  /><br />
     </div>
-    <div ng-show="form.$submitted || form.sCliente.$touched">
-      <div ng-show="form.sCliente.$error.required">Digame su Cliente</div>
-    </div>
-
     <div class="form-group col-md-4">
       <label>BRM: </label>
-      <input class="form-control" type="text" ng-model="$ctrl.solicitudEditar.brm" name="sBrm" placeholder="BRM"/><br />
+      <input  class="form-control" type="text" ng-model="$ctrl.solicitudEditar.brm" name="sBrm" placeholder="BRM"  /><br />
     </div>
-    <div ng-show="form.$submitted || form.sBrm.$touched">
-      <div ng-show="form.sBrm.$error.required">Digame su BRM</div>
-    </div>
-
     <div class="form-group col-md-4">
       <label>ADM: </label>
-      <input class="form-control" type="text" ng-model="$ctrl.solicitudEditar.adm" name="sAdm" placeholder="ADM"/><br />
+      <input class="form-control" type="text" ng-model="$ctrl.solicitudEditar.adm" name="sAdm" placeholder="ADM"  /><br />
     </div>
-    <div ng-show="form.$submitted || form.sAdm.$touched">
-      <div ng-show="form.sAdm.$error.required">Digame su ADM</div>
-    </div>
-
     <div class="form-group col-md-4">
       <label>Perfil: </label>
-      <input class="form-control" type="text" ng-model="$ctrl.solicitudEditar.perfil" name="sPerfil" placeholder="Perfil"/><br />
+      <input  class="form-control" type="text" ng-model="$ctrl.solicitudEditar.perfil" name="sPerfil" placeholder="Perfil"  /><br />
     </div>
-    <div ng-show="form.$submitted || form.sPerfil.$touched">
-      <div ng-show="form.sPerfil.$error.required">Digame su Perfil</div>
-    </div>
-
     <div class="form-group col-md-4">
       <label>Requisitos obligatorios: </label>
-      <input class="form-control" type="text" ng-model="$ctrl.solicitudEditar.reqObligatorios" name="sReqObligatorios" placeholder="ReqObligatorios"/><br />
+      <input class="form-control" type="text" ng-model="$ctrl.solicitudEditar.reqObligatorios" name="sReqObligatorios" placeholder="ReqObligatorios"  /><br />
     </div>
-    <div ng-show="form.$submitted || form.sReqObligatorios.$touched">
-      <div ng-show="form.sReqObligatorios.$error.required">Digame sus ReqObligatorios</div>
-    </div>
-
     <div class="form-group col-md-4">
       <label>Requisitosdeseables: </label>
-      <input class="form-control" type="text" ng-model="$ctrl.solicitudEditar.reqDeseables" name="sReqDeseables" placeholder="ReqDeseables"/><br />
+      <input  class="form-control" type="text" ng-model="$ctrl.solicitudEditar.reqDeseables" name="sReqDeseables" placeholder="ReqDeseables"  /><br />
     </div>
-    <div ng-show="form.$submitted || form.sReqDeseables.$touched">
-      <div ng-show="form.sReqDeseables.$error.required">Digame sus ReqDeseables</div>
-    </div>
-
-    <div class="form-group col-md-4">
-      <label>Consultoras contactadas: </label>
-      <input class="form-control" type="text" ng-model="$ctrl.solicitudEditar.consultorasContactadas" name="sConsultorasContactadas" placeholder="ConsultorasContactadas"/>
-      <br />
-    </div>
-    <div ng-show="form.$submitted || form.sConsultorasContactadas.$touched">
-      <div ng-show="form.sConsultorasContactadas.$error.required">Digame sus ConsultorasContactadas</div>
-    </div>
-
-    <div class="form-group col-md-4">
-      <label>Estado: </label>
-      <input class="radio-inline" type="radio" ng-model="$ctrl.solicitudEditar.estado" name="sEstado" value="abierta" ng-checked="$ctrl.solicitudEditar.estado === 'abierta'"> Abierta</input>
-      <input class="radio-inline" type="radio" ng-model="$ctrl.solicitudEditar.estado" name="sEstado" value="cerradaC" ng-checked="$ctrl.solicitudEditar.estado === 'cerradaCliente'"> Cerrrada cliente
-      <input class="radio-inline" type="radio" ng-model="$ctrl.solicitudEditar.estado" name="sEstado" value="cerradaI" ng-checked="$ctrl.solicitudEditar.estado === 'cerradaIncorporacion'"> Cerrada incorporacion
-      <input class="radio-inline" type="radio" ng-model="$ctrl.solicitudEditar.estado" name="sEstado" value="standby" ng-checked="$ctrl.solicitudEditar.estado === 'standby'"> Standby
-    </div>
-
     <div class="form-group col-md-4">
       <label>Ingles: </label>
       <select class="form-control" ng-model="$ctrl.solicitudEditar.ingles" name="Ingles">
@@ -99,26 +45,40 @@
         <option value="Alto" ng-model="$ctrl.solicitudEditarEditar.ingles" ng-change="$ctrl.solicitudEditarEditar.ingles === 'Alto'">Alto</option>
       </select>
     </div>
-
     <div class="form-group col-md-4">
+      <label>Consultoras contactadas: </label>
+      <input class="form-control" type="text" ng-model="$ctrl.solicitudEditar.consultorasContactadas" name="sConsultorasContactadas" placeholder="ConsultorasContactadas"
+      /><br />
+    </div>
+    <div class="btn-group" uib-dropdown >
+        <button type="button" class="btn btn-default"  uib-dropdown-toggle>
+          Estado<span class="caret"></span>
+            <span class="sr-only">Split button!</span>
+        </button>
+        <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="split-button">
+            <li role="menuitem" ng-repeat="estado in $ctrl.estados" value="{{estado}}" ng-selected="$ctrl.candidato.estado === estado">
+                <a href="#" ng-click="$ctrl.setEstado(estado.name)">{{estado.name}}</a>
+            </li>
+        </ul>
+    </div>
+    <div class="form-group col-md-1">
       <label>Viajar: </label>
-      <input class="radio-inline" type="radio" ng-model="$ctrl.solicitudEditar.viajar" name="sViajar"  value="S" ng-checked="$ctrl.solicitudEditar.viajar === 'S'">Si
-      <input class="radio-inline" type="radio" ng-model="$ctrl.solicitudEditar.viajar" name="sViajar" value="N" ng-checked="$ctrl.solicitudEditar.viajar === 'N'">No<br>
+      <br /><input class="radio-inline" type="radio" ng-model="$ctrl.solicitudEditar.viajar" name="sViajar"  value="S" ng-checked="$ctrl.solicitudEditar.viajar === 'S'">Si
+      <br /><input class="radio-inline" type="radio" ng-model="$ctrl.solicitudEditar.viajar" name="sViajar" value="N" ng-checked="$ctrl.solicitudEditar.viajar === 'N'">No
     </div>
-
-    <div class="form-group col-md-4">
+    <div class="form-group col-md-1">
       <label>Guardias: </label>
-      <input class="radio-inline" type="radio" ng-model="$ctrl.solicitudEditar.guardias" name="sGuardias" value="S" ng-checked="$ctrl.solicitudEditar.guardias === 'S'" checked>Si
-      <input class="radio-inline" type="radio" ng-model="$ctrl.solicitudEditar.guardias" name="sGuardias" value="N" ng-checked="$ctrl.solicitudEditar.guardias === 'N'">No<br>
+      <br /><input class="radio-inline" type="radio" ng-model="$ctrl.solicitudEditar.guardias" name="sGuardias" value="S" ng-checked="$ctrl.solicitudEditar.guardias === 'S'" checked>Si
+      <br /><input class="radio-inline" type="radio" ng-model="$ctrl.solicitudEditar.guardias" name="sGuardias" value="N" ng-checked="$ctrl.solicitudEditar.guardias === 'N'">No
     </div>
-
-    <input type="button" class="form-control" ng-click="$ctrl.reset(formSolicitudes)" value="Resetear solicitud" />
-    <input type="submit" class="form-control" ng-click="$ctrl.updateOrCreate($ctrl.solicitudEditar, formSolicitudes)" value="Enviar Solicitud" />
+    <center>
+    <div class="form-group col-md-12">
+    <input type="button" class="btn btn-default" ng-click="$ctrl.reset(formSolicitudes)" value="Resetear solicitud" />
+    <input type="submit" class="btn btn-success" ng-click="$ctrl.updateOrCreate($ctrl.solicitudEditar, formSolicitudes)" value="Enviar Solicitud" />
+  </div>
   </form>
-
+  <br />
   <pre>solicitud = {{$ctrl.solicitudEditar | json}}</pre>
-  <pre>master = {{formSolicitudes | json}}</pre>
-
+  <pre>master = {{$ctrl.master | json}}</pre>
   </center>
-
 </div>
