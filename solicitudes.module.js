@@ -198,10 +198,21 @@ function controladorFormulario(toastr, solicitudesFactory, $stateParams, $log, $
   vm.master = {};
   vm.id = $stateParams.id;
   $log.log(vm.solicitudEditar);
+
+  vm.guardias = ['S', 'N'];
+  vm.viajar = ['S', 'N'];
   vm.estados = ['abierta', 'cerradaCliente', 'cerradaIncorporacion', 'standby'];
 
+  vm.comprobarForm = function(op){
+    if(op == 'S'){
+      return 'Si';
+    }
+    else if(op == 'N'){
+      return 'No';
+    }
+  }
+
   vm.mode = $stateParams.mode;
-  console.log(vm.mode);
 
   if ($stateParams.id != 0) {
     solicitudesFactory.read($stateParams.id).then(
