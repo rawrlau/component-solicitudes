@@ -40,23 +40,11 @@
                 <span class="caret"></span>
               </button>
           <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="split-button">
-            <li role="menuitem"><a href="#">Ver</a></li>
-            <li role="menuitem"><a ui-sref="app.solicitudesForm({id: elem.id})">Editar</a></li>
+            <li role="menuitem"><a ui-sref="app.solicitudesForm({id: elem.id,mode: 'view'})">Ver</a></li>
+            <li role="menuitem"><a ui-sref="app.solicitudesForm({id: elem.id,mode: 'editar'})">Editar</a></li>
             <li role="menuitem"><a href="#">Editar estado</a></li>
             <li class="divider"></li>
             <li role="menuitem"><a href="#" ng-click="$ctrl.openComponentModal(elem.id)">Eliminar</a></li>
-            <!-- <script type="text/ng-template" id="myModalContent.html">
-              <div class="modal-header">
-                <h3 class="modal-title" id="modal-title">Eliminando 'Entidad' {{ $ctrl.seleccionado }}</h3>
-              </div>
-              <div class="modal-body" id="modal-body">
-                <p>¿Está usted seguro?</p>
-              </div>
-              <div class="modal-footer">
-                <button class="btn" type="button" ng-click="$ctrl.cancelar()">Cancelar</button>
-                <button class="btn btn-danger" type="button" ng-click="$ctrl.eliminar($ctrl.seleccionado)">Eliminar</button>
-              </div>
-            </script> -->
           </ul>
         </div>
       </td>
