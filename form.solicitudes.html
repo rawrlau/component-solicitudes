@@ -1,5 +1,6 @@
 <div class="container-fluid">
-  <h2 class="col-md-12">Formulario Solicitudes</h2>
+  <h2 class="col-md-12" ng-hide="$ctrl.mode !== 'editar'">Formulario Solicitudes</h2>
+  <h2 class="col-md-12" ng-hide="$ctrl.mode !== 'view'">Listado de la solicitud</h2>
   <form name="formSolicitudes" class="form-group">
     <div class="form-group col-md-4"
       ng-hide="$ctrl.mode !== 'editar'" ng-class="{ 'has-error' : formSolicitudes.nombre.$invalid && !formSolicitudes.nombre.$pristine, 'has-success': !focus &&  formSolicitudes.nombre.$valid}">
@@ -144,7 +145,7 @@
 
     <div class="btn-group" uib-dropdown ng-hide="$ctrl.mode !== 'editar'">
       <button type="button" class="btn btn-default"  uib-dropdown-toggle>
-        {{$ctrl.solicitudEditar.estado}}<span class="caret"></span>
+        {{$ctrl.solicitudEditar.estado}} <span class="caret"></span>
       <span class="sr-only">Split button!</span>
       </button>
       <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="split-button">
@@ -182,7 +183,6 @@
     </div>
 
     <center>
-
 
     <div class="form-group col-md-12">
       <br />
