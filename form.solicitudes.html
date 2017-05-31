@@ -1,6 +1,5 @@
 <div class="container-fluid">
-  <h2 class="col-md-12" ng-hide="$ctrl.mode !== 'editar'">Formulario Solicitudes</h2>
-  <h2 class="col-md-12" ng-hide="$ctrl.mode !== 'view'">Listado de la solicitud</h2>
+  <h2 class="col-md-12">Formulario Solicitudes</h2>
   <form name="formSolicitudes" class="form-group">
     <div class="form-group col-md-4"
       ng-hide="$ctrl.mode !== 'editar'" ng-class="{ 'has-error' : formSolicitudes.nombre.$invalid && !formSolicitudes.nombre.$pristine, 'has-success': !focus &&  formSolicitudes.nombre.$valid}">
@@ -12,7 +11,7 @@
 
     <div class="col-md-4" ng-hide="$ctrl.mode !== 'view'">
       <label>Nombre: </label>
-      <span>{{ $ctrl.solicitudEditar.nombre }}</span>
+      <span class="form-control">{{ $ctrl.solicitudEditar.nombre }}</span>
     </div>
 
     <div class="form-group col-md-4"
@@ -25,7 +24,7 @@
 
     <div class="col-md-4" ng-hide="$ctrl.mode !== 'view'">
       <label>Descripción: </label>
-      <span>{{ $ctrl.solicitudEditar.descripcion }}</span>
+      <span class="form-control">{{ $ctrl.solicitudEditar.descripcion }}</span>
     </div>
 
     <div class="form-group col-md-4" ng-hide="$ctrl.mode !== 'editar'">
@@ -35,7 +34,7 @@
 
     <div class="col-md-4" ng-hide="$ctrl.mode !== 'view'">
       <label>Fecha Recepción: </label>
-      <span>{{ $ctrl.solicitudEditar.fechaRecibida }}</span>
+      <span class="form-control">{{ $ctrl.solicitudEditar.fechaRecibida }}</span>
     </div>
 
     <div class="form-group col-md-4"
@@ -48,7 +47,7 @@
 
     <div class="col-md-4" ng-hide="$ctrl.mode !== 'view'">
       <label>Cliente: </label>
-      <span>{{ $ctrl.solicitudEditar.cliente }}</span>
+      <span class="form-control">{{ $ctrl.solicitudEditar.cliente }}</span>
     </div>
 
     <div class="form-group col-md-4"
@@ -61,7 +60,7 @@
 
     <div class="col-md-4" ng-hide="$ctrl.mode !== 'view'">
       <label>BRM: </label>
-      <span>{{ $ctrl.solicitudEditar.brm }}</span>
+      <span class="form-control">{{ $ctrl.solicitudEditar.brm }}</span>
     </div>
 
     <div class="form-group col-md-4"
@@ -74,7 +73,7 @@
 
     <div class="col-md-4" ng-hide="$ctrl.mode !== 'view'">
       <label>ADM: </label>
-      <span>{{ $ctrl.solicitudEditar.adm }}</span>
+      <span class="form-control">{{ $ctrl.solicitudEditar.adm }}</span>
     </div>
 
     <div class="form-group col-md-4"
@@ -87,7 +86,7 @@
 
     <div class="col-md-4" ng-hide="$ctrl.mode !== 'view'">
       <label>Perfil: </label>
-      <span>{{ $ctrl.solicitudEditar.perfil }}</span>
+      <span class="form-control">{{ $ctrl.solicitudEditar.perfil }}</span>
     </div>
 
     <div class="form-group col-md-4"
@@ -100,7 +99,7 @@
 
     <div class="col-md-4" ng-hide="$ctrl.mode !== 'view'">
       <label>reqObligatorios: </label>
-      <span>{{ $ctrl.solicitudEditar.reqObligatorios }}</span>
+      <span class="form-control">{{ $ctrl.solicitudEditar.reqObligatorios }}</span>
     </div>
 
     <div class="form-group col-md-4"
@@ -113,7 +112,7 @@
 
     <div class="col-md-4" ng-hide="$ctrl.mode !== 'view'">
       <label>reqDeseables: </label>
-      <span>{{ $ctrl.solicitudEditar.reqDeseables }}</span>
+      <span class="form-control">{{ $ctrl.solicitudEditar.reqDeseables }}</span>
     </div>
 
     <div class="form-group col-md-4" ng-hide="$ctrl.mode !== 'editar'">
@@ -127,7 +126,7 @@
 
     <div class="col-md-4" ng-hide="$ctrl.mode !== 'view'">
       <label>Ingles: </label>
-      <span>{{ $ctrl.solicitudEditar.ingles }}</span>
+      <span class="form-control">{{ $ctrl.solicitudEditar.ingles }}</span>
     </div>
 
     <div class="form-group col-md-4"
@@ -140,7 +139,7 @@
 
     <div class="col-md-4" ng-hide="$ctrl.mode !== 'view'">
       <label>Consultoras contactadas: </label>
-      <span>{{ $ctrl.solicitudEditar.consultorasContactadas }}</span>
+      <span class="form-control">{{ $ctrl.solicitudEditar.consultorasContactadas }}</span>
     </div>
 
     <div class="btn-group" uib-dropdown ng-hide="$ctrl.mode !== 'editar'">
@@ -157,7 +156,7 @@
 
     <div class="col-md-4" ng-hide="$ctrl.mode !== 'view'">
       <label>Estado: </label>
-      <span>{{ $ctrl.solicitudEditar.estado }}</span>
+      <span class="form-control">{{ $ctrl.solicitudEditar.estado }}</span>
     </div>
 
     <div class="form-group col-md-1" ng-hide="$ctrl.mode !== 'editar'">
@@ -168,8 +167,9 @@
 
     <div class="col-md-4" ng-hide="$ctrl.mode !== 'view'">
       <label>Viajar: </label>
-      <span>{{ $ctrl.comprobarForm($ctrl.solicitudEditar.viajar) }}</span>
+      <span class="form-control">{{ $ctrl.solicitudEditar.viajar }}</span>
     </div>
+
     <div class="form-group col-md-1" ng-hide="$ctrl.mode !== 'editar'">
       <label>Guardias: </label>
       <br /><input class="radio-inline" type="radio" ng-model="$ctrl.solicitudEditar.guardias" name="sGuardias" value="S" ng-checked="$ctrl.solicitudEditar.guardias === 'S'" checked>Si
@@ -178,9 +178,12 @@
 
     <div class="col-md-4" ng-hide="$ctrl.mode !== 'view'">
       <label>Guardias: </label>
-      <span>{{ $ctrl.comprobarForm($ctrl.solicitudEditar.guardias) }}</span>
+      <span class="form-control">{{ $ctrl.solicitudEditar.guardias }}</span>
     </div>
+
     <center>
+
+
     <div class="form-group col-md-12">
       <br />
       <a class="btn btn-default" ui-sref="app.solicitudes">Volver al listado de solicitudes</a>
