@@ -5,44 +5,19 @@
 1 verbose cli   'serve' ]
 2 info using npm@3.10.10
 3 info using node@v6.10.2
-4 verbose run-script [ 'preserve', 'serve', 'postserve' ]
-5 info lifecycle @~preserve: @
-6 silly lifecycle @~preserve: no script for preserve, continuing
-7 info lifecycle @~serve: @
-8 verbose lifecycle @~serve: unsafe-perm in lifecycle true
-9 verbose lifecycle @~serve: PATH: C:\Program Files\nodejs\node_modules\npm\bin\node-gyp-bin;W:\Desarrollo\front\ghrFront\node_modules\.bin;W:\Herramientas\jdk1.6.0_43\bin;W:\Herramientas\spring-roo-1.1.5.RELEASE\bin;W:\Herramientas\apache-maven-3.0.5\bin;W:\Herramientas\SCRIPTS;W:\Herramientas\MySQL\mysql-5.5.22-win32\bin;;C:\Users\adrian.sanchez\Desktop\Confidential\Downloads\cmder_mini\bin;C:\Users\adrian.sanchez\Desktop\Confidential\Downloads\cmder_mini\vendor\conemu-maximus5\ConEmu\Scripts;C:\Users\adrian.sanchez\Desktop\Confidential\Downloads\cmder_mini\vendor\conemu-maximus5;C:\Users\adrian.sanchez\Desktop\Confidential\Downloads\cmder_mini\vendor\conemu-maximus5\ConEmu;C:\ProgramData\Oracle\Java\javapath;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Program Files (x86)\ATI Technologies\ATI.ACE\Core-Static;C:\Program Files\nodejs\;C:\Users\adrian.sanchez\AppData\Local\Microsoft\WindowsApps;C:\Users\adrian.sanchez\AppData\Roaming\npm;C:\Users\adrian.sanchez\AppData\Local\Programs\Git\cmd;C:\Users\adrian.sanchez\AppData\Local\atom\bin;C:\Users\adrian.sanchez\AppData\Local\Programs\Git\usr\bin;C:\Users\adrian.sanchez\AppData\Local\Programs\Git\usr\share\vim\vim74;C:\Users\adrian.sanchez\Desktop\Confidential\Downloads\cmder_mini\
-10 verbose lifecycle @~serve: CWD: W:\Desarrollo\front\ghrFront
-11 silly lifecycle @~serve: Args: [ '/d /s /c', 'gulp clean && gulp serve' ]
-12 silly lifecycle @~serve: Returned: code: 3221225786  signal: null
-13 info lifecycle @~serve: Failed to exec serve script
-14 verbose stack Error: @ serve: `gulp clean && gulp serve`
-14 verbose stack Exit status 3221225786
-14 verbose stack     at EventEmitter.<anonymous> (C:\Program Files\nodejs\node_modules\npm\lib\utils\lifecycle.js:255:16)
-14 verbose stack     at emitTwo (events.js:106:13)
-14 verbose stack     at EventEmitter.emit (events.js:191:7)
-14 verbose stack     at ChildProcess.<anonymous> (C:\Program Files\nodejs\node_modules\npm\lib\utils\spawn.js:40:14)
-14 verbose stack     at emitTwo (events.js:106:13)
-14 verbose stack     at ChildProcess.emit (events.js:191:7)
-14 verbose stack     at maybeClose (internal/child_process.js:886:16)
-14 verbose stack     at Process.ChildProcess._handle.onexit (internal/child_process.js:226:5)
-15 verbose pkgid @
-16 verbose cwd W:\Desarrollo\front\ghrFront\bower_components\component-solicitudes
-17 error Windows_NT 10.0.14393
-18 error argv "C:\\Program Files\\nodejs\\node.exe" "C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js" "run" "serve"
-19 error node v6.10.2
-20 error npm  v3.10.10
-21 error code ELIFECYCLE
-22 error @ serve: `gulp clean && gulp serve`
-22 error Exit status 3221225786
-23 error Failed at the @ serve script 'gulp clean && gulp serve'.
-23 error Make sure you have the latest version of node.js and npm installed.
-23 error If you do, this is most likely a problem with the  package,
-23 error not with npm itself.
-23 error Tell the author that this fails on your system:
-23 error     gulp clean && gulp serve
-23 error You can get information on how to open an issue for this project with:
-23 error     npm bugs
-23 error Or if that isn't available, you can get their info via:
-23 error     npm owner ls
-23 error There is likely additional logging output above.
-24 verbose exit [ 1, true ]
+4 verbose stack Error: ENOENT: no such file or directory, open 'W:\Desarrollo\front\component-solicitudes\package.json'
+4 verbose stack     at Error (native)
+5 verbose cwd W:\Desarrollo\front\component-solicitudes
+6 error Windows_NT 10.0.14393
+7 error argv "C:\\Program Files\\nodejs\\node.exe" "C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js" "run" "serve"
+8 error node v6.10.2
+9 error npm  v3.10.10
+10 error path W:\Desarrollo\front\component-solicitudes\package.json
+11 error code ENOENT
+12 error errno -4058
+13 error syscall open
+14 error enoent ENOENT: no such file or directory, open 'W:\Desarrollo\front\component-solicitudes\package.json'
+15 error enoent ENOENT: no such file or directory, open 'W:\Desarrollo\front\component-solicitudes\package.json'
+15 error enoent This is most likely not a problem with npm itself
+15 error enoent and is related to npm not being able to find a file.
+16 verbose exit [ -4058, true ]

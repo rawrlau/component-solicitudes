@@ -145,7 +145,7 @@
 
     <div class="btn-group" uib-dropdown ng-hide="$ctrl.mode !== 'editar'">
       <button type="button" class="btn btn-default"  uib-dropdown-toggle>
-        {{$ctrl.solicitudEditar.estado}} <span class="caret"></span>
+        {{$ctrl.solicitudEditar.estado}}<span class="caret"></span>
       <span class="sr-only">Split button!</span>
       </button>
       <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="split-button">
@@ -170,7 +170,6 @@
       <label>Viajar: </label>
       <span>{{ $ctrl.comprobarForm($ctrl.solicitudEditar.viajar) }}</span>
     </div>
-
     <div class="form-group col-md-1" ng-hide="$ctrl.mode !== 'editar'">
       <label>Guardias: </label>
       <br /><input class="radio-inline" type="radio" ng-model="$ctrl.solicitudEditar.guardias" name="sGuardias" value="S" ng-checked="$ctrl.solicitudEditar.guardias === 'S'" checked>Si
@@ -181,9 +180,7 @@
       <label>Guardias: </label>
       <span>{{ $ctrl.comprobarForm($ctrl.solicitudEditar.guardias) }}</span>
     </div>
-
     <center>
-
     <div class="form-group col-md-12">
       <br />
       <a class="btn btn-default" ui-sref="app.solicitudes">Volver al listado de solicitudes</a>

@@ -197,6 +197,9 @@ function controladorFormulario(toastr, solicitudesFactory, $stateParams, $log, $
   var vm = this;
   vm.master = {};
   vm.id = $stateParams.id;
+  vm.mode = $stateParams.mode;
+  console.log(vm.mode);
+
   $log.log(vm.solicitudEditar);
 
   vm.guardias = ['S', 'N'];
@@ -250,7 +253,14 @@ function controladorFormulario(toastr, solicitudesFactory, $stateParams, $log, $
       form.$setPristine();
       form.$setUntouched();
     }
-    vm.solicitud = angular.copy(vm.master);
+    vm.solicitudEditar = angular.copy(vm.master);
+  };
+  vm.cambiar = function cambiar() {
+    if (vm.mode == 'view') {
+      vm.mode = 'editar';
+    } else if (vm.mode == 'editar') {
+      vm.mode = 'view';
+    }
   };
   vm.cambiar = function cambiar() {
     if(vm.mode == "view") {
