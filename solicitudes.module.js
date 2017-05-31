@@ -201,7 +201,21 @@ function controladorFormulario(toastr, solicitudesFactory, $stateParams, $log, $
   console.log(vm.mode);
 
   $log.log(vm.solicitudEditar);
+
+  vm.guardias = ['S', 'N'];
+  vm.viajar = ['S', 'N'];
   vm.estados = ['abierta', 'cerradaCliente', 'cerradaIncorporacion', 'standby'];
+
+  vm.comprobarForm = function(op){
+    if(op == 'S'){
+      return 'Si';
+    }
+    else if(op == 'N'){
+      return 'No';
+    }
+  }
+
+  vm.mode = $stateParams.mode;
 
   if ($stateParams.id != 0) {
     solicitudesFactory.read($stateParams.id).then(
@@ -248,6 +262,13 @@ function controladorFormulario(toastr, solicitudesFactory, $stateParams, $log, $
       vm.mode = 'view';
     }
   };
+  vm.cambiar = function cambiar() {
+    if(vm.mode == "view") {
+      vm.mode = "editar";
+    }else if(vm.mode == "editar") {
+      vm.mode = "view";
+    }
+  }
 }
 // Controlador ModalInstanceCtrl para confirmar y cancelar nuestra peticion
 angular.module('ghr.solicitudes').controller('ModalInstanceCtrl', function ($uibModalInstance, $log) {

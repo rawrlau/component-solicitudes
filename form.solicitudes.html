@@ -1,5 +1,6 @@
 <div class="container-fluid">
-  <h2 class="col-md-12">Formulario Solicitudes</h2>
+  <h2 class="col-md-12" ng-hide="$ctrl.mode !== 'editar'">Formulario Solicitudes</h2>
+  <h2 class="col-md-12" ng-hide="$ctrl.mode !== 'view'">Listado de la solicitud</h2>
   <form name="formSolicitudes" class="form-group">
     <div class="form-group col-md-4"
       ng-hide="$ctrl.mode !== 'editar'" ng-class="{ 'has-error' : formSolicitudes.nombre.$invalid && !formSolicitudes.nombre.$pristine, 'has-success': !focus &&  formSolicitudes.nombre.$valid}">
@@ -167,9 +168,8 @@
 
     <div class="col-md-4" ng-hide="$ctrl.mode !== 'view'">
       <label>Viajar: </label>
-      <span>{{ $ctrl.solicitudEditar.viajar }}</span>
+      <span>{{ $ctrl.comprobarForm($ctrl.solicitudEditar.viajar) }}</span>
     </div>
-
     <div class="form-group col-md-1" ng-hide="$ctrl.mode !== 'editar'">
       <label>Guardias: </label>
       <br /><input class="radio-inline" type="radio" ng-model="$ctrl.solicitudEditar.guardias" name="sGuardias" value="S" ng-checked="$ctrl.solicitudEditar.guardias === 'S'" checked>Si
@@ -178,12 +178,9 @@
 
     <div class="col-md-4" ng-hide="$ctrl.mode !== 'view'">
       <label>Guardias: </label>
-      <span>{{ $ctrl.solicitudEditar.guardias }}</span>
+      <span>{{ $ctrl.comprobarForm($ctrl.solicitudEditar.guardias) }}</span>
     </div>
-
     <center>
-
-
     <div class="form-group col-md-12">
       <br />
       <a class="btn btn-default" ui-sref="app.solicitudes">Volver al listado de solicitudes</a>
