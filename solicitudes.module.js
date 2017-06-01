@@ -10,7 +10,7 @@ angular
     })
     .constant('solBaseUrl', 'http://localhost:3003/api/')
     .constant('solEntidad', 'solicitudes')
-    .factory('solicitudesFactory', function solicitudesFactory(toastr, $http, solBaseUrl, solEntidad) {
+    .factory('solicitudesFactory', function solicitudesFactory(toastr, $http, solBaseUrl, solEntidad, candidatoFactory) {
         var serviceUrl = solBaseUrl + solEntidad;
         return {
             // Read and return all entities
@@ -114,7 +114,7 @@ function solicitudesListController($uibModal, $log, solicitudesFactory, $filter,
     };
 }
 // Controller que se encarga de gestionar nuestro formulario de solicitudes
-function controladorFormulario(toastr, solicitudesFactory, $stateParams, $log, $state) {
+function controladorFormulario(toastr, solicitudesFactory, candidatoFactory, $stateParams, $log, $state) {
     const vm = this;
 
     vm.master = {};
@@ -136,10 +136,16 @@ function controladorFormulario(toastr, solicitudesFactory, $stateParams, $log, $
     if ($stateParams.id != 0) {
         solicitudesFactory.read($stateParams.id).then(
             function(solicitud) {
-                vm.solicitudEditar = angular.copy(vm.master = solicitud);
+                vm.solicitudEditar = angular.copy(vm.master = vm.formatearFecha(solicitud));
             }
         );
     }
+
+    vm.formatearFecha = function formatearFecha(response) {
+        response.fechaRecibida = new Date(response.fechaRecibida);
+        return response;
+    }
+
     vm.updateOrCreate = function(solicitudEditar, form) {
         if (form.$valid) {
             if (vm.id == 0) {
@@ -181,13 +187,34 @@ function controladorFormulario(toastr, solicitudesFactory, $stateParams, $log, $
         }
     };
 
-    vm.getCandidatosAsignados = function() {
-
+    vm.candidatoSeleccionado = {
+        nombre: 'Master del universo'
     }
+
+    vm.getCandidatosAsignados = function() {
+        vm.candidatosAsignados = [{
+            nombre: 'Rodri'
+        }, {
+            nombre: 'Alejandro'
+        }];
+    }
+    vm.getCandidatosAsignados();
 
     vm.getCandidatosRecomendados = function() {
-        vm.arrayRecomendados = 0;
+        candidatoFactory.getAll().then(
+            function onSuccess(response) {
+                vm.candidatosRecomendados = response.filter(
+                    function(candidato) {
+                        return candidato;
+                    }
+                )
+            }
+        );
     }
+    vm.getCandidatosRecomendados();
+    vm.maxSize = 5; // Numero maximo de elementos
+    vm.currentPage = 1;
+
 }
 // Controlador ModalInstanceCtrl para confirmar y cancelar nuestra peticion
 angular

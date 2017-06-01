@@ -31,7 +31,7 @@
 
                 <div class="col-md-4" ng-hide="$ctrl.mode !== 'view'">
                     <label>Fecha Recepción: </label>
-                    <span class="form-control">{{ $ctrl.solicitudEditar.fechaRecibida }}</span>
+                    <span class="form-control">{{ $ctrl.solicitudEditar.fechaRecibida | date : shortDate}}</span>
                 </div>
 
                 <div class="form-group col-md-4" ng-hide="$ctrl.mode !== 'editar'" ng-class="{ 'has-error' : formSolicitudes.cliente.$invalid && !formSolicitudes.cliente.$pristine, 'has-success': !focus &&  formSolicitudes.cliente.$valid}">
@@ -177,49 +177,39 @@
             <br/>
             </center>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-4 sidebarCandidatos">
             <div class="row">
                 <div class="col-md-12">
-                    <table class="table table-striped table-responsive">
-                        <thead>
-                            <tr>
-                                <th colspan="2">Candidatos Asignados</th>
-                            </tr>
-                        </thead>
-                        <tr>
-                            <td class="rowCandidato">
-                                <div>
-                                    Nombre
-                                </div>
-                                <div class="">
-                                    <span class="btn btn-xs btn-danger glyphicon glyphicon-minus"></span>
-                                </div>
-                            </td>
-                        </tr>
-                    </table>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12">
-                    <table class="table table-striped table-responsive">
+                    <table class="table table-striped table-responsive marginless-bottom">
                         <thead>
                             <tr>
                                 <th colspan="2">Candidatos Recomendados</th>
                             </tr>
                         </thead>
-                        <tr>
-                            <tr>
-                                <td class="rowCandidato">
-                                    <div>
-                                        asignado
-                                    </div>
-                                    <div class="">
-                                        <span class="btn btn-xs btn-primary glyphicon glyphicon-plus"></span>
-                                    </div>
-                                </td>
-                            </tr>
+                        <tr class="candidatoSeleccionado">
+                            <td class="rowCandidato">
+                                <div>
+                                    {{$ctrl.candidatoSeleccionado.nombre}}
+                                </div>
+                                <div class="">
+                                    <span class="btn btn-xs btn-primary glyphicon glyphicon-minus"></span>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr ng-repeat="candidato in $ctrl.candidatosRecomendados | limitTo : 5 : ($ctrl.currentPage-1)*$ctrl.maxSize">
+                            <td class="rowCandidato">
+                                <div>
+                                    {{candidato.nombre}}
+                                </div>
+                                <div class="">
+                                    <span class="btn btn-xs btn-primary glyphicon glyphicon-plus"></span>
+                                </div>
+                            </td>
                         </tr>
                     </table>
+                    <div class="pagination">
+                        <ul uib-pagination total-items="$ctrl.candidatosRecomendados.length" ng-model="$ctrl.currentPage" max-size="0" class="pagination-sm" boundary-link-numbers="false"></ul>
+                    </div>
                 </div>
             </div>
         </div>
