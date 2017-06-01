@@ -1,7 +1,7 @@
 // Modulo ghr.solicitudes con su componente para el formulario y su listado
 angular.module('ghr.solicitudes', ['ui.bootstrap', 'toastr'])
   .component('ghrSolicitudesForm', {
-    templateUrl: '../bower_components/component-solicitudes/form.solicitudes.html',
+    templateUrl: '../bower_components/component-solicitudes/candidatosAsignadosEnSolicitudes.html',
     controller: controladorFormulario
   }).component('ghrSolicitudesList', {
     templateUrl: '../bower_components/component-solicitudes/list.solicitudes.html',
