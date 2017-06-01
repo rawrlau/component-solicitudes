@@ -1,0 +1,205 @@
+<div class="container-fluid">
+  <h2 class="col-md-12">Formulario Solicitudes</h2>
+  <form name="formSolicitudes" class="form-group">
+    <div class="form-group col-md-4"
+      ng-hide="$ctrl.mode !== 'editar'" ng-class="{ 'has-error' : formSolicitudes.nombre.$invalid && !formSolicitudes.nombre.$pristine, 'has-success': !focus &&  formSolicitudes.nombre.$valid}">
+      <label for="nombre">Nombre <span class="glyphicon glyphicon-asterisk"></span> :</label>
+      <input id="inputSuccess2" class="form-control has-success" name="nombre" required autofocus
+      pattern="[a-zA-ZñÑáéíóúÁÉÍÓÚüÜ ]{0,}" aria-describedby="helpBlock2"
+      ng-model="$ctrl.solicitudEditar.nombre" ng-focus="focus=true" ng-blur="focus=false">
+    </div>
+
+    <div class="col-md-4" ng-hide="$ctrl.mode !== 'view'">
+      <label>Nombre: </label>
+      <span class="form-control">{{ $ctrl.solicitudEditar.nombre }}</span>
+    </div>
+
+    <div class="form-group col-md-4"
+      ng-hide="$ctrl.mode !== 'editar'" ng-class="{ 'has-error' : formSolicitudes.descripcion.$invalid && !formSolicitudes.descripcion.$pristine, 'has-success': !focus &&  formSolicitudes.descripcion.$valid}">
+      <label for="descripcion">Descripcion :</label>
+      <input id="inputSuccess2" class="form-control has-success" name="descripcion" autofocus
+      pattern="[a-zA-ZñÑáéíóúÁÉÍÓÚüÜ ]{0,}" aria-describedby="helpBlock2"
+      ng-model="$ctrl.solicitudEditar.descripcion" ng-focus="focus=true" ng-blur="focus=false">
+    </div>
+
+    <div class="col-md-4" ng-hide="$ctrl.mode !== 'view'">
+      <label>Descripción: </label>
+      <span class="form-control">{{ $ctrl.solicitudEditar.descripcion }}</span>
+    </div>
+
+    <div class="form-group col-md-4" ng-hide="$ctrl.mode !== 'editar'">
+      <label>Fecha Recepción: </label>
+      <input  class="form-control" type="date" ng-model="$ctrl.solicitudEditar.fechaRecibida" name="sFechaRecibida" placeholder="fechaRecibida"/><br />
+    </div>
+
+    <div class="col-md-4" ng-hide="$ctrl.mode !== 'view'">
+      <label>Fecha Recepción: </label>
+      <span class="form-control">{{ $ctrl.solicitudEditar.fechaRecibida }}</span>
+    </div>
+
+    <div class="form-group col-md-4"
+      ng-hide="$ctrl.mode !== 'editar'" ng-class="{ 'has-error' : formSolicitudes.cliente.$invalid && !formSolicitudes.cliente.$pristine, 'has-success': !focus &&  formSolicitudes.cliente.$valid}">
+      <label for="cliente">Cliente <span class="glyphicon glyphicon-asterisk"></span> :</label>
+      <input id="inputSuccess2" class="form-control has-success" name="cliente" required autofocus
+      pattern="[a-zA-ZñÑáéíóúÁÉÍÓÚüÜ ]{0,}" aria-describedby="helpBlock2"
+      ng-model="$ctrl.solicitudEditar.cliente" ng-focus="focus=true" ng-blur="focus=false">
+    </div>
+
+    <div class="col-md-4" ng-hide="$ctrl.mode !== 'view'">
+      <label>Cliente: </label>
+      <span class="form-control">{{ $ctrl.solicitudEditar.cliente }}</span>
+    </div>
+
+    <div class="form-group col-md-4"
+      ng-hide="$ctrl.mode !== 'editar'" ng-class="{ 'has-error' : formSolicitudes.brm.$invalid && !formSolicitudes.brm.$pristine, 'has-success': !focus &&  formSolicitudes.brm.$valid}">
+      <label for="brm">BRM :</label>
+      <input id="inputSuccess2" class="form-control has-success" name="brm" autofocus
+      pattern="[a-zA-ZñÑáéíóúÁÉÍÓÚüÜ ]{0,}" aria-describedby="helpBlock2"
+      ng-model="$ctrl.solicitudEditar.brm" ng-focus="focus=true" ng-blur="focus=false">
+    </div>
+
+    <div class="col-md-4" ng-hide="$ctrl.mode !== 'view'">
+      <label>BRM: </label>
+      <span class="form-control">{{ $ctrl.solicitudEditar.brm }}</span>
+    </div>
+
+    <div class="form-group col-md-4"
+      ng-hide="$ctrl.mode !== 'editar'" ng-class="{ 'has-error' : formSolicitudes.adm.$invalid && !formSolicitudes.adm.$pristine, 'has-success': !focus &&  formSolicitudes.adm.$valid}">
+      <label for="adm">ADM :</label>
+      <input id="inputSuccess2" class="form-control has-success" name="adm" autofocus
+      pattern="[a-zA-ZñÑáéíóúÁÉÍÓÚüÜ ]{0,}" aria-describedby="helpBlock2"
+      ng-model="$ctrl.solicitudEditar.adm" ng-focus="focus=true" ng-blur="focus=false">
+    </div>
+
+    <div class="col-md-4" ng-hide="$ctrl.mode !== 'view'">
+      <label>ADM: </label>
+      <span class="form-control">{{ $ctrl.solicitudEditar.adm }}</span>
+    </div>
+
+    <div class="form-group col-md-4"
+      ng-hide="$ctrl.mode !== 'editar'" ng-class="{ 'has-error' : formSolicitudes.perfil.$invalid && !formSolicitudes.perfil.$pristine, 'has-success': !focus &&  formSolicitudes.perfil.$valid}">
+      <label for="perfil">Perfil <span class="glyphicon glyphicon-asterisk"></span> :</label>
+      <input id="inputSuccess2" class="form-control has-success" name="perfil" required autofocus
+      pattern="[a-zA-ZñÑáéíóúÁÉÍÓÚüÜ ]{0,}" aria-describedby="helpBlock2"
+      ng-model="$ctrl.solicitudEditar.perfil" ng-focus="focus=true" ng-blur="focus=false">
+    </div>
+
+    <div class="col-md-4" ng-hide="$ctrl.mode !== 'view'">
+      <label>Perfil: </label>
+      <span class="form-control">{{ $ctrl.solicitudEditar.perfil }}</span>
+    </div>
+
+    <div class="form-group col-md-4"
+      ng-hide="$ctrl.mode !== 'editar'" ng-class="{ 'has-error' : formSolicitudes.reqObligatorios.$invalid && !formSolicitudes.reqObligatorios.$pristine, 'has-success': !focus &&  formSolicitudes.reqObligatorios.$valid}">
+      <label for="reqObligatorios">reqObligatorios :</label>
+      <input id="inputSuccess2" class="form-control has-success" name="reqObligatorios" autofocus
+      pattern="[a-zA-ZñÑáéíóúÁÉÍÓÚüÜ ]{0,}" aria-describedby="helpBlock2"
+      ng-model="$ctrl.solicitudEditar.reqObligatorios" ng-focus="focus=true" ng-blur="focus=false">
+    </div>
+
+    <div class="col-md-4" ng-hide="$ctrl.mode !== 'view'">
+      <label>reqObligatorios: </label>
+      <span class="form-control">{{ $ctrl.solicitudEditar.reqObligatorios }}</span>
+    </div>
+
+    <div class="form-group col-md-4"
+      ng-hide="$ctrl.mode !== 'editar'" ng-class="{ 'has-error' : formSolicitudes.reqDeseables.$invalid && !formSolicitudes.reqDeseables.$pristine, 'has-success': !focus &&  formSolicitudes.reqDeseables.$valid}">
+      <label for="reqDeseables">reqDeseables :</label>
+      <input id="inputSuccess2" class="form-control has-success" name="reqDeseables" autofocus
+      pattern="[a-zA-ZñÑáéíóúÁÉÍÓÚüÜ ]{0,}" aria-describedby="helpBlock2"
+      ng-model="$ctrl.solicitudEditar.reqDeseables" ng-focus="focus=true" ng-blur="focus=false">
+    </div>
+
+    <div class="col-md-4" ng-hide="$ctrl.mode !== 'view'">
+      <label>reqDeseables: </label>
+      <span class="form-control">{{ $ctrl.solicitudEditar.reqDeseables }}</span>
+    </div>
+
+    <div class="form-group col-md-4" ng-hide="$ctrl.mode !== 'editar'">
+      <label>Ingles: </label>
+      <select class="form-control" ng-model="$ctrl.solicitudEditar.ingles" name="Ingles">
+        <option value="Bajo" ng-model="$ctrl.solicitudEditarEditar.ingles" ng-change="$ctrl.solicitudEditarEditar.ingles === 'Bajo'">Bajo</option>
+        <option value="Medio" ng-model="$ctrl.solicitudEditarEditar.ingles" ng-change="$ctrl.solicitudEditarEditar.ingles === 'Medio'">Medio</option>
+        <option value="Alto" ng-model="$ctrl.solicitudEditarEditar.ingles" ng-change="$ctrl.solicitudEditarEditar.ingles === 'Alto'">Alto</option>
+      </select>
+    </div>
+
+    <div class="col-md-4" ng-hide="$ctrl.mode !== 'view'">
+      <label>Ingles: </label>
+      <span class="form-control">{{ $ctrl.solicitudEditar.ingles }}</span>
+    </div>
+
+    <div class="form-group col-md-4"
+      ng-hide="$ctrl.mode !== 'editar'" ng-class="{ 'has-error' : formSolicitudes.consultorasContactadas.$invalid && !formSolicitudes.consultorasContactadas.$pristine, 'has-success': !focus &&  formSolicitudes.consultorasContactadas.$valid}">
+      <label for="consultorasContactadas">consultorasContactadas :</label>
+      <input id="inputSuccess2" class="form-control has-success" name="consultorasContactadas" autofocus
+      pattern="[a-zA-ZñÑáéíóúÁÉÍÓÚüÜ ]{0,}" aria-describedby="helpBlock2"
+      ng-model="$ctrl.solicitudEditar.consultorasContactadas" ng-focus="focus=true" ng-blur="focus=false">
+    </div>
+
+    <div class="col-md-4" ng-hide="$ctrl.mode !== 'view'">
+      <label>Consultoras contactadas: </label>
+      <span class="form-control">{{ $ctrl.solicitudEditar.consultorasContactadas }}</span>
+    </div>
+
+    <div class="btn-group" uib-dropdown ng-hide="$ctrl.mode !== 'editar'">
+      <button type="button" class="btn btn-default"  uib-dropdown-toggle>
+        {{$ctrl.solicitudEditar.estado}}<span class="caret"></span>
+      <span class="sr-only">Split button!</span>
+      </button>
+      <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="split-button">
+        <li role="menuitem" ng-repeat="estado in $ctrl.estados" value="{{estado}}" ng-selected="$ctrl.solicitudEditar.estado === estado">
+          <a href="#" ng-click="$ctrl.solicitudEditar.estado = estado">{{estado}}</a>
+        </li>
+      </ul>
+    </div>
+
+    <div class="col-md-4" ng-hide="$ctrl.mode !== 'view'">
+      <label>Estado: </label>
+      <span class="form-control">{{ $ctrl.solicitudEditar.estado }}</span>
+    </div>
+
+    <div class="form-group col-md-1" ng-hide="$ctrl.mode !== 'editar'">
+      <label>Viajar: </label>
+      <br /><input class="radio-inline" type="radio" ng-model="$ctrl.solicitudEditar.viajar" name="sViajar"  value="S" ng-checked="$ctrl.solicitudEditar.viajar === 'S'">Si
+      <br /><input class="radio-inline" type="radio" ng-model="$ctrl.solicitudEditar.viajar" name="sViajar" value="N" ng-checked="$ctrl.solicitudEditar.viajar === 'N'">No
+    </div>
+
+    <div class="col-md-4" ng-hide="$ctrl.mode !== 'view'">
+      <label>Viajar: </label>
+      <span class="form-control">{{ $ctrl.solicitudEditar.viajar }}</span>
+    </div>
+
+    <div class="form-group col-md-1" ng-hide="$ctrl.mode !== 'editar'">
+      <label>Guardias: </label>
+      <br /><input class="radio-inline" type="radio" ng-model="$ctrl.solicitudEditar.guardias" name="sGuardias" value="S" ng-checked="$ctrl.solicitudEditar.guardias === 'S'" checked>Si
+      <br /><input class="radio-inline" type="radio" ng-model="$ctrl.solicitudEditar.guardias" name="sGuardias" value="N" ng-checked="$ctrl.solicitudEditar.guardias === 'N'">No
+    </div>
+
+    <div class="col-md-4" ng-hide="$ctrl.mode !== 'view'">
+      <label>Guardias: </label>
+      <span class="form-control">{{ $ctrl.solicitudEditar.guardias }}</span>
+    </div>
+
+    <center>
+
+
+    <div class="form-group col-md-12">
+      <br />
+      <a class="btn btn-default" ui-sref="app.solicitudes">Volver al listado de solicitudes</a>
+      <input ng-hide="$ctrl.mode !== 'editar'" type="button" class="btn btn" ng-click="$ctrl.reset(formSolicitudes)" value="Resetear solicitud" />
+      <input ng-hide="$ctrl.mode !== 'editar'" type="submit" class="btn btn-success" ng-click="$ctrl.updateOrCreate($ctrl.solicitudEditar, formSolicitudes)" value="Enviar Solicitud" />
+      <input ng-hide="$ctrl.mode !== 'view'" type="button" class="btn btn-success" ng-click="$ctrl.cambiar()" value="Editar solicitud" />
+    </div>
+  </form>
+  <br />
+
+  <p class="col-md-12" ng-hide="$ctrl.mode !== 'editar'">
+    Los campos con el simbolo <span class="glyphicon glyphicon-asterisk"></span> son obligatorios.
+  </p>
+
+  <br />
+  <!-- <pre>solicitud = {{$ctrl.solicitudEditar | json}}</pre>
+  <pre>master = {{$ctrl.master | json}}</pre> -->
+  </center>
+</div>

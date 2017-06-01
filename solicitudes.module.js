@@ -1,5 +1,5 @@
 angular
-    .module('ghr.solicitudes', ['ui.bootstrap', 'toastr'])
+    .module('ghr.solicitudes', ['ui.bootstrap', 'toastr', 'ghr.candidatos'])
     .component('ghrSolicitudesForm', {
         templateUrl: '../bower_components/component-solicitudes/form.solicitudes.html',
         controller: controladorFormulario
@@ -180,6 +180,14 @@ function controladorFormulario(toastr, solicitudesFactory, $stateParams, $log, $
             vm.mode = 'view';
         }
     };
+
+    vm.getCandidatosAsignados = function() {
+
+    }
+
+    vm.getCandidatosRecomendados = function() {
+        vm.arrayRecomendados = 0;
+    }
 }
 // Controlador ModalInstanceCtrl para confirmar y cancelar nuestra peticion
 angular
