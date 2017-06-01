@@ -1,9 +1,8 @@
 <div class="container-fluid">
   <div class="row">
-    <h2>Formulario Solicitudes</h2>
-  </div>
-  <div class="row">
+
     <div class="col-md-8">
+      <h2>Formulario Solicitudes</h2>
       <form name="formSolicitudes" class="form-group">
         <div class="form-group col-md-4"
           ng-hide="$ctrl.mode !== 'editar'" ng-class="{ 'has-error' : formSolicitudes.nombre.$invalid && !formSolicitudes.nombre.$pristine, 'has-success': !focus &&  formSolicitudes.nombre.$valid}">
@@ -213,11 +212,18 @@
           <table class="table table-striped table-responsive">
             <thead>
               <tr>
-                <th>Candidatos Asignados</th>
+                <th colspan="2">Candidatos Asignados</th>
               </tr>
             </thead>
             <tr>
-
+              <td class="rowCandidato">
+                <div>
+                  Nombre
+               </div>
+               <div class="">
+                 <span class="btn btn-xs btn-danger glyphicon glyphicon-minus"></span>
+               </div>
+             </td>
             </tr>
           </table>
         </div>
@@ -227,11 +233,20 @@
           <table class="table table-striped table-responsive">
             <thead>
               <tr>
-                <th>Candidatos Recomendados</th>
+                <th  colspan="2">Candidatos Recomendados</th>
               </tr>
             </thead>
             <tr>
-
+              <tr>
+                <td class="rowCandidato">
+                  <div>
+                    asignado
+                 </div>
+                 <div class="">
+                   <span class="btn btn-xs btn-primary glyphicon glyphicon-plus"></span>
+                 </div>
+               </td>
+              </tr>
             </tr>
           </table>
         </div>
