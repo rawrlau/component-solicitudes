@@ -183,20 +183,20 @@
                     <table class="table table-striped table-responsive marginless-bottom">
                         <thead>
                             <tr>
-                                <th colspan="2">Candidatos Recomendados</th>
+                                <h3>Candidatos Recomendados</h3>
                             </tr>
                         </thead>
                         <tr class="candidatoSeleccionado">
                             <td class="rowCandidato">
                                 <div>
-                                    {{$ctrl.candidatoSeleccionado.nombre}}
+                                    <span class="fa fa-star"></span> {{$ctrl.candidatoSeleccionado.nombre}}
                                 </div>
                                 <div class="">
-                                    <span class="btn btn-xs btn-primary glyphicon glyphicon-minus"></span>
+                                    <span class="btn btn-xs btn-danger glyphicon glyphicon-minus"></span>
                                 </div>
                             </td>
                         </tr>
-                        <tr ng-repeat="candidato in $ctrl.candidatosRecomendados | limitTo : 5 : ($ctrl.currentPage-1)*$ctrl.maxSize">
+                        <tr ng-repeat="candidato in $ctrl.candidatosRecomendados | limitTo : 9 : ($ctrl.currentPage-1)*$ctrl.maxSize">
                             <td class="rowCandidato">
                                 <div>
                                     {{candidato.nombre}}
