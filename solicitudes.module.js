@@ -1,15 +1,18 @@
 // Modulo ghr.solicitudes con su componente para el formulario y su listado
-angular.module('ghr.solicitudes', ['ui.bootstrap', 'toastr'])
+angular.module('ghr.solicitudes', ['ui.bootstrap', 'toastr', 'ghr.candidatos'])
   .component('ghrSolicitudesForm', {
     templateUrl: '../bower_components/component-solicitudes/form.solicitudes.html',
     controller: controladorFormulario
   }).component('ghrSolicitudesList', {
     templateUrl: '../bower_components/component-solicitudes/list.solicitudes.html',
     controller: solicitudesListController
+  }).component('dashboardSolicitudes', {
+    templateUrl: '../bower_components/component-solicitudes/dashboard.solicitudes.html',
+    controller: dashboardSolicitudesController
   })
   .constant('solBaseUrl', 'http://localhost:3003/api/')
   .constant('solEntidad', 'solicitudes')
-  .factory('solicitudesFactory', function solicitudesFactory(toastr, $http, solBaseUrl, solEntidad) {
+  .factory('solicitudesFactory', function solicitudesFactory(toastr, $http, solBaseUrl, solEntidad, candidatoFactory) {
     // Arrays para rellenar nuestro objeto solicitud con valores aleatorios
     var nombre = ['Adrian', 'Hector', 'Dani', 'Miguel', 'Alex', 'Rodri', 'Marta', 'Alejandro', 'Alvaro'];
     var descripcion = ['descripcion1', 'descripcion2', 'descripcion3', 'descripcion4', 'descripcion5', 'descripcion6', 'descripcion7', 'descripcion8', 'descripcion9'];
@@ -43,6 +46,7 @@ angular.module('ghr.solicitudes', ['ui.bootstrap', 'toastr'])
         guardias: obtenerValor(guardias),
         consultorasContactadas: obtenerValor(consultorasContactadas),
         estado: obtenerValor(estado)
+        // fecha cierre
       };
       return solicitud;
     }
@@ -197,20 +201,22 @@ function controladorFormulario(toastr, solicitudesFactory, $stateParams, $log, $
   var vm = this;
   vm.master = {};
   vm.id = $stateParams.id;
+  vm.mode = $stateParams.mode;
+  console.log(vm.mode);
+
   $log.log(vm.solicitudEditar);
 
   vm.guardias = ['S', 'N'];
   vm.viajar = ['S', 'N'];
   vm.estados = ['abierta', 'cerradaCliente', 'cerradaIncorporacion', 'standby'];
 
-  vm.comprobarForm = function(op){
-    if(op == 'S'){
+  vm.comprobarForm = function (op) {
+    if (op == 'S') {
       return 'Si';
-    }
-    else if(op == 'N'){
+    } else if (op == 'N') {
       return 'No';
     }
-  }
+  };
 
   vm.mode = $stateParams.mode;
 
@@ -218,9 +224,9 @@ function controladorFormulario(toastr, solicitudesFactory, $stateParams, $log, $
     solicitudesFactory.read($stateParams.id).then(
       function (solicitud) {
         vm.solicitudEditar = angular.copy(vm.master = solicitud);
-      }
-    );
+      });
   }
+
   vm.updateOrCreate = function (solicitudEditar, form) {
     if (form.$valid) {
       if (vm.id == 0) {
@@ -250,15 +256,15 @@ function controladorFormulario(toastr, solicitudesFactory, $stateParams, $log, $
       form.$setPristine();
       form.$setUntouched();
     }
-    vm.solicitud = angular.copy(vm.master);
+    vm.solicitudEditar = angular.copy(vm.master);
   };
   vm.cambiar = function cambiar() {
-    if(vm.mode == "view") {
-      vm.mode = "editar";
-    }else if(vm.mode == "editar") {
-      vm.mode = "view";
+    if (vm.mode == 'view') {
+      vm.mode = 'editar';
+    } else if (vm.mode == 'editar') {
+      vm.mode = 'view';
     }
-  }
+  };
 }
 // Controlador ModalInstanceCtrl para confirmar y cancelar nuestra peticion
 angular.module('ghr.solicitudes').controller('ModalInstanceCtrl', function ($uibModalInstance, $log) {
@@ -296,3 +302,37 @@ angular.module('ghr.solicitudes').component('modalComponentBorrarSolicitudes', {
     };
   }
 });
+
+function dashboardSolicitudesController(solicitudesFactory, $filter, candidatoFactory) {
+  var vm = this;
+  function actualizarSolicitudes() {
+    // Dejamos arrays como al principio
+    vm.arrayFiltrado = vm.arraySolicitudes;
+    vm.arrayFiltradoAbiertas = $filter('filter')(vm.arrayFiltrado, 'abierta');
+    vm.arrayFiltradoEspera = $filter('filter')(vm.arrayFiltrado, 'standby');
+    vm.arrayFiltradoCerradas = $filter('filter')(vm.arrayFiltrado, 'cerradaCliente', 'cerradaIncorporacion');
+    // Filtramos por contenido escrito en busqueda
+    vm.arrayFiltradoAbiertas = $filter('filter')(vm.arrayFiltradoAbiertas, vm.filtro);
+    vm.arrayFiltradoEspera = $filter('filter')(vm.arrayFiltradoEspera, vm.filtro);
+    vm.arrayFiltradoCerradas = $filter('filter')(vm.arrayFiltradoCerradas, vm.filtro);
+  }
+
+  vm.actualizarSolicitudes = actualizarSolicitudes;
+  solicitudesFactory.getAll().then(
+    function onSuccess(response) {
+      vm.arrayCandidatos = candidatoFactory;
+      vm.arraySolicitudes = response;
+      vm.arrayFiltrado = vm.arraySolicitudes;
+      vm.arrayFiltradoAbiertas = $filter('filter')(vm.arrayFiltrado, 'abierta');
+      vm.arrayFiltradoEspera = $filter('filter')(vm.arrayFiltrado, 'standby');
+      vm.arrayFiltradoCerradas = $filter('filter')(vm.arrayFiltrado, 'cerradaCliente', 'cerradaIncorporacion');
+
+      for(var i = 0; i < vm.arrayFiltradoAbiertas.length; i++){
+        candidatoFactory.read(vm.arrayFiltradoAbiertas[i].candidatoId).then(
+          function onSuccess(candidato) {
+            vm.arrayCandidatos[i] = angular.copy(candidato);
+            i++;
+          });
+        }
+    });
+}

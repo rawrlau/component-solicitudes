@@ -1,0 +1,81 @@
+<div class= "container-fluid">
+  <div class="row">
+    <div class="col-sm-12">
+      <h1>DashBoard de solicitudes</h1>
+    </div>
+    <div class="col-sm-4">
+      <input class="form-control" ng-model="$ctrl.filtro" ng-change="$ctrl.actualizarSolicitudes()" placeholder="Buscar" />
+    </div>
+    <div class="col-sm-4">
+      <a class="btn btn-success" ui-sref="app.solicitudes">Volver al listado de solicitudes</a>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-4">
+      <h2>Abiertas</h2>
+    </div>
+    <div class="col-sm-4">
+      <h2>En espera</h2>
+    </div>
+    <div class="col-sm-4">
+      <h2>Cerradas</h2>
+    </div>
+  </div>
+  <div id="contendorListas" class="row">
+    <div class="col-sm-4 columnaFiltrada">
+      <ul class="list-group">
+        <li ng-repeat="elem in $ctrl.arrayFiltradoAbiertas track by $index">
+          <div class="list-group-item solicitudFiltrada">
+            <h4>{{elem.nombre}}</h4>
+            <hr />
+            <h5>{{elem.cliente}}</h5>
+            <h5>CONTACTO: {{ $ctrl.arrayCandidatos[$index].nombre }}</h5>
+            <script>
+              console.log($ctrl.arrayCandidatos[$index].nombre);
+            </script>
+            <h5>TEL</h5>
+            <h5>CORREO</h5>
+            <h5>LinkedIn</h5>
+          </div>
+          <br />
+          <br />
+        </li>
+      </ul>
+    </div>
+    <div class="col-sm-4 columnaFiltrada">
+      <ul class="list-group">
+        <li ng-repeat="elem in $ctrl.arrayFiltradoEspera ">
+          <div class="list-group-item solicitudFiltrada">
+            <h4>{{elem.nombre}}</h4>
+            <hr />
+            <h5>{{elem.cliente}}</h5>
+            <h5>CONTACTO</h5>
+            <h5>TEL</h5>
+            <h5>CORREO</h5>
+            <h5>LinkedIn</h5>
+          </div>
+          <br />
+          <br />
+        </li>
+      </ul>
+    </div>
+    <div class="col-sm-4">
+      <ul class="list-group">
+        <li  ng-repeat="elem in $ctrl.arrayFiltradoCerradas">
+          <div class="list-group-item solicitudFiltrada">
+            <h4>{{elem.nombre}}</h4>
+            <hr />
+            <h5>{{elem.cliente}}</h5>
+            <h5>CONTACTO</h5>
+            <!-- <h5>{{$ctrl.arrayCandidatos.read(elem.id)}}</h5> -->
+            <h5>TEL</h5>
+            <h5>CORREO</h5>
+            <h5>LinkedIn</h5>
+          </div>
+          <br />
+          <br />
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
