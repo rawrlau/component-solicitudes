@@ -1,5 +1,5 @@
 angular
-    .module('ghr.solicitudes', ['ui.bootstrap', 'toastr', 'ghr.candidatos'])
+    .module('ghr.solicitudes', ['ui.bootstrap', 'toastr', 'ghr.candidatos', 'ghr.caracteristicas'])
     .component('ghrSolicitudesForm', {
         templateUrl: '../bower_components/component-solicitudes/form.solicitudes.html',
         controller: controladorFormulario
@@ -10,7 +10,7 @@ angular
     })
     .constant('solBaseUrl', 'http://localhost:3003/api/')
     .constant('solEntidad', 'solicitudes')
-    .factory('solicitudesFactory', function solicitudesFactory(toastr, $http, solBaseUrl, solEntidad, candidatoFactory) {
+    .factory('solicitudesFactory', function solicitudesFactory(toastr, $http, solBaseUrl, solEntidad, candidatoFactory, caracteristicasFactory) {
         var serviceUrl = solBaseUrl + solEntidad;
         return {
             // Read and return all entities
@@ -71,6 +71,17 @@ angular
                 }, function onFailure(reason) {
                     toastr.error('No se ha podido realizar la operacion, por favor compruebe su conexion a internet e intentelo más tarde.', '¡Error!');
                 });
+            },
+            // Devuelve el candidato seleccionado de la solicitud
+            getCandidato: function getCandidato(id) {
+                return $http({
+                    method: 'GET',
+                    url: serviceUrl + '/' + id + '/candidato'
+                }).then(function onSuccess(response) {
+                    return response.data;
+                }, function onFailure(reason) {
+                    toastr.error('No se ha podido realizar la operacion, por favor compruebe su conexion a internet e intentelo más tarde.', '¡Error!');
+                });
             }
         };
     });
@@ -114,7 +125,7 @@ function solicitudesListController($uibModal, $log, solicitudesFactory, $filter,
     };
 }
 // Controller que se encarga de gestionar nuestro formulario de solicitudes
-function controladorFormulario(toastr, solicitudesFactory, candidatoFactory, $stateParams, $log, $state) {
+function controladorFormulario(toastr, solicitudesFactory, candidatoFactory, caracteristicasFactory, $stateParams, $log, $state) {
     const vm = this;
 
     vm.master = {};
@@ -125,20 +136,35 @@ function controladorFormulario(toastr, solicitudesFactory, candidatoFactory, $st
     vm.viajar = ['S', 'N'];
     vm.estados = ['abierta', 'cerradaCliente', 'cerradaIncorporacion', 'standby'];
 
+    // Lee la solicitud, el candidato seleccionado y los candidatos recomendados
+    if ($stateParams.id != 0) {
+        // Solicitud
+        solicitudesFactory.read($stateParams.id)
+            .then(function onSuccess(solicitud) {
+                vm.solicitudEditar = angular.copy(vm.master = vm.formatearFecha(solicitud));
+            });
+        // Candidato seleccionado
+        solicitudesFactory.getCandidato($stateParams.id)
+            .then(function onSuccess(response) {
+                vm.candidatoSeleccionado = response;
+            });
+        // Lista de candidatos recomendados
+        candidatoFactory.getAll()
+            .then(function onSuccess(response) {
+                vm.candidatosRecomendados = response.filter(
+                    function(candidato) {
+                        return candidato;
+                    }
+                )
+            });
+    }
+
     vm.comprobarForm = function(op) {
         if (op == 'S') {
             return 'Si';
         } else if (op == 'N') {
             return 'No';
         }
-    }
-
-    if ($stateParams.id != 0) {
-        solicitudesFactory.read($stateParams.id).then(
-            function(solicitud) {
-                vm.solicitudEditar = angular.copy(vm.master = vm.formatearFecha(solicitud));
-            }
-        );
     }
 
     vm.formatearFecha = function formatearFecha(response) {
@@ -187,31 +213,7 @@ function controladorFormulario(toastr, solicitudesFactory, candidatoFactory, $st
         }
     };
 
-    vm.candidatoSeleccionado = {
-        nombre: 'Master del universo'
-    }
-
-    vm.getCandidatosAsignados = function() {
-        vm.candidatosAsignados = [{
-            nombre: 'Rodri'
-        }, {
-            nombre: 'Alejandro'
-        }];
-    }
-    vm.getCandidatosAsignados();
-
-    vm.getCandidatosRecomendados = function() {
-        candidatoFactory.getAll().then(
-            function onSuccess(response) {
-                vm.candidatosRecomendados = response.filter(
-                    function(candidato) {
-                        return candidato;
-                    }
-                )
-            }
-        );
-    }
-    vm.getCandidatosRecomendados();
+    // Paginación de los candidatos recomendados
     vm.maxSize = 5; // Numero maximo de elementos
     vm.currentPage = 1;
 
