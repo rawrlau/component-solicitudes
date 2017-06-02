@@ -136,10 +136,40 @@ function solicitudesListController($uibModal, $log, solicitudesFactory, $filter,
 function controladorFormulario(toastr, solicitudesFactory, candidatoFactory, caracteristicasFactory, $stateParams, $log, $state) {
     const vm = this;
 
-    vm.master = {};
-    vm.id = $stateParams.id;
     vm.mode = $stateParams.mode;
     vm.estados = ['abierta', 'cerradaCliente', 'cerradaIncorporacion', 'standby'];
+
+    /**
+     * Cambia al modo entre view y edit
+     * @return {[type]} [description]
+     */
+    vm.changeMode = function() {
+        var modo;
+        if ($stateParams.mode == 'view') modo = 'editar'
+        else modo = 'view'
+        $state.go($state.current, {
+            mode: modo
+        });
+        vm.mode = $stateParams.mode;
+    }
+
+    /**
+     * Crea una copia de la solicitud en un nuevo objeto para
+     * ser recuperado en caso de descartar cambios
+     * @return {[type]} [description]
+     */
+    vm.setOriginal = function(data) {
+        vm.original = angular.copy(vm.solicitud = vm.formatearFecha(data));
+    }
+
+    /**
+     * Descartar cambios
+     * @return {[type]} [description]
+     */
+    vm.reset = function() {
+        vm.solicitud = angular.copy(vm.original);
+    };
+    vm.reset();
 
     /**
      * Lee la solicitud pasada por el $stateParams
@@ -148,7 +178,7 @@ function controladorFormulario(toastr, solicitudesFactory, candidatoFactory, car
     vm.getSolicitud = function() {
         solicitudesFactory.read($stateParams.id)
             .then(function onSuccess(solicitud) {
-                vm.solicitudEditar = angular.copy(vm.master = vm.formatearFecha(solicitud));
+                vm.solicitud = angular.copy(vm.original = vm.formatearFecha(solicitud));
             });
     }
 
@@ -204,14 +234,6 @@ function controladorFormulario(toastr, solicitudesFactory, candidatoFactory, car
         vm.setCandidatosRecomendados();
     }
 
-    vm.comprobarForm = function(op) {
-        if (op == 'S') {
-            return 'Si';
-        } else if (op == 'N') {
-            return 'No';
-        }
-    }
-
     /**
      * Formata la fecha de la solicitud para que sea compatible con la vista
      * @param  {[type]} response [description]
@@ -222,45 +244,44 @@ function controladorFormulario(toastr, solicitudesFactory, candidatoFactory, car
         return response;
     }
 
-    vm.updateOrCreate = function(solicitudEditar, form) {
+    /**
+     * Crea o actualiza una solicitud
+     * @param  {[type]} solicitud [description]
+     * @param  {[type]} form      [description]
+     * @return {[type]}           [description]
+     */
+    vm.updateOrCreate = function(solicitud, form) {
         if (form.$valid) {
-            if (vm.id == 0) {
-                delete vm.solicitudEditar.id;
-                solicitudesFactory.create(vm.solicitudEditar).then(
+            // Create
+            if ($stateParams.id == 0) {
+                delete vm.solicitud.id;
+                solicitudesFactory.create(vm.solicitud).then(
                     function(solicitud) {
                         $state.go($state.current, {
                             id: solicitud.id
                         });
                     });
-            } else {
-                for (var elemento in form.$$controls) {
-                    if (elemento.$dirty) {
-                        vm.solicitudEditar[elemento.$name] = elemento.$modelValue;
-                    }
+            }
+            // Update
+            else {
+                var solicitudMod = {}
+                for (var i = 0; i < form.$$controls.length; i++) {
+                    var input = form.$$controls[i];
+                    if (input.$dirty)
+                        solicitudMod[input.$name] = input.$modelValue;
                 }
-                solicitudesFactory.update(vm.solicitudEditar.id, vm.solicitudEditar).then(
-                    function(response) {
-                        console.log(vm.solicitudEditar);
-                        vm.solicitudEditar = angular.copy(vm.solicitudEditar);
-                    }
-                );
+                console.log(solicitudMod);
+                if (form.$dirty) {
+                    solicitudesFactory.update(solicitud.id, solicitudMod).then(
+                        function onSuccess(response) {
+                            vm.setOriginal(response);
+                        }
+                    );
+                } else
+                    toastr.info('No hay nada que modificar', 'Info');
             }
         } else {
             toastr.warning('¡Debe rellenar los campos obligatorios!', '¡Cuidado!');
-        }
-    };
-    vm.reset = function(form) {
-        if (form) {
-            form.$setPristine();
-            form.$setUntouched();
-        }
-        vm.solicitudEditar = angular.copy(vm.master);
-    };
-    vm.cambiar = function cambiar() {
-        if (vm.mode == 'view') {
-            vm.mode = 'editar';
-        } else if (vm.mode == 'editar') {
-            vm.mode = 'view';
         }
     };
 
