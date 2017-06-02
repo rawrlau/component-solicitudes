@@ -8,6 +8,14 @@ angular
         templateUrl: '../bower_components/component-solicitudes/list.solicitudes.html',
         controller: solicitudesListController
     })
+    .config(function(toastrConfig) { // Configura los toastr
+        angular.extend(toastrConfig, {
+            closeButton: true,
+            extendedTimeOut: 2000,
+            tapToDismiss: true,
+            preventOpenDuplicates: true
+        });
+    })
     .constant('solBaseUrl', 'http://localhost:3003/api/')
     .constant('solEntidad', 'solicitudes')
     .factory('solicitudesFactory', function solicitudesFactory(toastr, $http, solBaseUrl, solEntidad, candidatoFactory, caracteristicasFactory) {
@@ -131,31 +139,67 @@ function controladorFormulario(toastr, solicitudesFactory, candidatoFactory, car
     vm.master = {};
     vm.id = $stateParams.id;
     vm.mode = $stateParams.mode;
-
-    vm.guardias = ['S', 'N'];
-    vm.viajar = ['S', 'N'];
     vm.estados = ['abierta', 'cerradaCliente', 'cerradaIncorporacion', 'standby'];
 
-    // Lee la solicitud, el candidato seleccionado y los candidatos recomendados
-    if ($stateParams.id != 0) {
-        // Solicitud
+    /**
+     * Lee la solicitud pasada por el $stateParams
+     * @return {[type]} [description]
+     */
+    vm.getSolicitud = function() {
         solicitudesFactory.read($stateParams.id)
             .then(function onSuccess(solicitud) {
                 vm.solicitudEditar = angular.copy(vm.master = vm.formatearFecha(solicitud));
             });
-        // Candidato seleccionado
+    }
+
+    /**
+     * Devuelve el candidato seleccionado de la solicitud
+     * @return {[type]} [description]
+     */
+    vm.getCandidatoSeleccionado = function() {
         solicitudesFactory.getCandidato($stateParams.id)
             .then(function onSuccess(response) {
                 vm.candidatoSeleccionado = response;
             });
-        // Lista de candidatos recomendados
+    }
+
+    /**
+     * Devuelve la lista con los candidatos recomendados
+     * @return {[type]} [description]
+     */
+    vm.setCandidatosRecomendados = function() {
         candidatoFactory.getAll()
             .then(function onSuccess(response) {
                 vm.candidatosRecomendados = response.filter(
                     function(candidato) {
-                        return candidato;
+                        return candidato != vm.candidatoSeleccionado;
                     }
                 )
+            });
+    }
+
+    // Lee la solicitud, el candidato seleccionado y los candidatos recomendados
+    if ($stateParams.id != 0) {
+        vm.getSolicitud();
+        vm.getCandidatoSeleccionado();
+        vm.setCandidatosRecomendados();
+    }
+
+    /**
+     * Setea el candidato seleccionado de la solicitud
+     * @return {[type]} [description]
+     */
+    vm.setCandidatoSelect = function setCandidatoSelect(id) {
+        var idCandidato = null;
+        if (id !== null) idCandidato = id;
+        var solicitudMod = {
+            candidatoId: idCandidato
+        };
+        solicitudesFactory.update($stateParams.id, solicitudMod)
+            .then(function(response) {
+                vm.getCandidatoSeleccionado();
+                vm.getCandidatosAsignados();
+                vm.solicitud = angular.copy(vm.solicitud);
             });
     }
 
@@ -167,6 +211,11 @@ function controladorFormulario(toastr, solicitudesFactory, candidatoFactory, car
         }
     }
 
+    /**
+     * Formata la fecha de la solicitud para que sea compatible con la vista
+     * @param  {[type]} response [description]
+     * @return {[type]}          [description]
+     */
     vm.formatearFecha = function formatearFecha(response) {
         response.fechaRecibida = new Date(response.fechaRecibida);
         return response;
@@ -190,6 +239,7 @@ function controladorFormulario(toastr, solicitudesFactory, candidatoFactory, car
                 }
                 solicitudesFactory.update(vm.solicitudEditar.id, vm.solicitudEditar).then(
                     function(response) {
+                        console.log(vm.solicitudEditar);
                         vm.solicitudEditar = angular.copy(vm.solicitudEditar);
                     }
                 );

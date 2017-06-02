@@ -141,22 +141,21 @@
                         </thead>
                         <tr class="candidatoSeleccionado">
                             <td class="rowCandidato">
-                                <div>
+                                <div ng-if="$ctrl.candidatoSeleccionado.id != null">
                                     <span class="fa fa-star"></span> {{$ctrl.candidatoSeleccionado.nombre}}  {{$ctrl.candidatoSeleccionado.apellido}}
                                 </div>
-                                <div class="">
-                                    <span  class="btn btn-xs btn-danger glyphicon glyphicon-minus"></span>
+                                <div ng-if="$ctrl.candidatoSeleccionado.id == null" class="leyenda">
+                                    <span class="fa fa-star"></span> No hay candidado seleccionado aún
                                 </div>
+                                <button ng-click="$ctrl.setCandidatoSelect(null)" class="btn btn-xs btn-danger glyphicon glyphicon-minus"></button>
                             </td>
                         </tr>
                         <tr ng-repeat="candidato in $ctrl.candidatosRecomendados | limitTo : 9 : ($ctrl.currentPage-1)*$ctrl.maxSize">
                             <td class="rowCandidato">
                                 <div>
-                                    {{candidato.nombre}}
+                                    {{candidato.nombre}} {{candidato.apellido}}
                                 </div>
-                                <div class="">
-                                    <span class="btn btn-xs btn-primary glyphicon glyphicon-plus"></span>
-                                </div>
+                                <button ng-click="$ctrl.setCandidatoSelect(candidato.id)" class="btn btn-xs btn-primary glyphicon glyphicon-plus"></button>
                             </td>
                         </tr>
                     </table>
