@@ -197,10 +197,11 @@ function controladorFormulario(toastr, solicitudesFactory, candidatoFactory, car
         };
         solicitudesFactory.update($stateParams.id, solicitudMod)
             .then(function(response) {
-                vm.getCandidatoSeleccionado();
-                vm.getCandidatosAsignados();
                 vm.solicitud = angular.copy(vm.solicitud);
             });
+
+        vm.getCandidatoSeleccionado();
+        vm.setCandidatosRecomendados();
     }
 
     vm.comprobarForm = function(op) {
