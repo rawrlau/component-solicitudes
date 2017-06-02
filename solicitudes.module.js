@@ -172,7 +172,7 @@ function controladorFormulario(toastr, solicitudesFactory, candidatoFactory, car
             .then(function onSuccess(response) {
                 vm.candidatosRecomendados = response.filter(
                     function(candidato) {
-                        return candidato != vm.candidatoSeleccionado;
+                        return candidato.id != vm.candidatoSeleccionado.id;
                     }
                 )
             });
