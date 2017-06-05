@@ -1,5 +1,5 @@
 angular
-    .module('ghr.solicitudes', ['ui.bootstrap', 'toastr', 'ghr.candidatos'])
+    .module('ghr.solicitudes', ['ui.bootstrap', 'toastr', 'ghr.candidatos', 'ghr.caracteristicas', 'ghr.requisitos'])
     .component('ghrSolicitudesForm', {
         templateUrl: '../bower_components/component-solicitudes/form.solicitudes.html',
         controller: controladorFormulario
@@ -8,9 +8,17 @@ angular
         templateUrl: '../bower_components/component-solicitudes/list.solicitudes.html',
         controller: solicitudesListController
     })
+    .config(function(toastrConfig) { // Configura los toastr
+        angular.extend(toastrConfig, {
+            closeButton: true,
+            extendedTimeOut: 2000,
+            tapToDismiss: true,
+            preventOpenDuplicates: true
+        });
+    })
     .constant('solBaseUrl', 'http://localhost:3003/api/')
     .constant('solEntidad', 'solicitudes')
-    .factory('solicitudesFactory', function solicitudesFactory(toastr, $http, solBaseUrl, solEntidad, candidatoFactory) {
+    .factory('solicitudesFactory', function solicitudesFactory(toastr, $http, solBaseUrl, solEntidad, candidatoFactory, caracteristicasFactory, requisitosFactory) {
         var serviceUrl = solBaseUrl + solEntidad;
         return {
             // Read and return all entities
@@ -71,6 +79,17 @@ angular
                 }, function onFailure(reason) {
                     toastr.error('No se ha podido realizar la operacion, por favor compruebe su conexion a internet e intentelo más tarde.', '¡Error!');
                 });
+            },
+            // Devuelve el candidato seleccionado de la solicitud
+            getCandidato: function getCandidato(id) {
+                return $http({
+                    method: 'GET',
+                    url: serviceUrl + '/' + id + '/candidato'
+                }).then(function onSuccess(response) {
+                    return response.data;
+                }, function onFailure(reason) {
+                    toastr.error('No se ha podido realizar la operacion, por favor compruebe su conexion a internet e intentelo más tarde.', '¡Error!');
+                });
             }
         };
     });
@@ -114,104 +133,168 @@ function solicitudesListController($uibModal, $log, solicitudesFactory, $filter,
     };
 }
 // Controller que se encarga de gestionar nuestro formulario de solicitudes
-function controladorFormulario(toastr, solicitudesFactory, candidatoFactory, $stateParams, $log, $state) {
+function controladorFormulario(toastr, solicitudesFactory, candidatoFactory, caracteristicasFactory, requisitosFactory, $stateParams, $log, $state) {
     const vm = this;
 
-    vm.master = {};
-    vm.id = $stateParams.id;
     vm.mode = $stateParams.mode;
-
-    vm.guardias = ['S', 'N'];
-    vm.viajar = ['S', 'N'];
     vm.estados = ['abierta', 'cerradaCliente', 'cerradaIncorporacion', 'standby'];
 
-    vm.comprobarForm = function(op) {
-        if (op == 'S') {
-            return 'Si';
-        } else if (op == 'N') {
-            return 'No';
-        }
+    /**
+     * Cambia al modo entre view y edit
+     * @return {[type]} [description]
+     */
+    vm.changeMode = function() {
+        var modo;
+        if ($stateParams.mode == 'view') modo = 'editar'
+        else modo = 'view'
+        $state.go($state.current, {
+            mode: modo
+        });
+        vm.mode = $stateParams.mode;
     }
 
+    /**
+     * Crea una copia de la solicitud en un nuevo objeto para
+     * ser recuperado en caso de descartar cambios
+     * @return {[type]} [description]
+     */
+    vm.setOriginal = function(data) {
+        vm.original = angular.copy(vm.solicitud = vm.formatearFecha(data));
+    }
+
+    /**
+     * Descartar cambios
+     * @return {[type]} [description]
+     */
+    vm.reset = function() {
+        vm.solicitud = angular.copy(vm.original);
+    };
+    vm.reset();
+
+    /**
+     * Lee la solicitud pasada por el $stateParams
+     * @return {[type]} [description]
+     */
+    vm.getSolicitud = function() {
+        solicitudesFactory.read($stateParams.id)
+            .then(function onSuccess(solicitud) {
+                vm.solicitud = angular.copy(vm.original = vm.formatearFecha(solicitud));
+            });
+    }
+
+    /**
+     * Devuelve el candidato seleccionado de la solicitud
+     * @return {[type]} [description]
+     */
+    vm.getCandidatoSeleccionado = function() {
+        solicitudesFactory.getCandidato($stateParams.id)
+            .then(function onSuccess(response) {
+                vm.candidatoSeleccionado = response;
+            });
+    }
+
+    /**
+     * Devuelve la lista con los candidatos recomendados
+     * @return {[type]} [description]
+     */
+    vm.setCandidatosRecomendados = function() {
+        // candidatos
+        candidatoFactory.getAll().then(function onSuccess(response) {
+            vm.candidatos = response.filter(function(candidato) {
+                return candidato.id != vm.candidatoSeleccionado.id;
+            });
+        });
+        // requisitos
+        requisitosFactory.getAll().then(function(response) {
+            vm.reqObl = response.filter(function(requisito) {
+                return requisito.listaDeRequisitoId == vm.solicitud.idReqObligatorios;
+            });
+            vm.reqDes = response.filter(function(requisito) {
+                return requisito.listaDeRequisitoId == vm.solicitud.idReqDeseables;
+            });
+            console.log(vm.reqObl);
+            console.log(vm.reqDes);
+        });
+    }
+
+    // Lee la solicitud, el candidato seleccionado y los candidatos recomendados
     if ($stateParams.id != 0) {
-        solicitudesFactory.read($stateParams.id).then(
-            function(solicitud) {
-                vm.solicitudEditar = angular.copy(vm.master = vm.formatearFecha(solicitud));
-            }
-        );
+        vm.getSolicitud();
+        vm.getCandidatoSeleccionado();
+        vm.setCandidatosRecomendados();
     }
 
+    /**
+     * Setea el candidato seleccionado de la solicitud
+     * @return {[type]} [description]
+     */
+    vm.setCandidatoSelect = function setCandidatoSelect(id) {
+        var idCandidato = null;
+        if (id !== null) idCandidato = id;
+        var solicitudMod = {
+            candidatoId: idCandidato
+        };
+        solicitudesFactory.update($stateParams.id, solicitudMod)
+            .then(function(response) {
+                vm.solicitud = angular.copy(vm.solicitud);
+            });
+
+        vm.getCandidatoSeleccionado();
+        vm.setCandidatosRecomendados();
+    }
+
+    /**
+     * Formata la fecha de la solicitud para que sea compatible con la vista
+     * @param  {[type]} response [description]
+     * @return {[type]}          [description]
+     */
     vm.formatearFecha = function formatearFecha(response) {
         response.fechaRecibida = new Date(response.fechaRecibida);
         return response;
     }
 
-    vm.updateOrCreate = function(solicitudEditar, form) {
+    /**
+     * Crea o actualiza una solicitud
+     * @param  {[type]} solicitud [description]
+     * @param  {[type]} form      [description]
+     * @return {[type]}           [description]
+     */
+    vm.updateOrCreate = function(solicitud, form) {
         if (form.$valid) {
-            if (vm.id == 0) {
-                delete vm.solicitudEditar.id;
-                solicitudesFactory.create(vm.solicitudEditar).then(
+            // Create
+            if ($stateParams.id == 0) {
+                delete vm.solicitud.id;
+                solicitudesFactory.create(vm.solicitud).then(
                     function(solicitud) {
                         $state.go($state.current, {
                             id: solicitud.id
                         });
                     });
-            } else {
-                for (var elemento in form.$$controls) {
-                    if (elemento.$dirty) {
-                        vm.solicitudEditar[elemento.$name] = elemento.$modelValue;
-                    }
+            }
+            // Update
+            else {
+                var solicitudMod = {}
+                for (var i = 0; i < form.$$controls.length; i++) {
+                    var input = form.$$controls[i];
+                    if (input.$dirty)
+                        solicitudMod[input.$name] = input.$modelValue;
                 }
-                solicitudesFactory.update(vm.solicitudEditar.id, vm.solicitudEditar).then(
-                    function(response) {
-                        vm.solicitudEditar = angular.copy(vm.solicitudEditar);
-                    }
-                );
+                console.log(solicitudMod);
+                if (form.$dirty) {
+                    solicitudesFactory.update(solicitud.id, solicitudMod).then(
+                        function onSuccess(response) {
+                            vm.setOriginal(response);
+                        }
+                    );
+                } else
+                    toastr.info('No hay nada que modificar', 'Info');
             }
         } else {
             toastr.warning('¡Debe rellenar los campos obligatorios!', '¡Cuidado!');
         }
     };
-    vm.reset = function(form) {
-        if (form) {
-            form.$setPristine();
-            form.$setUntouched();
-        }
-        vm.solicitudEditar = angular.copy(vm.master);
-    };
-    vm.cambiar = function cambiar() {
-        if (vm.mode == 'view') {
-            vm.mode = 'editar';
-        } else if (vm.mode == 'editar') {
-            vm.mode = 'view';
-        }
-    };
 
-    vm.candidatoSeleccionado = {
-        nombre: 'Master del universo'
-    }
-
-    vm.getCandidatosAsignados = function() {
-        vm.candidatosAsignados = [{
-            nombre: 'Rodri'
-        }, {
-            nombre: 'Alejandro'
-        }];
-    }
-    vm.getCandidatosAsignados();
-
-    vm.getCandidatosRecomendados = function() {
-        candidatoFactory.getAll().then(
-            function onSuccess(response) {
-                vm.candidatosRecomendados = response.filter(
-                    function(candidato) {
-                        return candidato;
-                    }
-                )
-            }
-        );
-    }
-    vm.getCandidatosRecomendados();
+    // Paginación de los candidatos recomendados
     vm.maxSize = 5; // Numero maximo de elementos
     vm.currentPage = 1;
 
