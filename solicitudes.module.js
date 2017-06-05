@@ -1,5 +1,5 @@
 angular
-    .module('ghr.solicitudes', ['ui.bootstrap', 'toastr', 'ghr.candidatos', 'ghr.caracteristicas'])
+    .module('ghr.solicitudes', ['ui.bootstrap', 'toastr', 'ghr.candidatos', 'ghr.caracteristicas', 'ghr.requisitos'])
     .component('ghrSolicitudesForm', {
         templateUrl: '../bower_components/component-solicitudes/form.solicitudes.html',
         controller: controladorFormulario
@@ -18,7 +18,7 @@ angular
     })
     .constant('solBaseUrl', 'http://localhost:3003/api/')
     .constant('solEntidad', 'solicitudes')
-    .factory('solicitudesFactory', function solicitudesFactory(toastr, $http, solBaseUrl, solEntidad, candidatoFactory, caracteristicasFactory) {
+    .factory('solicitudesFactory', function solicitudesFactory(toastr, $http, solBaseUrl, solEntidad, candidatoFactory, caracteristicasFactory, requisitosFactory) {
         var serviceUrl = solBaseUrl + solEntidad;
         return {
             // Read and return all entities
@@ -133,7 +133,7 @@ function solicitudesListController($uibModal, $log, solicitudesFactory, $filter,
     };
 }
 // Controller que se encarga de gestionar nuestro formulario de solicitudes
-function controladorFormulario(toastr, solicitudesFactory, candidatoFactory, caracteristicasFactory, $stateParams, $log, $state) {
+function controladorFormulario(toastr, solicitudesFactory, candidatoFactory, caracteristicasFactory, requisitosFactory, $stateParams, $log, $state) {
     const vm = this;
 
     vm.mode = $stateParams.mode;
@@ -198,14 +198,23 @@ function controladorFormulario(toastr, solicitudesFactory, candidatoFactory, car
      * @return {[type]} [description]
      */
     vm.setCandidatosRecomendados = function() {
-        candidatoFactory.getAll()
-            .then(function onSuccess(response) {
-                vm.candidatosRecomendados = response.filter(
-                    function(candidato) {
-                        return candidato.id != vm.candidatoSeleccionado.id;
-                    }
-                )
+        // candidatos
+        candidatoFactory.getAll().then(function onSuccess(response) {
+            vm.candidatos = response.filter(function(candidato) {
+                return candidato.id != vm.candidatoSeleccionado.id;
             });
+        });
+        // requisitos
+        requisitosFactory.getAll().then(function(response) {
+            vm.reqObl = response.filter(function(requisito) {
+                return requisito.listaDeRequisitoId == vm.solicitud.idReqObligatorios;
+            });
+            vm.reqDes = response.filter(function(requisito) {
+                return requisito.listaDeRequisitoId == vm.solicitud.idReqDeseables;
+            });
+            console.log(vm.reqObl);
+            console.log(vm.reqDes);
+        });
     }
 
     // Lee la solicitud, el candidato seleccionado y los candidatos recomendados

@@ -6,7 +6,7 @@
             <form name="formSolicitudes" class="form-group">
                 <div class="form-group col-md-4" ng-hide="$ctrl.mode !== 'editar'" ng-class="{ 'has-error' : formSolicitudes.nombre.$invalid && !formSolicitudes.nombre.$pristine, 'has-success': !focus &&  formSolicitudes.nombre.$valid}">
                     <label for="nombre">Nombre <span class="glyphicon glyphicon-asterisk"></span> :</label>
-                    <input id="inputSuccess2" class="form-control has-success" name="nombre" required autofocus pattern="[a-zA-ZñÑáéíóúÁÉÍÓÚüÜ ]{0,}" aria-describedby="helpBlock2" ng-model="$ctrl.solicitud.nombre" ng-focus="focus=true" ng-blur="focus=false">
+                    <input id="inputSuccess2" class="form-control has-success" name="nombre" required autofocus pattern="[a-zA-ZñÑáéíóúÁÉÍÓÚüÜ.,;: 0-9]{0,}" aria-describedby="helpBlock2" ng-model="$ctrl.solicitud.nombre" ng-focus="focus=true" ng-blur="focus=false">
                 </div>
 
                 <div class="col-md-4" ng-hide="$ctrl.mode !== 'view'">
@@ -16,7 +16,7 @@
 
                 <div class="form-group col-md-4" ng-hide="$ctrl.mode !== 'editar'" ng-class="{ 'has-error' : formSolicitudes.descripcion.$invalid && !formSolicitudes.descripcion.$pristine, 'has-success': !focus &&  formSolicitudes.descripcion.$valid}">
                     <label for="descripcion">Descripcion :</label>
-                    <input id="inputSuccess2" class="form-control has-success" name="descripcion" autofocus pattern="[a-zA-ZñÑáéíóúÁÉÍÓÚüÜ ]{0,}" aria-describedby="helpBlock2" ng-model="$ctrl.solicitud.descripcion" ng-focus="focus=true" ng-blur="focus=false">
+                    <input id="inputSuccess2" class="form-control has-success" name="descripcion" autofocus pattern="[a-zA-ZñÑáéíóúÁÉÍÓÚüÜ.,;: 0-9]{0,}" aria-describedby="helpBlock2" ng-model="$ctrl.solicitud.descripcion" ng-focus="focus=true" ng-blur="focus=false">
                 </div>
 
                 <div class="col-md-4" ng-hide="$ctrl.mode !== 'view'">
@@ -36,7 +36,7 @@
 
                 <div class="form-group col-md-4" ng-hide="$ctrl.mode !== 'editar'" ng-class="{ 'has-error' : formSolicitudes.cliente.$invalid && !formSolicitudes.cliente.$pristine, 'has-success': !focus &&  formSolicitudes.cliente.$valid}">
                     <label for="cliente">Cliente <span class="glyphicon glyphicon-asterisk"></span> :</label>
-                    <input id="inputSuccess2" class="form-control has-success" name="cliente" required autofocus pattern="[a-zA-ZñÑáéíóúÁÉÍÓÚüÜ ]{0,}" aria-describedby="helpBlock2" ng-model="$ctrl.solicitud.cliente" ng-focus="focus=true" ng-blur="focus=false">
+                    <input id="inputSuccess2" class="form-control has-success" name="cliente" required autofocus pattern="[a-zA-ZñÑáéíóúÁÉÍÓÚüÜ.,;: 0-9]{0,}" aria-describedby="helpBlock2" ng-model="$ctrl.solicitud.cliente" ng-focus="focus=true" ng-blur="focus=false">
                 </div>
 
                 <div class="col-md-4" ng-hide="$ctrl.mode !== 'view'">
@@ -46,7 +46,7 @@
 
                 <div class="form-group col-md-4" ng-hide="$ctrl.mode !== 'editar'" ng-class="{ 'has-error' : formSolicitudes.brm.$invalid && !formSolicitudes.brm.$pristine, 'has-success': !focus &&  formSolicitudes.brm.$valid}">
                     <label for="brm">BRM :</label>
-                    <input id="inputSuccess2" class="form-control has-success" name="brm" autofocus pattern="[a-zA-ZñÑáéíóúÁÉÍÓÚüÜ ]{0,}" aria-describedby="helpBlock2" ng-model="$ctrl.solicitud.brm" ng-focus="focus=true" ng-blur="focus=false">
+                    <input id="inputSuccess2" class="form-control has-success" name="brm" autofocus pattern="[a-zA-ZñÑáéíóúÁÉÍÓÚüÜ.,;: 0-9]{0,}" aria-describedby="helpBlock2" ng-model="$ctrl.solicitud.brm" ng-focus="focus=true" ng-blur="focus=false">
                 </div>
 
                 <div class="col-md-4" ng-hide="$ctrl.mode !== 'view'">
@@ -56,7 +56,7 @@
 
                 <div class="form-group col-md-4" ng-hide="$ctrl.mode !== 'editar'" ng-class="{ 'has-error' : formSolicitudes.adm.$invalid && !formSolicitudes.adm.$pristine, 'has-success': !focus &&  formSolicitudes.adm.$valid}">
                     <label for="adm">ADM :</label>
-                    <input id="inputSuccess2" class="form-control has-success" name="adm" autofocus pattern="[a-zA-ZñÑáéíóúÁÉÍÓÚüÜ ]{0,}" aria-describedby="helpBlock2" ng-model="$ctrl.solicitud.adm" ng-focus="focus=true" ng-blur="focus=false">
+                    <input id="inputSuccess2" class="form-control has-success" name="adm" autofocus pattern="[a-zA-ZñÑáéíóúÁÉÍÓÚüÜ.,;: 0-9]{0,}" aria-describedby="helpBlock2" ng-model="$ctrl.solicitud.adm" ng-focus="focus=true" ng-blur="focus=false">
                 </div>
 
                 <div class="col-md-4" ng-hide="$ctrl.mode !== 'view'">
@@ -64,29 +64,29 @@
                     <span class="form-control">{{ $ctrl.solicitud.adm }}</span>
                 </div>
 
-                <div class="form-group col-md-4" ng-hide="$ctrl.mode !== 'editar'" ng-class="{ 'has-error' : formSolicitudes.reqObligatorios.$invalid && !formSolicitudes.reqObligatorios.$pristine, 'has-success': !focus &&  formSolicitudes.reqObligatorios.$valid}">
-                    <label for="reqObligatorios">reqObligatorios :</label>
-                    <input id="inputSuccess2" class="form-control has-success" name="reqObligatorios" autofocus pattern="[a-zA-ZñÑáéíóúÁÉÍÓÚüÜ ]{0,}" aria-describedby="helpBlock2" ng-model="$ctrl.solicitud.reqObligatorios" ng-focus="focus=true" ng-blur="focus=false">
+                <div class="form-group col-md-4" ng-hide="$ctrl.mode !== 'editar'" ng-class="{ 'has-error' : formSolicitudes.idReqObligatorios.$invalid && !formSolicitudes.idReqObligatorios.$pristine, 'has-success': !focus &&  formSolicitudes.idReqObligatorios.$valid}">
+                    <label for="idReqObligatorios">ReqObligatorios :</label>
+                    <input id="inputSuccess2" class="form-control has-success" name="idReqObligatorios" autofocus pattern="[0-9]{0,}" aria-describedby="helpBlock2" ng-model="$ctrl.solicitud.idReqObligatorios" ng-focus="focus=true" ng-blur="focus=false">
                 </div>
 
                 <div class="col-md-4" ng-hide="$ctrl.mode !== 'view'">
-                    <label>reqObligatorios: </label>
-                    <span class="form-control">{{ $ctrl.solicitud.reqObligatorios }}</span>
+                    <label>ReqObligatorios: </label>
+                    <span class="form-control">{{ $ctrl.solicitud.idReqObligatorios }}</span>
                 </div>
 
-                <div class="form-group col-md-4" ng-hide="$ctrl.mode !== 'editar'" ng-class="{ 'has-error' : formSolicitudes.reqDeseables.$invalid && !formSolicitudes.reqDeseables.$pristine, 'has-success': !focus &&  formSolicitudes.reqDeseables.$valid}">
-                    <label for="reqDeseables">reqDeseables :</label>
-                    <input id="inputSuccess2" class="form-control has-success" name="reqDeseables" autofocus pattern="[a-zA-ZñÑáéíóúÁÉÍÓÚüÜ ]{0,}" aria-describedby="helpBlock2" ng-model="$ctrl.solicitud.reqDeseables" ng-focus="focus=true" ng-blur="focus=false">
+                <div class="form-group col-md-4" ng-hide="$ctrl.mode !== 'editar'" ng-class="{ 'has-error' : formSolicitudes.idReqDeseables.$invalid && !formSolicitudes.idReqDeseables.$pristine, 'has-success': !focus &&  formSolicitudes.idReqDeseables.$valid}">
+                    <label for="idReqDeseables">ReqDeseables :</label>
+                    <input id="inputSuccess2" class="form-control has-success" name="idReqDeseables" autofocus pattern="[0-9]{0,}" aria-describedby="helpBlock2" ng-model="$ctrl.solicitud.idReqDeseables" ng-focus="focus=true" ng-blur="focus=false">
                 </div>
 
                 <div class="col-md-4" ng-hide="$ctrl.mode !== 'view'">
-                    <label>reqDeseables: </label>
-                    <span class="form-control">{{ $ctrl.solicitud.reqDeseables }}</span>
+                    <label>ReqDeseables: </label>
+                    <span class="form-control">{{ $ctrl.solicitud.idReqDeseables }}</span>
                 </div>
 
                 <div class="form-group col-md-4" ng-hide="$ctrl.mode !== 'editar'" ng-class="{ 'has-error' : formSolicitudes.consultorasContactadas.$invalid && !formSolicitudes.consultorasContactadas.$pristine, 'has-success': !focus &&  formSolicitudes.consultorasContactadas.$valid}">
                     <label for="consultorasContactadas">consultorasContactadas :</label>
-                    <input id="inputSuccess2" class="form-control has-success" name="consultorasContactadas" autofocus pattern="[a-zA-ZñÑáéíóúÁÉÍÓÚüÜ ]{0,}" aria-describedby="helpBlock2" ng-model="$ctrl.solicitud.consultorasContactadas" ng-focus="focus=true" ng-blur="focus=false">
+                    <input id="inputSuccess2" class="form-control has-success" name="consultorasContactadas" autofocus pattern="[a-zA-ZñÑáéíóúÁÉÍÓÚüÜ .,;: 0-9]{0,}" aria-describedby="helpBlock2" ng-model="$ctrl.solicitud.consultorasContactadas" ng-focus="focus=true" ng-blur="focus=false">
                 </div>
 
                 <div class="col-md-4" ng-hide="$ctrl.mode !== 'view'">
@@ -115,12 +115,23 @@
                 </div>
 
                 <center>
-                    <div class="form-group col-md-12">
+                    <div class="form-group col-md-12" ng-if="$ctrl.mode === 'editar'">
                         <br />
-                        <a class="btn btn-default" ui-sref="app.solicitudes">Volver al listado de solicitudes</a>
-                        <input ng-hide="$ctrl.mode !== 'editar'" type="button" class="btn btn" ng-click="$ctrl.reset()" value="Resetear solicitud" />
-                        <input ng-hide="$ctrl.mode !== 'editar'" type="submit" class="btn btn-success" ng-click="$ctrl.updateOrCreate($ctrl.solicitud, formSolicitudes)" value="Enviar Solicitud" />
-                        <input ng-hide="$ctrl.mode !== 'view'" type="button" class="btn btn-success" ng-click="$ctrl.changeMode()" value="Editar solicitud" />
+
+                        <button type="button" ng-click="$ctrl.changeMode()" value="Cancelar edición" class="reset btn btn-warning ">
+                            Volver <span class ="glyphicon glyphicon-ban-circle"></span>
+                        </button>
+                        <button type="button" ng-click="$ctrl.reset()" value="Descartar cambios" class="reset btn btn-default ">
+                            Descartar Cambios <span class ="glyphicon glyphicon-remove"></span>
+                        </button>
+                        <button type="submit" ng-click="$ctrl.updateOrCreate($ctrl.solicitud, formSolicitudes)" ng-disabled="formSolicitudes.$invalid" class="submit btn btn-primary">
+                            Guardar <span class="glyphicon glyphicon-send"></span>
+                        </button>
+                    </div>
+                    <div class="form-group col-md-12" ng-if="$ctrl.mode === 'view'">
+                        <button type="submit" ng-click="$ctrl.changeMode()" ng-disabled="formSolicitudes.$invalid || formContacto.$invalid" class="submit btn btn-primary">
+                            Editar&nbsp;&nbsp; <span class="glyphicon glyphicon-pencil"></span>
+                        </button>
                     </div>
                     <br>
                     <p class="col-md-12" ng-hide="$ctrl.mode !== 'editar'">
@@ -150,7 +161,7 @@
                                 <button ng-click="$ctrl.setCandidatoSelect(null)" class="btn btn-xs btn-danger glyphicon glyphicon-minus"></button>
                             </td>
                         </tr>
-                        <tr ng-repeat="candidato in $ctrl.candidatosRecomendados | limitTo : 9 : ($ctrl.currentPage-1)*$ctrl.maxSize">
+                        <tr ng-repeat="candidato in $ctrl.candidatos | limitTo : 9 : ($ctrl.currentPage-1)*$ctrl.maxSize">
                             <td class="rowCandidato">
                                 <div>
                                     {{candidato.nombre}} {{candidato.apellido}}
@@ -160,7 +171,7 @@
                         </tr>
                     </table>
                     <div class="pagination">
-                        <ul uib-pagination total-items="$ctrl.candidatosRecomendados.length" ng-model="$ctrl.currentPage" max-size="0" class="pagination-sm" boundary-link-numbers="false"></ul>
+                        <ul uib-pagination total-items="$ctrl.candidatos.length" ng-model="$ctrl.currentPage" max-size="0" class="pagination-sm" boundary-link-numbers="false"></ul>
                     </div>
                 </div>
             </div>
