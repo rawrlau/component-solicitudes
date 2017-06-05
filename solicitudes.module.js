@@ -198,23 +198,38 @@ function controladorFormulario(toastr, solicitudesFactory, candidatoFactory, car
      * @return {[type]} [description]
      */
     vm.setCandidatosRecomendados = function() {
-        // candidatos
-        candidatoFactory.getAll().then(function onSuccess(response) {
-            vm.candidatos = response.filter(function(candidato) {
-                return candidato.id != vm.candidatoSeleccionado.id;
-            });
-        });
-        // requisitos
         requisitosFactory.getAll().then(function(response) {
             vm.reqObl = response.filter(function(requisito) {
                 return requisito.listaDeRequisitoId == vm.solicitud.idReqObligatorios;
             });
-            vm.reqDes = response.filter(function(requisito) {
-                return requisito.listaDeRequisitoId == vm.solicitud.idReqDeseables;
-            });
-            console.log(vm.reqObl);
-            console.log(vm.reqDes);
         });
+        candidatoFactory.getAll().then(function onSuccess(response) {
+            vm.candidatos = response.filter(function(candidato) {
+                requisitosFactory.read(candidato.listaDeRequisitoId).then(function(reqsCandidato) {
+                    requisitosFactory.read(vm.solicitud.idReqObligatorios).then(function(reqsObligatorios) {
+                        for (var i = 0; i < reqsCandidato.length; i++) {
+                            vm.elemInArray(reqsCandidato[i], vm.elemInArray);
+                        }
+                    });
+                });
+                return candidato.id != vm.candidatoSeleccionado.id;
+            });
+        });
+    }
+
+    // service.get().then(function(res1) {
+    //     return mankerService.get(res1.id);
+    // }).then(function(res2) {
+    //     vm.datosManker = miFuncionManker(res2);
+    // })
+
+    vm.elemInArray = function(elem, array) {
+        for (var i = 0; i < array.length; i++) {
+            if (elem == i) {
+                return true;
+            }
+        }
+        return false;
     }
 
     // Lee la solicitud, el candidato seleccionado y los candidatos recomendados
