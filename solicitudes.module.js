@@ -202,9 +202,6 @@ function controladorFormulario(toastr, solicitudesFactory, $stateParams, $log, $
   vm.master = {};
   vm.id = $stateParams.id;
   vm.mode = $stateParams.mode;
-  console.log(vm.mode);
-
-  $log.log(vm.solicitudEditar);
 
   vm.guardias = ['S', 'N'];
   vm.viajar = ['S', 'N'];
@@ -223,9 +220,22 @@ function controladorFormulario(toastr, solicitudesFactory, $stateParams, $log, $
   if ($stateParams.id != 0) {
     solicitudesFactory.read($stateParams.id).then(
       function (solicitud) {
-        vm.solicitudEditar = angular.copy(vm.master = solicitud);
-      });
+        vm.solicitudEditar = angular.copy(vm.master = vm.formatearFecha(solicitud));
+      }
+    );
   }
+
+
+  /**
+     * Formata la fecha de la solicitud para que sea compatible con la vista
+     * @param  {[type]} response [description]
+     * @return {[type]}          [description]
+     */
+    vm.formatearFecha = function formatearFecha(response) {
+        response.fechaRecibida = new Date(response.fechaRecibida);
+        response.fechaCierre = new Date(response.fechaCierre);
+        return response;
+    }
 
   vm.updateOrCreate = function (solicitudEditar, form) {
     if (form.$valid) {
@@ -307,6 +317,7 @@ function dashboardSolicitudesController(solicitudesFactory, $filter, candidatoFa
   var vm = this;
   function actualizarSolicitudes() {
     // Dejamos arrays como al principio
+
     vm.arrayFiltrado = vm.arraySolicitudes;
     vm.arrayFiltradoAbiertas = $filter('filter')(vm.arrayFiltrado, 'abierta');
     vm.arrayFiltradoEspera = $filter('filter')(vm.arrayFiltrado, 'standby');
@@ -316,23 +327,25 @@ function dashboardSolicitudesController(solicitudesFactory, $filter, candidatoFa
     vm.arrayFiltradoEspera = $filter('filter')(vm.arrayFiltradoEspera, vm.filtro);
     vm.arrayFiltradoCerradas = $filter('filter')(vm.arrayFiltradoCerradas, vm.filtro);
   }
-
   vm.actualizarSolicitudes = actualizarSolicitudes;
   solicitudesFactory.getAll().then(
     function onSuccess(response) {
-      vm.arrayCandidatos = candidatoFactory;
       vm.arraySolicitudes = response;
+      vm.arrayCandidatos = [];
+      // vm.arrayCandidatos = candidatoFactory;
       vm.arrayFiltrado = vm.arraySolicitudes;
       vm.arrayFiltradoAbiertas = $filter('filter')(vm.arrayFiltrado, 'abierta');
       vm.arrayFiltradoEspera = $filter('filter')(vm.arrayFiltrado, 'standby');
       vm.arrayFiltradoCerradas = $filter('filter')(vm.arrayFiltrado, 'cerradaCliente', 'cerradaIncorporacion');
 
-      for(var i = 0; i < vm.arrayFiltradoAbiertas.length; i++){
+      for (var i = 0; i < vm.arrayFiltradoAbiertas.length; i++) {
         candidatoFactory.read(vm.arrayFiltradoAbiertas[i].candidatoId).then(
-          function onSuccess(candidato) {
-            vm.arrayCandidatos[i] = angular.copy(candidato);
-            i++;
-          });
-        }
+            function (candidato) {
+              return vm.arrayCandidatos[i] = angular.copy(vm.arrayCandidatos[i] = candidato);
+              // vm.arrayCandidatos[i] = candidato;
+              console.log(candidato);
+            }
+          );
+      }
     });
 }
