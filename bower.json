@@ -4,7 +4,7 @@
   "description": "componente para la entidad solicitudes",
   "main": ["solicitudes.module.js"],
   "authors": [
-    "Daniel Moreno"
+    "Equipo softtek"
   ],
   "license": "MIT",
   "private": true,
