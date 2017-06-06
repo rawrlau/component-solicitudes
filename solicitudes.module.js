@@ -1,5 +1,5 @@
 angular
-    .module('ghr.solicitudes', ['ui.bootstrap', 'toastr', 'ghr.candidatos', 'ghr.caracteristicas', 'ghr.requisitos'])
+    .module('ghr.solicitudes', ['ui.bootstrap', 'toastr', 'ghr.candidatos', 'ghr.caracteristicas', 'ghr.requisitos', 'ghr.contactos'])
     .component('ghrSolicitudesForm', {
         templateUrl: '../bower_components/component-solicitudes/form.solicitudes.html',
         controller: controladorFormulario
@@ -7,6 +7,10 @@ angular
     .component('ghrSolicitudesList', {
         templateUrl: '../bower_components/component-solicitudes/list.solicitudes.html',
         controller: solicitudesListController
+    })
+    .component('dashboardSolicitudes', {
+        templateUrl: '../bower_components/component-solicitudes/dashboard.solicitudes.html',
+        controller: dashboardSolicitudesController
     })
     .config(function(toastrConfig) { // Configura los toastr
         angular.extend(toastrConfig, {
@@ -198,37 +202,46 @@ function controladorFormulario(toastr, solicitudesFactory, candidatoFactory, car
      * @return {[type]} [description]
      */
     vm.setCandidatosRecomendados = function() {
-        requisitosFactory.getAll().then(function(response) {
-            vm.reqObl = response.filter(function(requisito) {
-                return requisito.listaDeRequisitoId == vm.solicitud.idReqObligatorios;
-            });
-        });
+
         candidatoFactory.getAll().then(function onSuccess(response) {
             vm.candidatos = response.filter(function(candidato) {
-                requisitosFactory.read(candidato.listaDeRequisitoId).then(function(reqsCandidato) {
-                    requisitosFactory.read(vm.solicitud.idReqObligatorios).then(function(reqsObligatorios) {
-                        for (var i = 0; i < reqsCandidato.length; i++) {
-                            vm.elemInArray(reqsCandidato[i], vm.elemInArray);
-                        }
-                    });
-                });
                 return candidato.id != vm.candidatoSeleccionado.id;
             });
         });
+        // solicitudesFactory.read($stateParams.id).then(function(solicitud) {
+        //     return requisitosFactory.read(solicitud.idReqObligatorios);
+        // }).then(function(reqObligatorios) {
+        //     candidatoFactory.getAll().then(function(candidatos) {
+        //         vm.arrayCandidatos = candidatos;
+        //         vm.candidatos = [];
+        //         for (var i = 0; i < vm.arrayCandidatos.length; i++) {
+        //             requisitosFactory.read(vm.arrayCandidatos[i].listaDeRequisitoId).then(function(reqCandidato) {
+        //                 console.log(vm.arrayCandidatos[i]);
+        //                 if (comprobarCandidato(reqCandidato, reqObligatorios)) {
+        //                     vm.candidatos.push(vm.arrayCandidatos[i]);
+        //                 }
+        //             });
+        //         }
+        //     });
+        // });
     }
 
-    // service.get().then(function(res1) {
-    //     return mankerService.get(res1.id);
-    // }).then(function(res2) {
-    //     vm.datosManker = miFuncionManker(res2);
-    // })
+    // function comprobarCandidato(reqCandidato, reqObl) {
+    //     for (var i = 0; i < reqCandidato.length; i++) {
+    //         var idCarCan = reqCandidato[i].caracteristicaId;
+    //         for (var j = 0; j < reqObl.length; j++) {
+    //             var idCarObl = reqObl[i].caracteristicaId;
+    //             if (idCarCan == idCarObl)
+    //                 return true;
+    //         }
+    //     }
+    //     return false;
+    // }
 
     vm.elemInArray = function(elem, array) {
-        for (var i = 0; i < array.length; i++) {
-            if (elem == i) {
+        for (var i = 0; i < array.length; i++)
+            if (elem == i)
                 return true;
-            }
-        }
         return false;
     }
 
@@ -354,3 +367,85 @@ angular
             };
         }
     });
+
+function dashboardSolicitudesController(solicitudesFactory, $filter, candidatoFactory, contactosFactory) {
+    var vm = this;
+
+    function actualizarSolicitudes() {
+        // Dejamos arrays como al principio
+        vm.arrayFiltrado = vm.arraySolicitudes;
+        vm.arrayFiltradoAbiertas = $filter('filter')(vm.arrayFiltrado, 'abierta');
+        vm.arrayFiltradoEspera = $filter('filter')(vm.arrayFiltrado, 'standby');
+        vm.arrayFiltradoCerradas = $filter('filter')(vm.arrayFiltrado, 'cerradaCliente', 'cerradaIncorporacion');
+        // Filtramos por contenido escrito en busqueda
+        vm.arrayFiltradoAbiertas = $filter('filter')(vm.arrayFiltradoAbiertas, vm.filtro);
+        vm.arrayFiltradoEspera = $filter('filter')(vm.arrayFiltradoEspera, vm.filtro);
+        vm.arrayFiltradoCerradas = $filter('filter')(vm.arrayFiltradoCerradas, vm.filtro);
+    }
+
+    vm.actualizarSolicitudes = actualizarSolicitudes;
+    vm.arrayCandidatosAbiertas = [];
+    vm.arrayCandidatosEspera = [];
+    vm.arrayCandidatosCerradas = [];
+    solicitudesFactory.getAll().then(
+        function onSuccess(response) {
+            vm.arraySolicitudes = response;
+            vm.arrayFiltrado = vm.arraySolicitudes;
+            vm.arrayFiltradoAbiertas = $filter('filter')(vm.arrayFiltrado, 'abierta');
+            vm.arrayFiltradoEspera = $filter('filter')(vm.arrayFiltrado, 'standby');
+            vm.arrayFiltradoCerradas = $filter('filter')(vm.arrayFiltrado, 'cerradaCliente', 'cerradaIncorporacion');
+
+            for (var indice = 0; indice < vm.arrayFiltradoAbiertas.length; indice++) {
+                candidatoFactory.read(vm.arrayFiltradoAbiertas[indice].candidatoId).then(
+                    function(candidato) {
+                        vm.arrayCandidatosAbiertas.push(angular.copy(candidato));
+                    }
+                );
+            }
+
+            for (var indice = 0; indice < vm.arrayFiltradoEspera.length; indice++) {
+                candidatoFactory.read(vm.arrayFiltradoEspera[indice].candidatoId).then(
+                    function(candidato) {
+                        vm.arrayCandidatosEspera.push(angular.copy(candidato));
+                    }
+                );
+            }
+
+            for (var indice = 0; indice < vm.arrayFiltradoCerradas.length; indice++) {
+                candidatoFactory.read(vm.arrayFiltradoCerradas[indice].candidatoId).then(
+                    function(candidato) {
+                        vm.arrayCandidatosCerradas.push(angular.copy(candidato));
+                    }
+                );
+            }
+
+            contactosFactory.getAll().then(
+                function onSuccess(response) {
+                    vm.arrayContactos = [];
+                    vm.arrayContactos = response;
+                    vm.contactosAbiertas = [];
+                    vm.contactosEspera = [];
+                    vm.contactosCerradas = [];
+                    for (var i = 0; i < vm.arrayContactos.length; i++) {
+                        for (var j = 0; j < vm.arrayCandidatosAbiertas.length; j++) {
+                            if (vm.arrayContactos[i].idCandidato == vm.arrayCandidatosAbiertas[j].id) {
+                                vm.contactosAbiertas.push(vm.arrayContactos[i]);
+                            }
+                        }
+
+                        for (var j = 0; j < vm.arrayCandidatosEspera.length; j++) {
+                            if (vm.arrayContactos[i].idCandidato == vm.arrayCandidatosEspera[j].id) {
+                                vm.contactosEspera.push(vm.arrayContactos[i]);
+                            }
+                        }
+
+                        for (var j = 0; j < vm.arrayCandidatosCerradas.length; j++) {
+                            if (vm.arrayContactos[i].idCandidato == vm.arrayCandidatosCerradas[j].id) {
+                                vm.contactosCerradas.push(vm.arrayContactos[i]);
+                            }
+                        }
+                    }
+                }
+            );
+        });
+}
