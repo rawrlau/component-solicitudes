@@ -1,211 +1,147 @@
-// Modulo ghr.solicitudes con su componente para el formulario y su listado
-angular.module('ghr.solicitudes', ['ui.bootstrap', 'toastr', 'ghr.candidatos'])
-  .component('ghrSolicitudesForm', {
-    templateUrl: '../bower_components/component-solicitudes/form.solicitudes.html',
-    controller: controladorFormulario
-  }).component('ghrSolicitudesList', {
-    templateUrl: '../bower_components/component-solicitudes/list.solicitudes.html',
-    controller: solicitudesListController
-  }).component('dashboardSolicitudes', {
-    templateUrl: '../bower_components/component-solicitudes/dashboard.solicitudes.html',
-    controller: dashboardSolicitudesController
-  })
-  .constant('solBaseUrl', 'http://localhost:3003/api/')
-  .constant('solEntidad', 'solicitudes')
-  .factory('solicitudesFactory', function solicitudesFactory(toastr, $http, solBaseUrl, solEntidad, candidatoFactory) {
-    // Arrays para rellenar nuestro objeto solicitud con valores aleatorios
-    var nombre = ['Adrian', 'Hector', 'Dani', 'Miguel', 'Alex', 'Rodri', 'Marta', 'Alejandro', 'Alvaro'];
-    var descripcion = ['descripcion1', 'descripcion2', 'descripcion3', 'descripcion4', 'descripcion5', 'descripcion6', 'descripcion7', 'descripcion8', 'descripcion9'];
-    var cliente = ['BBVA', 'El Corte Ingles', 'Clientazo'];
-    var brm = ['arm1', 'arm2', 'arm3', 'arm4', 'arm5', 'arm6'];
-    var adm = ['adm1', 'adm2', 'adm3', 'adm4', 'adm5', 'adm6'];
-    var perfil = ['programador', 'Senior Java', 'Analista', 'Senior JavaScript', 'Experto en C'];
-    var reqObligatorios = ['Conocimientos de java', 'Puntualidad', 'Responsabilidad'];
-    var reqDeseables = ['Deseable1', 'Deseable2', 'Deseable3', 'Deseable4', 'Deseable5'];
-    var viajar = ['S', 'N'];
-    var guardias = ['S', 'N'];
-    var ingles = ['Bajo', 'Medio', 'Alto'];
-    var consultorasContactadas = ['Consultora1', 'Consultora2', 'Consultora3', 'Consultora4', 'Consultora5'];
-    var estado = ['abierta', 'cerradaCliente', 'cerradaIncorporacion', 'standby'];
-    // Funcion que crea un objeto solicitud y lo rellena con un valor aleatorio
-    function crearSolicitud(id) {
-      var solicitud = {
-        id: id,
-        nombre: obtenerValor(nombre),
-        descripcion: obtenerValor(descripcion),
-        fechaRecibida: new Date(obtenerFecha()),
-        // fechaRecibida: new Date(new Date().getTime() - distribucionLineal(100)),
-        cliente: obtenerValor(cliente),
-        brm: obtenerValor(brm),
-        adm: obtenerValor(adm),
-        reqObligatorios: obtenerValor(reqObligatorios),
-        reqDeseables: obtenerValor(reqDeseables),
-        perfil: obtenerValor(perfil),
-        ingles: obtenerValor(ingles),
-        viajar: obtenerValor(viajar),
-        guardias: obtenerValor(guardias),
-        consultorasContactadas: obtenerValor(consultorasContactadas),
-        estado: obtenerValor(estado)
-        // fecha cierre
-      };
-      return solicitud;
-    }
-    // Con este metodo obtenemos una fecha aleatoria para nuestro campo fechaRecibida
-    function obtenerFecha() {
-      var date = new Date();
-      var dia = Math.floor(Math.random() * 31);
-      var mes = Math.floor(Math.random() * 13);
-      date.setDate(date.getDate() + dia);
-      date.setMonth(date.getMonth() + mes);
-      return date.getMonth() + '/' + date.getDate() + '/' + date.getFullYear();
-    }
-    // Obtenemos un valor aleatorio
-    function distribucionLineal(rango) {
-      return Math.floor(Math.random() * rango);
-    }
-    // Rellenamos el array con nuestro valor aleatorio
-    function obtenerValor(array) {
-      return array[distribucionLineal(array.length)];
-    }
-    // Creamos un numero determinado de objeto solicitud
-    function crearSolicitudes() {
-      var arraySolicitudes = [];
-      for (var i = 1; i <= 104; i++) {
-        arraySolicitudes.push(crearSolicitud(i));
-      }
-      return arraySolicitudes;
-    }
-    function _getReferenceById(id) {
-      var solicitud;
-      for (var i = 0; (i < arraySolicitudes.length) && (solicitud == undefined); i++) {
-        if (arraySolicitudes[i].id == id) {
-          solicitud = arraySolicitudes[i];
-        }
-      }
-      return solicitud;
-    }
-    // return crearSolicitudes();
-    var arraySolicitudes = crearSolicitudes();
-    var serviceUrl = solBaseUrl + solEntidad;
-    return {
-      // Read and return all entities
-      getAll: function getAll() {
-        // return angular.copy(arraySolicitudes);
-        return $http({
-          method: 'GET',
-          url: serviceUrl
-        })
-        .then(function onSuccess(response) {
-          return response.data;
-        },
-        function onFailure(reason) {
-          toastr.error('No se ha podido realizar la operacion, por favor compruebe su conexion a internet e intentelo más tarde.', '¡Error!');
+angular
+    .module('ghr.solicitudes', ['ui.bootstrap', 'toastr', 'ghr.candidatos', 'ghr.caracteristicas', 'ghr.requisitos', 'ghr.contactos'])
+    .component('ghrSolicitudesForm', {
+        templateUrl: '../bower_components/component-solicitudes/form.solicitudes.html',
+        controller: controladorFormulario
+    })
+    .component('ghrSolicitudesList', {
+        templateUrl: '../bower_components/component-solicitudes/list.solicitudes.html',
+        controller: solicitudesListController
+    })
+    .config(function(toastrConfig) { // Configura los toastr
+        angular.extend(toastrConfig, {
+            closeButton: true,
+            extendedTimeOut: 2000,
+            tapToDismiss: true,
+            preventOpenDuplicates: true
         });
-      },
-      create: function create(solicitud) {
-        return $http({
-          method: 'POST',
-          url: serviceUrl,
-          data: solicitud
-        }).then(function onSuccess(response) {
-          toastr.success('¡Solicitud creada satisfactoriamente!', '¡Ok!');
-          return response.data;
-        },
-        function onFailure(reason) {
-          toastr.error('No se ha podido realizar la operacion, por favor compruebe su conexion a internet e intentelo más tarde.', '¡Error!');
-        });
-      },
-      read: function read(id) {
-        return $http({
-          method: 'GET',
-          url: serviceUrl + '/' + id
-        }).then(function onSuccess(response) {
-          return response.data;
-        },
-        function onFailure(reason) {
-          toastr.error('No se ha podido realizar la operacion, por favor compruebe su conexion a internet e intentelo más tarde.', '¡Error!');
-        });
-      },
-      update: function update(id, solicitud) {
-        return $http({
-          method: 'PATCH',
-          url: serviceUrl + '/' + id,
-          data: solicitud
-        }).then(function onSuccess(response) {
-          toastr.success('¡Solicitud modificada satisfactoriamente!', '¡Ok!');
-          return response.data;
-        },
-        function onFailure(reason) {
-          toastr.error('No se ha podido realizar la operacion, por favor compruebe su conexion a internet e intentelo más tarde.', '¡Error!');
-        });
-      },
-      delete: function _delete(id) {
-        if (!id) {
-          throw solEntidad + 'invalida.';
-        }
-        return $http({
-          method: 'DELETE',
-          url: serviceUrl + '/' + id
-        }).then(function onSuccess(response) {
-          toastr.success('¡Solicitud eliminada satisfactoriamente!', '¡Ok!');
-          return response.data;
-        },
-        function onFailure(reason) {
-          toastr.error('No se ha podido realizar la operacion, por favor compruebe su conexion a internet e intentelo más tarde.', '¡Error!');
-        });
-      }
-    };
-  });
+    })
+    .component('dashboardSolicitudes', {
+      templateUrl: '../bower_components/component-solicitudes/dashboard.solicitudes.html',
+      controller: dashboardSolicitudesController
+    })
+    .constant('solBaseUrl', 'http://localhost:3003/api/')
+    .constant('solEntidad', 'solicitudes')
+    .factory('solicitudesFactory', function solicitudesFactory(toastr, $http, solBaseUrl, solEntidad, candidatoFactory, contactosFactory, caracteristicasFactory, requisitosFactory, ) {
+        var serviceUrl = solBaseUrl + solEntidad;
+        return {
+            // Read and return all entities
+            getAll: function getAll() {
+                return $http({
+                    method: 'GET',
+                    url: serviceUrl
+                }).then(function onSuccess(response) {
+                    return response.data;
+                }, function onFailure(reason) {
+                    toastr.error('No se ha podido realizar la operacion, por favor compruebe su conexion a internet e intentelo más tarde.', '¡Error!');
+                });
+            },
+            create: function create(solicitud) {
+                return $http({
+                    method: 'POST',
+                    url: serviceUrl,
+                    data: solicitud
+                }).then(function onSuccess(response) {
+                    toastr.success('¡Solicitud creada satisfactoriamente!', '¡Ok!');
+                    return response.data;
+                }, function onFailure(reason) {
+                    toastr.error('No se ha podido realizar la operacion, por favor compruebe su conexion a internet e intentelo más tarde.', '¡Error!');
+                });
+            },
+            read: function read(id) {
+                return $http({
+                    method: 'GET',
+                    url: serviceUrl + '/' + id
+                }).then(function onSuccess(response) {
+                    return response.data;
+                }, function onFailure(reason) {
+                    toastr.error('No se ha podido realizar la operacion, por favor compruebe su conexion a internet e intentelo más tarde.', '¡Error!');
+                });
+            },
+            update: function update(id, solicitud) {
+                return $http({
+                    method: 'PATCH',
+                    url: serviceUrl + '/' + id,
+                    data: solicitud
+                }).then(function onSuccess(response) {
+                    toastr.success('¡Solicitud modificada satisfactoriamente!', '¡Ok!');
+                    return response.data;
+                }, function onFailure(reason) {
+                    toastr.error('No se ha podido realizar la operacion, por favor compruebe su conexion a internet e intentelo más tarde.', '¡Error!');
+                });
+            },
+            delete: function _delete(id) {
+                if (!id) {
+                    throw solEntidad + 'invalida.';
+                }
+                return $http({
+                    method: 'DELETE',
+                    url: serviceUrl + '/' + id
+                }).then(function onSuccess(response) {
+                    toastr.success('¡Solicitud eliminada satisfactoriamente!', '¡Ok!');
+                    return response.data;
+                }, function onFailure(reason) {
+                    toastr.error('No se ha podido realizar la operacion, por favor compruebe su conexion a internet e intentelo más tarde.', '¡Error!');
+                });
+            },
+            // Devuelve el candidato seleccionado de la solicitud
+            getCandidato: function getCandidato(id) {
+                return $http({
+                    method: 'GET',
+                    url: serviceUrl + '/' + id + '/candidato'
+                }).then(function onSuccess(response) {
+                    return response.data;
+                }, function onFailure(reason) {
+                    toastr.error('No se ha podido realizar la operacion, por favor compruebe su conexion a internet e intentelo más tarde.', '¡Error!');
+                });
+            }
+        };
+    });
 // Controller para generar nuestras solicitudes y gestionar el borrado de la solicitud
 function solicitudesListController($uibModal, $log, solicitudesFactory, $filter, toastr) {
-  var vm = this;
+    const vm = this;
 
-  function actualizarArraySolicitudes() {
-    vm.arrayFiltrado = $filter('filter')(vm.arraySolicitudes, vm.filtro);
-  }
-  vm.actualizarArraySolicitudes = actualizarArraySolicitudes;
-  solicitudesFactory.getAll().then(
-    function onSuccess(response) {
-      vm.arraySolicitudes = response;
-      vm.arrayFiltrado = vm.arraySolicitudes;
-      vm.totalItems = vm.arraySolicitudes.length;
-    });
-  // vm.arraySolicitudes = solicitudesFactory.getAll();
-  vm.maxSize = 10; // Numero maximo de elementos
-  vm.currentPage = 1;
-  // Se encarga de abrir nuestra ventana modal en base al id obtenido
-  vm.openComponentModal = function (id) {
-    var modalInstance = $uibModal.open({
-      component: 'modalComponentBorrarSolicitudes',
-      resolve: {
-        seleccionado: function () {
-          return id;
-        }
-      }
-    });
-    // Instance para borrar una entidad concreta de solicitudes
-    modalInstance.result.then(function (solicitudId) {
-      solicitudesFactory.delete(solicitudId).then(function onSuccess(deletedCount) {
-        solicitudesFactory.getAll().then(function (solicitudes) {
-          vm.arraySolicitudes = solicitudes;
-          actualizarArraySolicitudes();
+    function actualizarArraySolicitudes() {
+        vm.arrayFiltrado = $filter('filter')(vm.arraySolicitudes, vm.filtro);
+    }
+    vm.actualizarArraySolicitudes = actualizarArraySolicitudes;
+    solicitudesFactory.getAll().then(
+        function onSuccess(response) {
+            vm.arraySolicitudes = response;
+            vm.arrayFiltrado = vm.arraySolicitudes;
+            vm.totalItems = vm.arraySolicitudes.length;
         });
-      }
-      );
-    }, function (reason) {
-    });
-  };
+    // vm.arraySolicitudes = solicitudesFactory.getAll();
+    vm.maxSize = 10; // Numero maximo de elementos
+    vm.currentPage = 1;
+
+    // Se encarga de abrir nuestra ventana modal en base al id obtenido
+    vm.openComponentModal = function(id) {
+        var modalInstance = $uibModal.open({
+            component: 'modalComponentBorrarSolicitudes',
+            resolve: {
+                seleccionado: function() {
+                    return id;
+                }
+            }
+        });
+        // Instance para borrar una entidad concreta de solicitudes
+        modalInstance.result.then(function(solicitudId) {
+            solicitudesFactory.delete(solicitudId).then(function onSuccess(deletedCount) {
+                solicitudesFactory.getAll().then(function(solicitudes) {
+                    vm.arraySolicitudes = solicitudes;
+                    actualizarArraySolicitudes();
+                });
+            });
+        }, function(reason) {});
+    };
 }
 // Controller que se encarga de gestionar nuestro formulario de solicitudes
-function controladorFormulario(toastr, solicitudesFactory, $stateParams, $log, $state) {
-  var vm = this;
-  vm.master = {};
-  vm.id = $stateParams.id;
-  vm.mode = $stateParams.mode;
+function controladorFormulario(toastr, solicitudesFactory, contactosFactory, candidatoFactory, caracteristicasFactory, requisitosFactory, $stateParams, $log, $state) {
+    const vm = this;
 
-  vm.guardias = ['S', 'N'];
-  vm.viajar = ['S', 'N'];
-  vm.estados = ['abierta', 'cerradaCliente', 'cerradaIncorporacion', 'standby'];
+    vm.mode = $stateParams.mode;
+    vm.estados = ['abierta', 'cerradaCliente', 'cerradaIncorporacion', 'standby'];
 
   vm.comprobarForm = function (op) {
     if (op == 'S') {
@@ -215,77 +151,178 @@ function controladorFormulario(toastr, solicitudesFactory, $stateParams, $log, $
     }
   };
 
-  vm.mode = $stateParams.mode;
+    /**
+     * Cambia al modo entre view y edit
+     * @return {[type]} [description]
+     */
+    vm.changeMode = function() {
+        var modo;
+        if ($stateParams.mode == 'view') modo = 'editar'
+        else modo = 'view'
+        $state.go($state.current, {
+            mode: modo
+        });
+        vm.mode = $stateParams.mode;
+    }
 
-  if ($stateParams.id != 0) {
-    solicitudesFactory.read($stateParams.id).then(
-      function (solicitud) {
-        vm.solicitudEditar = angular.copy(vm.master = vm.formatearFecha(solicitud));
-      }
-    );
-  }
+    /**
+     * Crea una copia de la solicitud en un nuevo objeto para
+     * ser recuperado en caso de descartar cambios
+     * @return {[type]} [description]
+     */
+    vm.setOriginal = function(data) {
+        vm.original = angular.copy(vm.solicitud = vm.formatearFecha(data));
+    }
 
+    /**
+     * Descartar cambios
+     * @return {[type]} [description]
+     */
+    vm.reset = function() {
+        vm.solicitud = angular.copy(vm.original);
+    };
+    vm.reset();
 
-  /**
+    /**
+     * Lee la solicitud pasada por el $stateParams
+     * @return {[type]} [description]
+     */
+    vm.getSolicitud = function() {
+        solicitudesFactory.read($stateParams.id)
+            .then(function onSuccess(solicitud) {
+                vm.solicitud = angular.copy(vm.original = vm.formatearFecha(solicitud));
+            });
+    }
+
+    /**
+     * Devuelve el candidato seleccionado de la solicitud
+     * @return {[type]} [description]
+     */
+    vm.getCandidatoSeleccionado = function() {
+        solicitudesFactory.getCandidato($stateParams.id)
+            .then(function onSuccess(response) {
+                vm.candidatoSeleccionado = response;
+            });
+    }
+
+    /**
+     * Devuelve la lista con los candidatos recomendados
+     * @return {[type]} [description]
+     */
+    vm.setCandidatosRecomendados = function() {
+        // candidatos
+        candidatoFactory.getAll().then(function onSuccess(response) {
+            vm.candidatos = response.filter(function(candidato) {
+                return candidato.id != vm.candidatoSeleccionado.id;
+            });
+        });
+        // requisitos
+        requisitosFactory.getAll().then(function(response) {
+            vm.reqObl = response.filter(function(requisito) {
+                return requisito.listaDeRequisitoId == vm.solicitud.idReqObligatorios;
+            });
+            vm.reqDes = response.filter(function(requisito) {
+                return requisito.listaDeRequisitoId == vm.solicitud.idReqDeseables;
+            });
+            console.log(vm.reqObl);
+            console.log(vm.reqDes);
+        });
+    }
+
+    // Lee la solicitud, el candidato seleccionado y los candidatos recomendados
+    if ($stateParams.id != 0) {
+        vm.getSolicitud();
+        vm.getCandidatoSeleccionado();
+        vm.setCandidatosRecomendados();
+    }
+
+    /**
+     * Setea el candidato seleccionado de la solicitud
+     * @return {[type]} [description]
+     */
+    vm.setCandidatoSelect = function setCandidatoSelect(id) {
+        var idCandidato = null;
+        if (id !== null) idCandidato = id;
+        var solicitudMod = {
+            candidatoId: idCandidato
+        };
+        solicitudesFactory.update($stateParams.id, solicitudMod)
+            .then(function(response) {
+                vm.solicitud = angular.copy(vm.solicitud);
+            });
+
+        vm.getCandidatoSeleccionado();
+        vm.setCandidatosRecomendados();
+    }
+
+    /**
      * Formata la fecha de la solicitud para que sea compatible con la vista
      * @param  {[type]} response [description]
      * @return {[type]}          [description]
      */
     vm.formatearFecha = function formatearFecha(response) {
         response.fechaRecibida = new Date(response.fechaRecibida);
-        response.fechaCierre = new Date(response.fechaCierre);
         return response;
     }
 
-  vm.updateOrCreate = function (solicitudEditar, form) {
-    if (form.$valid) {
-      if (vm.id == 0) {
-        delete vm.solicitudEditar.id;
-        solicitudesFactory.create(vm.solicitudEditar).then(
-          function (solicitud) {
-            $state.go($state.current, {id: solicitud.id});
-          });
-      } else {
-        for (var elemento in form.$$controls) {
-          if (elemento.$dirty) {
-            vm.solicitudEditar[elemento.$name] = elemento.$modelValue;
-          }
+    /**
+     * Crea o actualiza una solicitud
+     * @param  {[type]} solicitud [description]
+     * @param  {[type]} form      [description]
+     * @return {[type]}           [description]
+     */
+    vm.updateOrCreate = function(solicitud, form) {
+        if (form.$valid) {
+            // Create
+            if ($stateParams.id == 0) {
+                delete vm.solicitud.id;
+                solicitudesFactory.create(vm.solicitud).then(
+                    function(solicitud) {
+                        $state.go($state.current, {
+                            id: solicitud.id
+                        });
+                    });
+            }
+            // Update
+            else {
+                var solicitudMod = {}
+                for (var i = 0; i < form.$$controls.length; i++) {
+                    var input = form.$$controls[i];
+                    if (input.$dirty)
+                        solicitudMod[input.$name] = input.$modelValue;
+                }
+                console.log(solicitudMod);
+                if (form.$dirty) {
+                    solicitudesFactory.update(solicitud.id, solicitudMod).then(
+                        function onSuccess(response) {
+                            vm.setOriginal(response);
+                        }
+                    );
+                } else
+                    toastr.info('No hay nada que modificar', 'Info');
+            }
+        } else {
+            toastr.warning('¡Debe rellenar los campos obligatorios!', '¡Cuidado!');
         }
-        solicitudesFactory.update(vm.solicitudEditar.id, vm.solicitudEditar).then(
-          function (response) {
-            vm.solicitudEditar = angular.copy(vm.solicitudEditar);
-          }
-        );
-      }
-    } else {
-      toastr.warning('¡Debe rellenar los campos obligatorios!', '¡Cuidado!');
-    }
-  };
-  vm.reset = function (form) {
-    if (form) {
-      form.$setPristine();
-      form.$setUntouched();
-    }
-    vm.solicitudEditar = angular.copy(vm.master);
-  };
-  vm.cambiar = function cambiar() {
-    if (vm.mode == 'view') {
-      vm.mode = 'editar';
-    } else if (vm.mode == 'editar') {
-      vm.mode = 'view';
-    }
-  };
+    };
+
+    // Paginación de los candidatos recomendados
+    vm.maxSize = 5; // Numero maximo de elementos
+    vm.currentPage = 1;
+
 }
 // Controlador ModalInstanceCtrl para confirmar y cancelar nuestra peticion
-angular.module('ghr.solicitudes').controller('ModalInstanceCtrl', function ($uibModalInstance, $log) {
-  var $ctrl = this;
-  vm.ok = function (value) {
-    $uibModalInstance.close(value);
-  };
-  vm.cancel = function (reason) {
-    $uibModalInstance.dismiss(reason);
-  };
-});
+angular
+    .module('ghr.solicitudes')
+    .controller('ModalInstanceCtrl', function($uibModalInstance, $log) {
+        var $ctrl = this;
+        vm.ok = function(value) {
+            $uibModalInstance.close(value);
+        };
+        vm.cancel = function(reason) {
+            $uibModalInstance.dismiss(reason);
+        };
+    });
 // Modulo para nuestra ventana modal con su controller para eliminar y cancelar
 angular.module('ghr.solicitudes').component('modalComponentBorrarSolicitudes', {
   templateUrl: '../bower_components/component-solicitudes/myModalContent.html',
@@ -313,8 +350,10 @@ angular.module('ghr.solicitudes').component('modalComponentBorrarSolicitudes', {
   }
 });
 
-function dashboardSolicitudesController(solicitudesFactory, $filter, candidatoFactory) {
+function dashboardSolicitudesController(solicitudesFactory, $filter, candidatoFactory, $stateParams, contactosFactory) {
+
   var vm = this;
+
   function actualizarSolicitudes() {
     // Dejamos arrays como al principio
 
@@ -327,25 +366,57 @@ function dashboardSolicitudesController(solicitudesFactory, $filter, candidatoFa
     vm.arrayFiltradoEspera = $filter('filter')(vm.arrayFiltradoEspera, vm.filtro);
     vm.arrayFiltradoCerradas = $filter('filter')(vm.arrayFiltradoCerradas, vm.filtro);
   }
+
   vm.actualizarSolicitudes = actualizarSolicitudes;
+  //Arrays para nuestros candidatos
+  vm.arrayCandidatosAbiertas = [];
+  vm.arrayCandidatosEspera = [];
+  vm.arrayCandidatosCerradas = [];
+
+  //Arrays para nuestros contactos
+  vm.arrayContactos = [];
+  vm.arrayContactosAbiertas = [];
+
   solicitudesFactory.getAll().then(
     function onSuccess(response) {
       vm.arraySolicitudes = response;
-      vm.arrayCandidatos = [];
-      // vm.arrayCandidatos = candidatoFactory;
       vm.arrayFiltrado = vm.arraySolicitudes;
       vm.arrayFiltradoAbiertas = $filter('filter')(vm.arrayFiltrado, 'abierta');
       vm.arrayFiltradoEspera = $filter('filter')(vm.arrayFiltrado, 'standby');
       vm.arrayFiltradoCerradas = $filter('filter')(vm.arrayFiltrado, 'cerradaCliente', 'cerradaIncorporacion');
 
-      for (var i = 0; i < vm.arrayFiltradoAbiertas.length; i++) {
-        candidatoFactory.read(vm.arrayFiltradoAbiertas[i].candidatoId).then(
+      //Obtenemos todos los objetos de contacto
+      contactosFactory.getAll().then(
+        function onSuccess(response) {
+          vm.arrayContactos = response;
+          console.log(vm.arrayContactos.length);
+          console.log(vm.arrayContactos);
+      })
+
+      //Obtenemos nuestro candidato mediante candidatoId
+      for (var indice = 0; indice < vm.arrayFiltradoAbiertas.length; indice++) {
+        candidatoFactory.read(vm.arrayFiltradoAbiertas[indice].candidatoId).then(
             function (candidato) {
-              return vm.arrayCandidatos[i] = angular.copy(vm.arrayCandidatos[i] = candidato);
-              // vm.arrayCandidatos[i] = candidato;
-              console.log(candidato);
+              vm.arrayCandidatosAbiertas.push(angular.copy(candidato));
             }
           );
       }
+
+      for (var indice = 0; indice < vm.arrayFiltradoEspera.length; indice++) {
+        candidatoFactory.read(vm.arrayFiltradoEspera[indice].candidatoId).then(
+            function (candidato) {
+              vm.arrayCandidatosEspera.push(angular.copy(candidato));
+            }
+          );
+      }
+
+      for (var indice = 0; indice < vm.arrayFiltradoCerradas.length; indice++) {
+        candidatoFactory.read(vm.arrayFiltradoCerradas[indice].candidatoId).then(
+            function (candidato) {
+              vm.arrayCandidatosCerradas.push(angular.copy(candidato));
+            }
+          );
+      }
+
     });
-}
+  };
