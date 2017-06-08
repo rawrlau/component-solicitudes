@@ -8,23 +8,11 @@
     </div>
   </div>
   </center>
-  <div class="row">
-    <div class="col-sm-4">
-      <h3>Solicitudes abiertas <span class="glyphicon glyphicon-ok-circle"></span></h3>
-    </div>
-    <div class="col-sm-4">
-      <h3>Solicitudes en espera <span class="glyphicon glyphicon-hourglass"></span></h3>
-    </div>
-    <div class="col-sm-4">
-      <h3>Solicitudes cerradas <span class="glyphicon glyphicon-ban-circle"></span></h3>
-    </div>
-  </div>
   <div id="contendorListas" class="row">
     <div class="col-sm-4 columnaFiltrada">
-      <ul ui-on-Drop="onDrop($event,$data,$ctrl.arrayFiltradoAbiertas)" class="list-group">
-        <li ng-repeat="elem in $ctrl.arrayFiltradoAbiertas track by $index"
-            ui-draggable="true" drag="elem"
-            on-drop-success="dropSuccessHandler($event,$index,$ctrl.arrayFiltradoAbiertas)">
+      <h3>Solicitudes abiertas <span class="glyphicon glyphicon-ok-circle"></span></h3>
+      <ul class="list-group">
+        <li ng-repeat="elem in $ctrl.arrayFiltradoAbiertas track by $index">
           <div class="list-group-item solicitudFiltrada">
             <h4><b> Solicitante:</b> <span class="leyenda">{{elem.nombre}}</span></h4>
             <hr />
@@ -42,10 +30,9 @@
       </ul>
     </div>
     <div dnd-list="list" class="col-sm-4 columnaFiltrada">
-      <ul ui-on-Drop="onDrop($event,$data,$ctrl.arrayFiltradoEspera)" class="list-group">
-        <li ng-repeat="elem in $ctrl.arrayFiltradoEspera track by $index"
-            ui-draggable="true" drag="elem"
-            on-drop-success="dropSuccessHandler($event,$index,$ctrl.arrayFiltradoEspera)">
+      <h3>Solicitudes en espera <span class="glyphicon glyphicon-hourglass"></span></h3>
+      <ul class="list-group">
+        <li ng-repeat="elem in $ctrl.arrayFiltradoEspera track by $index">
           <div class="list-group-item solicitudFiltrada">
             <h4><b>Solicitante:</b> <span class="leyenda">{{elem.nombre}}</span></h4>
             <hr />
@@ -63,10 +50,9 @@
       </ul>
     </div>
     <div dnd-list="list" class="col-sm-4">
-      <ul ui-on-Drop="onDrop($event,$data,$ctrl.arrayFiltradoCerradas)" class="list-group">
-        <li ng-repeat="elem in $ctrl.arrayFiltradoCerradas track by $index"
-            ui-draggable="true" drag="elem"
-            on-drop-success="dropSuccessHandler($event,$index,$ctrl.arrayFiltradoCerradas)">
+      <h3>Solicitudes cerradas <span class="glyphicon glyphicon-ban-circle"></span></h3>
+      <ul class="list-group">
+        <li ng-repeat="elem in $ctrl.arrayFiltradoCerradas track by $index">
           <div class="list-group-item solicitudFiltrada">
             <h4><b>Solicitante:</b> <span class="leyenda">{{elem.nombre}}</span></h4>
             <hr />
