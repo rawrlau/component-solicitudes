@@ -26,7 +26,7 @@
             ui-draggable="true" drag="elem"
             on-drop-success="dropSuccessHandler($event,$index,$ctrl.arrayFiltradoAbiertas)">
           <div class="list-group-item solicitudFiltrada">
-            <h4><b> Nombre:</b> <span class="leyenda">{{elem.nombre}}</span></h4>
+            <h4><b> Solicitante:</b> <span class="leyenda">{{elem.nombre}}</span></h4>
             <hr />
             <h5><span class="glyphicon glyphicon-briefcase"></span><b> Cliente:</b> <span class="leyenda">{{elem.cliente}}</span></h5>
             <h5><span class="glyphicon glyphicon-user"></span><b> Candidato:</b> <span class="leyenda">{{ $ctrl.arrayCandidatosAbiertas[$index].nombre}}</span></h5>
@@ -47,7 +47,7 @@
             ui-draggable="true" drag="elem"
             on-drop-success="dropSuccessHandler($event,$index,$ctrl.arrayFiltradoEspera)">
           <div class="list-group-item solicitudFiltrada">
-            <h4><b>Nombre:</b> <span class="leyenda">{{elem.nombre}}</span></h4>
+            <h4><b>Solicitante:</b> <span class="leyenda">{{elem.nombre}}</span></h4>
             <hr />
             <h5><span class="glyphicon glyphicon-briefcase"></span><b> Cliente:</b> <span class="leyenda">{{elem.cliente}}</span></h5>
             <h5><span class="glyphicon glyphicon-user"></span><b> Candidato:</b> <span class="leyenda">{{ $ctrl.arrayCandidatosEspera[$index].nombre}}</span></h5>
@@ -68,7 +68,7 @@
             ui-draggable="true" drag="elem"
             on-drop-success="dropSuccessHandler($event,$index,$ctrl.arrayFiltradoCerradas)">
           <div class="list-group-item solicitudFiltrada">
-            <h4><b>Nombre:</b> <span class="leyenda">{{elem.nombre}}</span></h4>
+            <h4><b>Solicitante:</b> <span class="leyenda">{{elem.nombre}}</span></h4>
             <hr />
             <h5><span class="glyphicon glyphicon-briefcase"></span><b> Cliente:</b> <span class="leyenda">{{elem.cliente}}</span></h5>
             <h5><span class="glyphicon glyphicon-user"></span><b> Candidato:</b> <span class="leyenda">{{ $ctrl.arrayCandidatosCerradas[$index].nombre}}</span></h5>
