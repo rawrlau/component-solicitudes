@@ -16,7 +16,7 @@ angular
       preventOpenDuplicates: true
     });
   })
-  .component('dashboardSolicitudes', {
+  .component('ghrSolicitudesDashboard', {
     templateUrl: '../bower_components/component-solicitudes/dashboard.solicitudes.html',
     controller: dashboardSolicitudesController
   })
@@ -358,6 +358,8 @@ angular.module('ghr.solicitudes').component('modalComponentBorrarSolicitudes', {
 
 function dashboardSolicitudesController(solicitudesFactory, $filter, candidatoFactory, contactosFactory) {
   var vm = this;
+  vm.holi= "holi";
+  console.log(vm.holi);
 
   function actualizarSolicitudes() {
     // Dejamos arrays como al principio
@@ -375,13 +377,15 @@ function dashboardSolicitudesController(solicitudesFactory, $filter, candidatoFa
   vm.arrayCandidatosAbiertas = [];
   vm.arrayCandidatosEspera = [];
   vm.arrayCandidatosCerradas = [];
-  solicitudesFactory.getAll().then(
-    function onSuccess(response) {
-      vm.arraySolicitudes = response;
-      vm.arrayFiltrado = vm.arraySolicitudes;
+
+
+  solicitudesFactory.getAll().then(function onSuccess(response) {
+      vm.arrayFiltrado = response;
       vm.arrayFiltradoAbiertas = $filter('filter')(vm.arrayFiltrado, 'abierta');
       vm.arrayFiltradoEspera = $filter('filter')(vm.arrayFiltrado, 'standby');
       vm.arrayFiltradoCerradas = $filter('filter')(vm.arrayFiltrado, 'cerradaCliente', 'cerradaIncorporacion');
+
+console.log(vm.arrayFiltrado);
 
       for (var indice = 0; indice < vm.arrayFiltradoAbiertas.length; indice++) {
         candidatoFactory.read(vm.arrayFiltradoAbiertas[indice].candidatoId).then(
@@ -411,7 +415,7 @@ function dashboardSolicitudesController(solicitudesFactory, $filter, candidatoFa
         function onSuccess(response) {
           vm.arrayContactos = [];
           vm.arrayContactos = response;
-          console.log(vm.arrayContactos);
+          // console.log(vm.arrayContactos);
           vm.contactosAbiertas = [];
           vm.contactosEspera = [];
           vm.contactosCerradas = [];
