@@ -202,7 +202,6 @@ function controladorFormulario(toastr, solicitudesFactory, candidatoFactory, car
      * @return {[type]} [description]
      */
     vm.setCandidatosRecomendados = function() {
-
         candidatoFactory.getAll().then(function onSuccess(response) {
             vm.candidatos = response.filter(function(candidato) {
                 return candidato.id != vm.candidatoSeleccionado.id;
