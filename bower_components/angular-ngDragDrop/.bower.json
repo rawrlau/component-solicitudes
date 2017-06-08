@@ -1,0 +1,40 @@
+{
+  "name": "angular-ngDragDrop",
+  "authors": [
+    "Ajain Vivek <ajainvivek07@gmail.com>"
+  ],
+  "description": "Angular Drag and Drop Directive",
+  "main": "dist/ngDragDrop.js",
+  "license": "MIT",
+  "private": false,
+  "keywords": [
+    "dragdrop",
+    "ngDragDrop",
+    "angular drag drop"
+  ],
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "devDependencies": {
+    "jquery": "~2.1.1",
+    "angular": "~1.2.26",
+    "angular-sanitize": "~1.2.26",
+    "angular-mocks": "~1.2.26",
+    "bootstrap": "latest"
+  },
+  "homepage": "https://github.com/ajainvivek/ngDragDrop",
+  "_release": "a2843ed25e",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "a2843ed25e87c6d6bbcd4fcada43a06688aa3d72"
+  },
+  "_source": "https://github.com/ajainvivek/ngDragDrop.git",
+  "_target": "*",
+  "_originalSource": "ngDragDrop",
+  "_direct": true
+}
