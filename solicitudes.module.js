@@ -1,80 +1,4 @@
 angular
-<<<<<<< HEAD
-  .module('ghr.solicitudes', ['ui.bootstrap', 'toastr', 'ghr.candidatos', 'ghr.caracteristicas', 'ghr.requisitos', 'ghr.contactos'])
-  .component('ghrSolicitudesForm', {
-    templateUrl: '../bower_components/component-solicitudes/form.solicitudes.html',
-    controller: controladorFormulario
-  })
-  .component('ghrSolicitudesList', {
-    templateUrl: '../bower_components/component-solicitudes/list.solicitudes.html',
-    controller: solicitudesListController
-  })
-  .config(function(toastrConfig) { // Configura los toastr
-    angular.extend(toastrConfig, {
-      closeButton: true,
-      extendedTimeOut: 2000,
-      tapToDismiss: true,
-      preventOpenDuplicates: true
-    });
-  })
-  .component('ghrSolicitudesDashboard', {
-    templateUrl: '../bower_components/component-solicitudes/dashboard.solicitudes.html',
-    controller: dashboardSolicitudesController
-  })
-  .constant('solBaseUrl', 'http://localhost:3003/api/')
-  .constant('solEntidad', 'solicitudes')
-  .factory('solicitudesFactory', function solicitudesFactory(toastr, $http, solBaseUrl, solEntidad, candidatoFactory, caracteristicasFactory, requisitosFactory) {
-    var serviceUrl = solBaseUrl + solEntidad;
-    return {
-      // Read and return all entities
-      getAll: function getAll() {
-        return $http({
-          method: 'GET',
-          url: serviceUrl
-        }).then(function onSuccess(response) {
-          return response.data;
-        }, function onFailure(reason) {
-          toastr.error('No se ha podido realizar la operacion, por favor compruebe su conexion a internet e intentelo más tarde.', '¡Error!');
-        });
-      },
-      create: function create(solicitud) {
-        return $http({
-          method: 'POST',
-          url: serviceUrl,
-          data: solicitud
-        }).then(function onSuccess(response) {
-          toastr.success('¡Solicitud creada satisfactoriamente!', '¡Ok!');
-          return response.data;
-        }, function onFailure(reason) {
-          toastr.error('No se ha podido realizar la operacion, por favor compruebe su conexion a internet e intentelo más tarde.', '¡Error!');
-        });
-      },
-      read: function read(id) {
-        return $http({
-          method: 'GET',
-          url: serviceUrl + '/' + id
-        }).then(function onSuccess(response) {
-          return response.data;
-        }, function onFailure(reason) {
-          toastr.error('No se ha podido realizar la operacion, por favor compruebe su conexion a internet e intentelo más tarde.', '¡Error!');
-        });
-      },
-      update: function update(id, solicitud) {
-        return $http({
-          method: 'PATCH',
-          url: serviceUrl + '/' + id,
-          data: solicitud
-        }).then(function onSuccess(response) {
-          toastr.success('¡Solicitud modificada satisfactoriamente!', '¡Ok!');
-          return response.data;
-        }, function onFailure(reason) {
-          toastr.error('No se ha podido realizar la operacion, por favor compruebe su conexion a internet e intentelo más tarde.', '¡Error!');
-        });
-      },
-      delete: function _delete(id) {
-        if (!id) {
-          throw solEntidad + 'invalida.';
-=======
     .module('ghr.solicitudes', ['ui.bootstrap', 'ngDragDrop', 'toastr', 'ghr.candidatos', 'ghr.caracteristicas', 'ghr.requisitos', 'ghr.contactos'])
     .component('ghrSolicitudesForm', {
       templateUrl: '../bower_components/component-solicitudes/form.solicitudes.html',
@@ -170,7 +94,6 @@ angular
           }, function onFailure(reason) {
             toastr.error('No se ha podido realizar la operacion, por favor compruebe su conexion a internet e intentelo más tarde.', '¡Error!');
           });
->>>>>>> d4dd26959d9e7ca86a117eb1ef79f7669eca3c92
         }
       };
     });
@@ -435,8 +358,6 @@ angular.module('ghr.solicitudes').component('modalComponentBorrarSolicitudes', {
 
 function dashboardSolicitudesController(solicitudesFactory, $filter, candidatoFactory, contactosFactory) {
   var vm = this;
-  vm.holi= "holi";
-  console.log(vm.holi);
 
   vm.addText = "";
 
@@ -466,21 +387,13 @@ function dashboardSolicitudesController(solicitudesFactory, $filter, candidatoFa
   vm.arrayCandidatosEspera = [];
   vm.arrayCandidatosCerradas = [];
 
-<<<<<<< HEAD
-
-  solicitudesFactory.getAll().then(function onSuccess(response) {
-      vm.arrayFiltrado = response;
-=======
   solicitudesFactory.getAll().then(
     function onSuccess(response) {
       vm.arraySolicitudes = response;
       vm.arrayFiltrado = vm.arraySolicitudes;
->>>>>>> d4dd26959d9e7ca86a117eb1ef79f7669eca3c92
       vm.arrayFiltradoAbiertas = $filter('filter')(vm.arrayFiltrado, 'abierta');
       vm.arrayFiltradoEspera = $filter('filter')(vm.arrayFiltrado, 'standby');
       vm.arrayFiltradoCerradas = $filter('filter')(vm.arrayFiltrado, 'cerradaCliente', 'cerradaIncorporacion');
-
-console.log(vm.arrayFiltrado);
 
       for (var indice = 0; indice < vm.arrayFiltradoAbiertas.length; indice++) {
         candidatoFactory.read(vm.arrayFiltradoAbiertas[indice].candidatoId).then(
@@ -510,7 +423,7 @@ console.log(vm.arrayFiltrado);
         function onSuccess(response) {
           vm.arrayContactos = [];
           vm.arrayContactos = response;
-          // console.log(vm.arrayContactos);
+          console.log(vm.arrayContactos);
           vm.contactosAbiertas = [];
           vm.contactosEspera = [];
           vm.contactosCerradas = [];
