@@ -3,8 +3,7 @@
   "homepage": "https://github.com/SofttekFormacion2017/component-solicitudes.git",
   "description": "componente para la entidad solicitudes",
   "main": [
-    "solicitudes.module.js",
-    "draganddrop.js"
+    "solicitudes.module.js"
   ],
   "authors": [
     "Daniel Moreno"
