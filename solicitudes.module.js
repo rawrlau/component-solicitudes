@@ -1,5 +1,5 @@
 angular
-    .module('ghr.solicitudes', ['ui.bootstrap', 'toastr', 'ghr.candidatos', 'ghr.caracteristicas', 'ghr.requisitos', 'ghr.contactos'])
+    .module('ghr.solicitudes', ['ui.bootstrap', 'ngDragDrop', 'toastr', 'ghr.candidatos', 'ghr.caracteristicas', 'ghr.requisitos', 'ghr.contactos'])
     .component('ghrSolicitudesForm', {
         templateUrl: '../bower_components/component-solicitudes/form.solicitudes.html',
         controller: controladorFormulario
@@ -8,10 +8,6 @@ angular
         templateUrl: '../bower_components/component-solicitudes/list.solicitudes.html',
         controller: solicitudesListController
     })
-    .component('dashboardSolicitudes', {
-        templateUrl: '../bower_components/component-solicitudes/dashboard.solicitudes.html',
-        controller: dashboardSolicitudesController
-    })
     .config(function(toastrConfig) { // Configura los toastr
         angular.extend(toastrConfig, {
             closeButton: true,
@@ -19,6 +15,10 @@ angular
             tapToDismiss: true,
             preventOpenDuplicates: true
         });
+    })
+    .component('ghrSolicitudesDashboard', {
+        templateUrl: '../bower_components/component-solicitudes/dashboard.solicitudes.html',
+        controller: dashboardSolicitudesController
     })
     .constant('solBaseUrl', 'http://localhost:3003/api/')
     .constant('solEntidad', 'solicitudes')
@@ -143,19 +143,30 @@ function controladorFormulario(toastr, solicitudesFactory, candidatoFactory, car
     vm.mode = $stateParams.mode;
     vm.estados = ['abierta', 'cerradaCliente', 'cerradaIncorporacion', 'standby'];
 
+    vm.comprobarForm = function(op) {
+        if (op == 'S') {
+            return 'Si';
+        } else if (op == 'N') {
+            return 'No';
+        }
+    };
+
     /**
      * Cambia al modo entre view y edit
      * @return {[type]} [description]
      */
     vm.changeMode = function() {
         var modo;
-        if ($stateParams.mode == 'view') modo = 'editar'
-        else modo = 'view'
+        if ($stateParams.mode == 'view') {
+            modo = 'editar';
+        } else {
+            modo = 'view';
+        }
         $state.go($state.current, {
             mode: modo
         });
         vm.mode = $stateParams.mode;
-    }
+    };
 
     /**
      * Crea una copia de la solicitud en un nuevo objeto para
@@ -164,7 +175,7 @@ function controladorFormulario(toastr, solicitudesFactory, candidatoFactory, car
      */
     vm.setOriginal = function(data) {
         vm.original = angular.copy(vm.solicitud = vm.formatearFecha(data));
-    }
+    };
 
     /**
      * Descartar cambios
@@ -184,7 +195,7 @@ function controladorFormulario(toastr, solicitudesFactory, candidatoFactory, car
             .then(function onSuccess(solicitud) {
                 vm.solicitud = angular.copy(vm.original = vm.formatearFecha(solicitud));
             });
-    }
+    };
 
     /**
      * Devuelve el candidato seleccionado de la solicitud
@@ -195,7 +206,7 @@ function controladorFormulario(toastr, solicitudesFactory, candidatoFactory, car
             .then(function onSuccess(response) {
                 vm.candidatoSeleccionado = response;
             });
-    }
+    };
 
     /**
      * Devuelve la lista con los candidatos recomendados
@@ -257,7 +268,9 @@ function controladorFormulario(toastr, solicitudesFactory, candidatoFactory, car
      */
     vm.setCandidatoSelect = function setCandidatoSelect(id) {
         var idCandidato = null;
-        if (id !== null) idCandidato = id;
+        if (id !== null) {
+            idCandidato = id;
+        }
         var solicitudMod = {
             candidatoId: idCandidato
         };
@@ -268,7 +281,7 @@ function controladorFormulario(toastr, solicitudesFactory, candidatoFactory, car
 
         vm.getCandidatoSeleccionado();
         vm.setCandidatosRecomendados();
-    }
+    };
 
     /**
      * Formata la fecha de la solicitud para que sea compatible con la vista
@@ -278,7 +291,7 @@ function controladorFormulario(toastr, solicitudesFactory, candidatoFactory, car
     vm.formatearFecha = function formatearFecha(response) {
         response.fechaRecibida = new Date(response.fechaRecibida);
         return response;
-    }
+    };
 
     /**
      * Crea o actualiza una solicitud
@@ -300,11 +313,12 @@ function controladorFormulario(toastr, solicitudesFactory, candidatoFactory, car
             }
             // Update
             else {
-                var solicitudMod = {}
+                var solicitudMod = {};
                 for (var i = 0; i < form.$$controls.length; i++) {
                     var input = form.$$controls[i];
-                    if (input.$dirty)
+                    if (input.$dirty) {
                         solicitudMod[input.$name] = input.$modelValue;
+                    }
                 }
                 console.log(solicitudMod);
                 if (form.$dirty) {
@@ -313,8 +327,9 @@ function controladorFormulario(toastr, solicitudesFactory, candidatoFactory, car
                             vm.setOriginal(response);
                         }
                     );
-                } else
+                } else {
                     toastr.info('No hay nada que modificar', 'Info');
+                }
             }
         } else {
             toastr.warning('¡Debe rellenar los campos obligatorios!', '¡Cuidado!');
@@ -324,7 +339,6 @@ function controladorFormulario(toastr, solicitudesFactory, candidatoFactory, car
     // Paginación de los candidatos recomendados
     vm.maxSize = 5; // Numero maximo de elementos
     vm.currentPage = 1;
-
 }
 // Controlador ModalInstanceCtrl para confirmar y cancelar nuestra peticion
 angular
@@ -339,36 +353,45 @@ angular
         };
     });
 // Modulo para nuestra ventana modal con su controller para eliminar y cancelar
-angular
-    .module('ghr.solicitudes')
-    .component('modalComponentBorrarSolicitudes', {
-        templateUrl: '../bower_components/component-solicitudes/myModalContent.html',
-        bindings: {
-            resolve: '<',
-            close: '&',
-            dismiss: '&'
-        },
-        controller: function(toastr, solicitudesFactory) {
-            var vm = this;
-            vm.arraySolicitudes = solicitudesFactory.getAll();
-            vm.$onInit = function() {
-                vm.seleccionado = vm.resolve.seleccionado;
-            };
-            vm.eliminar = function(solicitud) {
-                vm.close({
-                    $value: solicitud
-                });
-            };
-            vm.cancelar = function() {
-                vm.dismiss({
-                    $value: 'cancel'
-                });
-            };
-        }
-    });
+angular.module('ghr.solicitudes').component('modalComponentBorrarSolicitudes', {
+    templateUrl: '../bower_components/component-solicitudes/myModalContent.html',
+    bindings: {
+        resolve: '<',
+        close: '&',
+        dismiss: '&'
+    },
+    controller: function(toastr, solicitudesFactory) {
+        var vm = this;
+        vm.arraySolicitudes = solicitudesFactory.getAll();
+        vm.$onInit = function() {
+            vm.seleccionado = vm.resolve.seleccionado;
+        };
+        vm.eliminar = function(solicitud) {
+            vm.close({
+                $value: solicitud
+            });
+        };
+        vm.cancelar = function() {
+            vm.dismiss({
+                $value: 'cancel'
+            });
+        };
+    }
+});
 
 function dashboardSolicitudesController(solicitudesFactory, $filter, candidatoFactory, contactosFactory) {
     var vm = this;
+
+    vm.addText = "";
+
+
+    vm.dropSuccessHandler = function($event, index, array) {
+        array.splice(index, 1);
+    };
+
+    vm.onDrop = function($event, $data, array) {
+        array.push($data);
+    };
 
     function actualizarSolicitudes() {
         // Dejamos arrays como al principio
@@ -386,6 +409,7 @@ function dashboardSolicitudesController(solicitudesFactory, $filter, candidatoFa
     vm.arrayCandidatosAbiertas = [];
     vm.arrayCandidatosEspera = [];
     vm.arrayCandidatosCerradas = [];
+
     solicitudesFactory.getAll().then(
         function onSuccess(response) {
             vm.arraySolicitudes = response;
@@ -422,6 +446,7 @@ function dashboardSolicitudesController(solicitudesFactory, $filter, candidatoFa
                 function onSuccess(response) {
                     vm.arrayContactos = [];
                     vm.arrayContactos = response;
+                    console.log(vm.arrayContactos);
                     vm.contactosAbiertas = [];
                     vm.contactosEspera = [];
                     vm.contactosCerradas = [];

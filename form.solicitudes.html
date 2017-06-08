@@ -64,6 +64,16 @@
                     <span class="form-control">{{ $ctrl.solicitud.adm }}</span>
                 </div>
 
+                <div class="form-group col-md-4" ng-hide="$ctrl.mode !== 'editar'" ng-class="{ 'has-error' : formSolicitudes.perfil.$invalid && !formSolicitudes.perfil.$pristine, 'has-success': !focus &&  formSolicitudes.perfil.$valid}">
+                    <label for="perfil">Perfil <span class="glyphicon glyphicon-asterisk"></span> :</label>
+                    <input id="inputSuccess2" class="form-control has-success" name="perfil" required autofocus pattern="[a-zA-ZñÑáéíóúÁÉÍÓÚüÜ.,;: 0-9]{0,}" aria-describedby="helpBlock2" ng-model="$ctrl.solicitud.perfil" ng-focus="focus=true" ng-blur="focus=false">
+                </div>
+
+                <div class="col-md-4" ng-hide="$ctrl.mode !== 'view'">
+                    <label>Perfil: </label>
+                    <span class="form-control">{{ $ctrl.solicitud.perfil }}</span>
+                </div>
+
                 <div class="form-group col-md-4" ng-hide="$ctrl.mode !== 'editar'" ng-class="{ 'has-error' : formSolicitudes.idReqObligatorios.$invalid && !formSolicitudes.idReqObligatorios.$pristine, 'has-success': !focus &&  formSolicitudes.idReqObligatorios.$valid}">
                     <label for="idReqObligatorios">ReqObligatorios :</label>
                     <input id="inputSuccess2" class="form-control has-success" name="idReqObligatorios" autofocus pattern="[0-9]{0,}" aria-describedby="helpBlock2" ng-model="$ctrl.solicitud.idReqObligatorios" ng-focus="focus=true" ng-blur="focus=false">
@@ -98,7 +108,7 @@
                     <label for="consultorasContactadas">Estado :</label>
                     <div class="btn-group" uib-dropdown ng-hide="$ctrl.mode !== 'editar'">
                         <button type="button" class="btn btn-default" uib-dropdown-toggle>
-                        {{$ctrl.solicitud.estado}}<span class="caret"></span>
+                        {{$ctrl.solicitud.estado}} <span class="caret"></span>
                             <span class="sr-only">Split button!</span>
                         </button>
                         <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="split-button">
@@ -128,6 +138,7 @@
                             Guardar <span class="glyphicon glyphicon-send"></span>
                         </button>
                     </div>
+                    <div class="form-group col-md-12"></div>
                     <div class="form-group col-md-12" ng-if="$ctrl.mode === 'view'">
                         <button type="submit" ng-click="$ctrl.changeMode()" ng-disabled="formSolicitudes.$invalid || formContacto.$invalid" class="submit btn btn-primary">
                             Editar&nbsp;&nbsp; <span class="glyphicon glyphicon-pencil"></span>

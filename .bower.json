@@ -3,7 +3,8 @@
   "homepage": "https://github.com/SofttekFormacion2017/component-solicitudes.git",
   "description": "componente para la entidad solicitudes",
   "main": [
-    "solicitudes.module.js"
+    "solicitudes.module.js",
+    "draganddrop.js"
   ],
   "authors": [
     "Daniel Moreno"
@@ -17,14 +18,17 @@
     "test",
     "tests"
   ],
-  "version": "1.0.0",
-  "_release": "1.0.0",
+  "dependencies": {
+    "angular-toastr": "^2.1.1",
+    "angular-animate": "^1.6.4"
+  },
+  "_release": "054fe5883b",
   "_resolution": {
-    "type": "version",
-    "tag": "1.0.0",
-    "commit": "f84d1729270bc650721927915324a132fad9678b"
+    "type": "branch",
+    "branch": "develop",
+    "commit": "054fe5883b13ea5509c8f7cf3d249cb0065155a9"
   },
   "_source": "https://github.com/SofttekFormacion2017/component-solicitudes.git",
-  "_target": "1.0.0",
+  "_target": "develop",
   "_originalSource": "https://github.com/SofttekFormacion2017/component-solicitudes.git"
 }
