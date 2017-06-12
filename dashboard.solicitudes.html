@@ -11,17 +11,21 @@
   <div id="contendorListas" class="row">
     <div class="col-sm-4 columnaFiltrada">
       <h3>Solicitudes abiertas <span class="glyphicon glyphicon-ok-circle"></span></h3>
-      <ul class="list-group">
-        <li ng-repeat="elem in $ctrl.arrayFiltradoAbiertas track by $index">
+      <ul class="list-group" ui-on-Drop="$ctrl.onDrop($event,$data,$ctrl.arrayFiltrado,'abierta')">
+        <li
+          ng-repeat="elem in $ctrl.arrayFiltrado | filter:{ estado:'abierta'} track by $index"
+          ui-draggable="true" drag="elem"
+          on-drop-success="$ctrl.dropSuccessHandler($event,$ctrl.arrayFiltrado.indexOf(elem),$ctrl.arrayFiltrado, elem.id)">
           <div class="list-group-item solicitudFiltrada">
-            <h4><b> Solicitante:</b> <span class="leyenda">{{elem.nombre}}</span></h4>
+            <h4 class="tituloSolicitudAbierta"><span class="leyenda">{{elem.nombre}}</span><span class="glyphicon glyphicon-align-justify"></span></h4>
             <hr />
             <h5><span class="glyphicon glyphicon-briefcase"></span><b> Cliente:</b> <span class="leyenda">{{elem.cliente}}</span></h5>
-            <h5><span class="glyphicon glyphicon-user"></span><b> Candidato:</b> <span class="leyenda">{{ $ctrl.arrayCandidatosAbiertas[$index].nombre}}</span></h5>
-            <div ng-repeat="sal in $ctrl.contactosAbiertas | filter: {idCandidato: elem.candidatoId}:true">
-              <h5 ng-if="sal.tipo == 'Teléfono' && elem.idCandidato === sal.candidatoId"><span class="glyphicon glyphicon-earphone"></span><b> Telefono:</b> <span class="leyenda">{{sal.valor}}</span></h5>
-              <h5 ng-if="sal.tipo == 'Correo' && elem.idCandidato === sal.candidatoId"><span class="glyphicon glyphicon-envelope"></span><b> Correo:</b> <span class="leyenda">{{sal.valor}}</span></h5>
-              <h5 ng-if="sal.tipo == 'LinkedIn' && elem.idCandidato === sal.candidatoId"><span class="fa fa-linkedin"></span><b> LinkedIn:</b> <span class="leyenda">{{sal.valor}}</span></h5>
+            <h5><span class="glyphicon glyphicon-user"></span><b> Candidato:</b> <span class="leyenda">{{ elem.candidato.nombre}}</span></h5>
+            <h5>Estado: {{ elem.estado }}</h5>
+            <div ng-repeat = "contacto in elem.candidato.contactos">
+              <h5 ng-if="contacto.tipo == 'Teléfono'"><span class="glyphicon glyphicon-earphone"></span><b> Telefono:</b> <span class="leyenda">{{contacto.valor}}</span></h5>
+              <h5 ng-if="contacto.tipo == 'Correo' "><span class="glyphicon glyphicon-envelope"></span><b> Correo:</b> <span class="leyenda">{{contacto.valor}}</span></h5>
+              <h5 ng-if="contacto.tipo == 'LinkedIn'"><span class="fa fa-linkedin"></span><b> LinkedIn:</b> <span class="leyenda">{{contacto.valor}}</span></h5>
             </div>
           </div>
           <br />
@@ -31,17 +35,21 @@
     </div>
     <div dnd-list="list" class="col-sm-4 columnaFiltrada">
       <h3>Solicitudes en espera <span class="glyphicon glyphicon-hourglass"></span></h3>
-      <ul class="list-group">
-        <li ng-repeat="elem in $ctrl.arrayFiltradoEspera track by $index">
+      <ul class="list-group" ui-on-Drop="$ctrl.onDrop($event,$data,$ctrl.arrayFiltrado,'standby')">
+        <li
+          ng-repeat="elem in $ctrl.arrayFiltrado | filter:{ estado:'standby'} track by $index"
+          ui-draggable="true" drag="elem"
+          on-drop-success="$ctrl.dropSuccessHandler($event,$ctrl.arrayFiltrado.indexOf(elem),$ctrl.arrayFiltrado, elem.id)">
           <div class="list-group-item solicitudFiltrada">
-            <h4><b>Solicitante:</b> <span class="leyenda">{{elem.nombre}}</span></h4>
+            <h4 class="tituloSolicitudEspera"><span class="leyenda">{{elem.nombre}}</span><span class="glyphicon glyphicon-align-justify"></span></h4>
             <hr />
             <h5><span class="glyphicon glyphicon-briefcase"></span><b> Cliente:</b> <span class="leyenda">{{elem.cliente}}</span></h5>
-            <h5><span class="glyphicon glyphicon-user"></span><b> Candidato:</b> <span class="leyenda">{{ $ctrl.arrayCandidatosEspera[$index].nombre}}</span></h5>
-            <div ng-repeat="sal in $ctrl.contactosEspera | filter: {idCandidato: elem.candidatoId}:true">
-              <h5 ng-if="sal.tipo == 'Teléfono' && elem.idCandidato === sal.candidatoId"><span class="glyphicon glyphicon-earphone"></span><b> Telefono:</b> <span class="leyenda">{{sal.valor}}</span></h5>
-              <h5 ng-if="sal.tipo == 'Correo' && elem.idCandidato === sal.candidatoId"><span class="glyphicon glyphicon-envelope"></span><b> Correo:</b> <span class="leyenda">{{sal.valor}}</span></h5>
-              <h5 ng-if="sal.tipo == 'LinkedIn' && elem.idCandidato === sal.candidatoId"><span class="fa fa-linkedin"></span><b> LinkedIn:</b> <span class="leyenda">{{sal.valor}}</span></h5>
+            <h5><span class="glyphicon glyphicon-user"></span><b> Candidato:</b> <span class="leyenda">{{ elem.candidato.nombre}}</span></h5>
+            <h5>Estado: {{ elem.estado }}</h5>
+            <div ng-repeat = "contacto in elem.candidato.contactos">
+              <h5 ng-if="contacto.tipo == 'Teléfono'"><span class="glyphicon glyphicon-earphone"></span><b> Telefono:</b> <span class="leyenda">{{contacto.valor}}</span></h5>
+              <h5 ng-if="contacto.tipo == 'Correo' "><span class="glyphicon glyphicon-envelope"></span><b> Correo:</b> <span class="leyenda">{{contacto.valor}}</span></h5>
+              <h5 ng-if="contacto.tipo == 'LinkedIn'"><span class="fa fa-linkedin"></span><b> LinkedIn:</b> <span class="leyenda">{{contacto.valor}}</span></h5>
             </div>
           </div>
           <br />
@@ -51,17 +59,21 @@
     </div>
     <div dnd-list="list" class="col-sm-4">
       <h3>Solicitudes cerradas <span class="glyphicon glyphicon-ban-circle"></span></h3>
-      <ul class="list-group">
-        <li ng-repeat="elem in $ctrl.arrayFiltradoCerradas track by $index">
+      <ul class="list-group" ui-on-Drop="$ctrl.openComponentModalEstado(elem.id)">
+        <li
+          ng-repeat="elem in $ctrl.arrayFiltrado | filter:{ estado: 'cerrada'} track by $index"
+          ui-draggable="true" drag="elem"
+          on-drop-success="$ctrl.dropSuccessHandler($event,$ctrl.arrayFiltrado.indexOf(elem),$ctrl.arrayFiltrado, elem.id)">
           <div class="list-group-item solicitudFiltrada">
-            <h4><b>Solicitante:</b> <span class="leyenda">{{elem.nombre}}</span></h4>
+            <h4 class="tituloSolicitudCerrada"><span class="leyenda">{{elem.nombre}}</span><span class="glyphicon glyphicon-align-justify"></span></h4>
             <hr />
             <h5><span class="glyphicon glyphicon-briefcase"></span><b> Cliente:</b> <span class="leyenda">{{elem.cliente}}</span></h5>
-            <h5><span class="glyphicon glyphicon-user"></span><b> Candidato:</b> <span class="leyenda">{{ $ctrl.arrayCandidatosCerradas[$index].nombre}}</span></h5>
-            <div ng-repeat="sal in $ctrl.contactosCerradas | filter: {idCandidato: elem.candidatoId}:true">
-              <h5 ng-if="sal.tipo == 'Teléfono' && elem.idCandidato === sal.candidatoId"><span class="glyphicon glyphicon-earphone"></span><b> Telefono:</b> <span class="leyenda">{{sal.valor}}</span></h5>
-              <h5 ng-if="sal.tipo == 'Correo' && elem.idCandidato === sal.candidatoId"><span class="glyphicon glyphicon-envelope"></span><b> Correo:</b> <span class="leyenda">{{sal.valor}}</span></h5>
-              <h5 ng-if="sal.tipo == 'LinkedIn' && elem.idCandidato === sal.candidatoId"><span class="fa fa-linkedin"></span><b> LinkedIn:</b> <span class="leyenda">{{sal.valor}}</span></h5>
+            <h5><span class="glyphicon glyphicon-user"></span><b> Candidato:</b> <span class="leyenda">{{ elem.candidato.nombre}}</span></h5>
+            <h5>Estado: {{ elem.estado }}</h5>
+            <div ng-repeat = "contacto in elem.candidato.contactos">
+              <h5 ng-if="contacto.tipo == 'Teléfono'"><span class="glyphicon glyphicon-earphone"></span><b> Telefono:</b> <span class="leyenda">{{contacto.valor}}</span></h5>
+              <h5 ng-if="contacto.tipo == 'Correo' "><span class="glyphicon glyphicon-envelope"></span><b> Correo:</b> <span class="leyenda">{{contacto.valor}}</span></h5>
+              <h5 ng-if="contacto.tipo == 'LinkedIn'"><span class="fa fa-linkedin"></span><b> LinkedIn:</b> <span class="leyenda">{{contacto.valor}}</span></h5>
             </div>
           </div>
           <br />
