@@ -369,8 +369,6 @@ angular.module('ghr.solicitudes')
   }
 });
 
-
-
 function dashboardSolicitudesController(toastr, $uibModal, solicitudesFactory, $filter, candidatoFactory, contactosFactory) {
   var vm = this;
 
@@ -404,18 +402,23 @@ function dashboardSolicitudesController(toastr, $uibModal, solicitudesFactory, $
   };
 
   vm.onDrop = function ($event, $data, array, estado) {
-    $data.estado = estado;
-    array.push($data);
-    toastr.success('¡El estado de la solicitud ha sido cambiado!', '¡Ok!');
+    if(estado == "cerrada") {
+      vm.openComponentModalEstado($data);
+      array.push($data);
+    }
+    else{
+      $data.estado = estado;
+      array.push($data);
+      toastr.success('¡El estado de la solicitud ha sido cambiado!', '¡Ok!');
+    }
+
   };
 
   //Recogemos las solicitudes con sus candidatos y contactos correspondientes
   solicitudesFactory.getAll(filter).then(function (res2) {
-      console.log(res2);
       vm.arraySolicitudes = [];
       vm.arraySolicitudes = res2;
       vm.arrayFiltrado = vm.arraySolicitudes;
-      console.log(vm.arrayFiltrado);
     });
     vm.arrayFiltrado = vm.arraySolicitudes;
 
@@ -435,25 +438,24 @@ function dashboardSolicitudesController(toastr, $uibModal, solicitudesFactory, $
     };
 
 // Se encarga de abrir nuestra ventana modal en base al id obtenido
-vm.openComponentModalEstado = function (id) {
+vm.openComponentModalEstado = function (solicitud) {
   var modalInstance = $uibModal.open({
     component: 'modalComponentEstadoSolicitudes',
     resolve: {
       seleccionado: function () {
-        return id;
+        return solicitud;
       }
     }
   });
   // Instance para modificar una entidad concreta de solicitudes
-  modalInstance.result.then(function (solicitudId, solicitud) {
-    solicitudesFactory.update(solicitudId, solicitud).then(function onSuccess(updateCount) {
+  modalInstance.result.then(function (solicitud) {
+    console.log('modalInstance: ',solicitud);
+    solicitudesFactory.update(solicitud.id, solicitud).then(function onSuccess() {
       solicitudesFactory.getAll().then(function (solicitudes) {
         vm.arraySolicitudes = solicitudes;
-        actualizarArraySolicitudes();
       });
     });
   }, function (reason) {});
 };
 
-  console.log(vm.arraySolicitudes);
 }

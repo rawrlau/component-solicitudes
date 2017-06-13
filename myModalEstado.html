@@ -3,9 +3,10 @@
 </div>
 <div class="modal-body" id="modal-body">
     <p>¿ A que estado desea cambiar ?</p>
-</div>
-<div class="modal-footer">
     <button class="btn" type="button" ng-click="$ctrl.cancelar()">Cancelar</button>
-    <button class="btn btn-primary" type="button" ng-click="$ctrl.onDrop($event,$data,$ctrl.arrayFiltrado,'cerradaCliente')">cerradaCliente</button>
-    <button class="btn btn-primary" type="button" ng-click="$ctrl.onDrop($event,$data,$ctrl.arrayFiltrado,'cerradaIncorporacion')">cerradaIncorporacion</button>
+    <button class="btn btn-primary" type="button" ng-click="$ctrl.seleccionado.estado = 'cerradaCliente'; $ctrl.cambiarEstado($ctrl.seleccionado)">cerradaCliente</button>
+    <button class="btn btn-primary" type="button" ng-click="$ctrl.seleccionado.estado = 'cerradaIncorporacion'; $ctrl.cambiarEstado($ctrl.seleccionado)">cerradaIncorporacion</button>
 </div>
+<!-- <div class="modal-footer">
+
+</div> -->
