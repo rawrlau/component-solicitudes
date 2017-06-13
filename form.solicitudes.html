@@ -64,16 +64,6 @@
                     <span class="form-control">{{ $ctrl.solicitud.adm }}</span>
                 </div>
 
-                <div class="form-group col-md-4" ng-hide="$ctrl.mode !== 'editar'" ng-class="{ 'has-error' : formSolicitudes.perfil.$invalid && !formSolicitudes.perfil.$pristine, 'has-success': !focus &&  formSolicitudes.perfil.$valid}">
-                    <label for="perfil">Perfil <span class="glyphicon glyphicon-asterisk"></span> :</label>
-                    <input id="inputSuccess2" class="form-control has-success" name="perfil" required autofocus pattern="[a-zA-ZñÑáéíóúÁÉÍÓÚüÜ.,;: 0-9]{0,}" aria-describedby="helpBlock2" ng-model="$ctrl.solicitud.perfil" ng-focus="focus=true" ng-blur="focus=false">
-                </div>
-
-                <div class="col-md-4" ng-hide="$ctrl.mode !== 'view'">
-                    <label>Perfil: </label>
-                    <span class="form-control">{{ $ctrl.solicitud.perfil }}</span>
-                </div>
-
                 <div class="form-group col-md-4" ng-hide="$ctrl.mode !== 'editar'" ng-class="{ 'has-error' : formSolicitudes.idReqObligatorios.$invalid && !formSolicitudes.idReqObligatorios.$pristine, 'has-success': !focus &&  formSolicitudes.idReqObligatorios.$valid}">
                     <label for="idReqObligatorios">ReqObligatorios :</label>
                     <input id="inputSuccess2" class="form-control has-success" name="idReqObligatorios" autofocus pattern="[0-9]{0,}" aria-describedby="helpBlock2" ng-model="$ctrl.solicitud.idReqObligatorios" ng-focus="focus=true" ng-blur="focus=false">
@@ -159,24 +149,23 @@
                         <thead>
                             <tr>
                                 <h3>Candidatos Recomendados</h3>
-                                {{$ctrl.candidatoBB}}
                             </tr>
                         </thead>
                         <tr class="candidatoSeleccionado">
                             <td class="rowCandidato">
                                 <div ng-if="$ctrl.candidatoSeleccionado.id != null">
-                                    <span class="fa fa-star"></span> {{$ctrl.candidatoSeleccionado.nombre}}  {{$ctrl.candidatoSeleccionado.apellido}}
+                                    <span class="fa fa-star yellow-star"></span> <a ui-sref="app.candidatos-perfil({id:$ctrl.candidatoSeleccionado.id})">{{$ctrl.candidatoSeleccionado.nombre}} {{$ctrl.candidatoSeleccionado.apellido}}</a> <span class="badge">{{$ctrl.candidatoSeleccionado.points}}</span>
                                 </div>
                                 <div ng-if="$ctrl.candidatoSeleccionado.id == null" class="leyenda">
-                                    <span class="fa fa-star"></span> No hay candidado seleccionado aún
+                                    <span class="fa fa-star"></span> {{$ctrl.candidatoSeleccionado.nombre}}
                                 </div>
                                 <button ng-click="$ctrl.setCandidatoSelect(null)" class="btn btn-xs btn-danger glyphicon glyphicon-minus"></button>
                             </td>
                         </tr>
-                        <tr ng-repeat="candidato in $ctrl.candidatos | limitTo : 9 : ($ctrl.currentPage-1)*$ctrl.maxSize">
+                        <tr ng-repeat="candidato in $ctrl.candidatos | orderBy : '-points' | limitTo: 9 : ($ctrl.currentPage-1)*$ctrl.maxSize">
                             <td class="rowCandidato">
                                 <div>
-                                    {{candidato.nombre}} {{candidato.apellido}}
+                                    <a ui-sref="app.candidatos-perfil({id:candidato.id})">{{candidato.nombre}} {{candidato.apellido}}</a> <span class="badge">{{candidato.points}}</span>
                                 </div>
                                 <button ng-click="$ctrl.setCandidatoSelect(candidato.id)" class="btn btn-xs btn-primary glyphicon glyphicon-plus"></button>
                             </td>
