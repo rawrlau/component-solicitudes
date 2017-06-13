@@ -51,10 +51,13 @@ angular
                     toastr.error('No se ha podido realizar la operacion, por favor compruebe su conexion a internet e intentelo más tarde.', '¡Error!');
                 });
             },
-            read: function read(id) {
+            read: function read(id, filter) {
                 return $http({
                     method: 'GET',
-                    url: serviceUrl + '/' + id
+                    url: serviceUrl + '/' + id,
+                    params: {
+                        'filter': filter
+                    }
                 }).then(function onSuccess(response) {
                     return response.data;
                 }, function onFailure(reason) {
@@ -87,18 +90,7 @@ angular
                 }, function onFailure(reason) {
                     toastr.error('No se ha podido realizar la operacion, por favor compruebe su conexion a internet e intentelo más tarde.', '¡Error!');
                 });
-            },
-            // Devuelve el candidato seleccioncado de la solicitud
-            getCandidato: function getCandidato(id) {
-                return $http({
-                    method: 'GET',
-                    url: serviceUrl + '/' + id + '/candidato'
-                }).then(function onSuccess(response) {
-                    return response.data;
-                }, function onFailure(reason) {
-                    toastr.error('No se ha podido realizar la operacion, por favor compruebe su conexion a internet e intentelo más tarde.', '¡Error!');
-                });
-            },
+            }
         };
     });
 // Controller para generar nuestras solicitudes y gestionar el borrado de la solicitud
@@ -189,14 +181,38 @@ function controladorFormulario(toastr, solicitudesFactory, candidatoFactory, car
     };
     vm.reset();
 
+
     /**
      * Devuelve el candidato seleccionado de la solicitud
      * @return {[type]} [description]
      */
     vm.getCandidatoSeleccionado = function() {
-        solicitudesFactory.getCandidato($stateParams.id)
+        filter = {
+            "include": "candidato"
+        }
+        solicitudesFactory.read($stateParams.id, filter)
             .then(function onSuccess(response) {
-                vm.candidatoSeleccionado = response;
+                vm.candidatoSeleccionado = response.candidato
+            });
+    };
+
+    /**
+     * Setea el candidato seleccionado de la solicitud
+     * @return {[type]} [description]
+     */
+    vm.setCandidatoSelect = function setCandidatoSelect(id) {
+        var idCandidato = null;
+        if (id !== null) {
+            idCandidato = id;
+        }
+        var solicitudMod = {
+            candidatoId: idCandidato
+        };
+        solicitudesFactory.update($stateParams.id, solicitudMod)
+            .then(function(response) {
+                vm.solicitud = angular.copy(vm.solicitud);
+            }).then(function() {
+                vm.getSolicitud();
             });
     };
 
@@ -208,6 +224,14 @@ function controladorFormulario(toastr, solicitudesFactory, candidatoFactory, car
         return solicitudesFactory.read($stateParams.id)
             .then(function addReqObl(solicitud) {
                 vm.solicitud = angular.copy(vm.original = vm.formatearFecha(solicitud));
+                if (vm.solicitud.candidatoId) {
+                    vm.getCandidatoSeleccionado(vm.solicitud.candidatoId);
+                } else {
+                    vm.candidatoSeleccionado = {
+                        nombre: 'No hay candidato seleccionado',
+                        id: null
+                    }
+                }
                 return vm.reqObligatorios = requisitosFactory.read(vm.original.idReqObligatorios);
             })
             .then(function addReqDes(response) {
@@ -215,7 +239,6 @@ function controladorFormulario(toastr, solicitudesFactory, candidatoFactory, car
             })
             .then(function(reqObl) {
                 vm.reqObligatorios = reqObl;
-                console.log(vm.reqObligatorios);
                 var arrayIdsCaracteristicas = [];
                 angular.forEach(vm.reqObligatorios, function(requisito) {
                     arrayIdsCaracteristicas.push(requisito.caracteristicaId);
@@ -245,8 +268,18 @@ function controladorFormulario(toastr, solicitudesFactory, candidatoFactory, car
             })
             .then(function(response) {
                 vm.candidatos = response.filter(function(candidato) {
-                    if (candidato.listaDeRequisito != undefined) {
-                        return candidato.listaDeRequisito.requisitos.length >= vm.reqObligatorios.length && candidato.id != vm.candidatoSeleccionado.id
+                    if (candidato.listaDeRequisito != undefined && candidato.listaDeRequisito.requisitos.length) {
+                        var points = 0;
+                        angular.forEach(candidato.listaDeRequisito.requisitos, function(requisito) {
+                            points += requisito.nivel
+                        })
+                        candidato.points = points;
+                        if (vm.solicitud.candidatoId) {
+                            return candidato.listaDeRequisito.requisitos.length >= vm.reqObligatorios.length && candidato.id != vm.candidatoSeleccionado.id
+                        } else {
+                            return candidato.listaDeRequisito.requisitos.length >= vm.reqObligatorios.length
+                        }
+
                     } else {
                         return false;
                     }
@@ -257,29 +290,7 @@ function controladorFormulario(toastr, solicitudesFactory, candidatoFactory, car
     // Lee la solicitud, el candidato seleccionado y los candidatos recomendados
     if ($stateParams.id != 0) {
         vm.getSolicitud();
-        vm.getCandidatoSeleccionado();
     }
-
-    /**
-     * Setea el candidato seleccionado de la solicitud
-     * @return {[type]} [description]
-     */
-    vm.setCandidatoSelect = function setCandidatoSelect(id) {
-        var idCandidato = null;
-        if (id !== null) {
-            idCandidato = id;
-        }
-        var solicitudMod = {
-            candidatoId: idCandidato
-        };
-        solicitudesFactory.update($stateParams.id, solicitudMod)
-            .then(function(response) {
-                vm.solicitud = angular.copy(vm.solicitud);
-            }).then(function() {
-                vm.getCandidatoSeleccionado();
-                vm.getSolicitud();
-            });
-    };
 
     /**
      * Formata la fecha de la solicitud para que sea compatible con la vista

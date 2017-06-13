@@ -149,24 +149,23 @@
                         <thead>
                             <tr>
                                 <h3>Candidatos Recomendados</h3>
-                                {{$ctrl.candidatoBB}}
                             </tr>
                         </thead>
                         <tr class="candidatoSeleccionado">
                             <td class="rowCandidato">
                                 <div ng-if="$ctrl.candidatoSeleccionado.id != null">
-                                    <span class="fa fa-star"></span> {{$ctrl.candidatoSeleccionado.nombre}}  {{$ctrl.candidatoSeleccionado.apellido}}
+                                    <span class="fa fa-star yellow-star"></span> <a ui-sref="app.candidatos-perfil({id:$ctrl.candidatoSeleccionado.id})">{{$ctrl.candidatoSeleccionado.nombre}} {{$ctrl.candidatoSeleccionado.apellido}}</a> <span class="badge">{{$ctrl.candidatoSeleccionado.points}}</span>
                                 </div>
                                 <div ng-if="$ctrl.candidatoSeleccionado.id == null" class="leyenda">
-                                    <span class="fa fa-star"></span> No hay candidado seleccionado aún
+                                    <span class="fa fa-star"></span> {{$ctrl.candidatoSeleccionado.nombre}}
                                 </div>
                                 <button ng-click="$ctrl.setCandidatoSelect(null)" class="btn btn-xs btn-danger glyphicon glyphicon-minus"></button>
                             </td>
                         </tr>
-                        <tr ng-repeat="candidato in $ctrl.candidatos | limitTo: 9 : ($ctrl.currentPage-1)*$ctrl.maxSize">
+                        <tr ng-repeat="candidato in $ctrl.candidatos | orderBy : '-points' | limitTo: 9 : ($ctrl.currentPage-1)*$ctrl.maxSize">
                             <td class="rowCandidato">
                                 <div>
-                                    {{candidato.nombre}} {{candidato.apellido}}
+                                    <a ui-sref="app.candidatos-perfil({id:candidato.id})">{{candidato.nombre}} {{candidato.apellido}}</a> <span class="badge">{{candidato.points}}</span>
                                 </div>
                                 <button ng-click="$ctrl.setCandidatoSelect(candidato.id)" class="btn btn-xs btn-primary glyphicon glyphicon-plus"></button>
                             </td>
