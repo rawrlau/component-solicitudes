@@ -404,11 +404,11 @@ function dashboardSolicitudesController(toastr, $uibModal, solicitudesFactory, $
   vm.onDrop = function ($event, $data, array, estado) {
     if(estado == "cerrada") {
       vm.openComponentModalEstado($data);
-      array.push($data);
+      array.unshift($data);
     }
     else{
       $data.estado = estado;
-      array.push($data);
+      array.unshift($data);
       toastr.success('¡El estado de la solicitud ha sido cambiado!', '¡Ok!');
     }
 
