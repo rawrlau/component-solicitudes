@@ -371,7 +371,7 @@ angular.module('ghr.solicitudes')
 
 
 
-function dashboardSolicitudesController($uibModal, solicitudesFactory, $filter, candidatoFactory, contactosFactory) {
+function dashboardSolicitudesController(toastr, $uibModal, solicitudesFactory, $filter, candidatoFactory, contactosFactory) {
   var vm = this;
 
   var filter = {
@@ -406,6 +406,7 @@ function dashboardSolicitudesController($uibModal, solicitudesFactory, $filter, 
   vm.onDrop = function ($event, $data, array, estado) {
     $data.estado = estado;
     array.push($data);
+    toastr.success('¡El estado de la solicitud ha sido cambiado!', '¡Ok!');
   };
 
   //Recogemos las solicitudes con sus candidatos y contactos correspondientes
@@ -418,9 +419,10 @@ function dashboardSolicitudesController($uibModal, solicitudesFactory, $filter, 
     });
     vm.arrayFiltrado = vm.arraySolicitudes;
 
-    // vm.$onInit = function () {
-    //   vm.seleccionado = vm.resolve.seleccionado;
-    // };
+    //Metodos para controlar la ventana Modal
+    vm.$onInit = function () {
+      vm.seleccionado = vm.resolve.seleccionado;
+    };
     vm.cambiarEstado = function (solicitud) {
       vm.close({
         $value: solicitud
@@ -442,7 +444,7 @@ vm.openComponentModalEstado = function (id) {
       }
     }
   });
-  // Instance para borrar una entidad concreta de solicitudes
+  // Instance para modificar una entidad concreta de solicitudes
   modalInstance.result.then(function (solicitudId, solicitud) {
     solicitudesFactory.update(solicitudId, solicitud).then(function onSuccess(updateCount) {
       solicitudesFactory.getAll().then(function (solicitudes) {
