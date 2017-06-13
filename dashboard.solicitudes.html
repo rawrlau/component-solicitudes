@@ -8,21 +8,20 @@
     </div>
   </div>
   </center>
-  <div id="contendorListas" class="row">
+  <div id="contendorListas" class="row draganddropSolicitudes">
     <div class="col-sm-4 columnaFiltrada">
       <h3>Solicitudes abiertas <span class="glyphicon glyphicon-ok-circle"></span></h3>
       <ul class="list-group" ui-on-Drop="$ctrl.onDrop($event,$data,$ctrl.arrayFiltrado,'abierta')">
-        <li
-          ng-repeat="elem in $ctrl.arrayFiltrado | filter:{ estado:'abierta'} track by $index">
+        <li drag-channel="A" drop-channel="A" drop-validate="$ctrl.dropValidate($data,'abierta')"
+          ng-repeat="elem in $ctrl.arrayFiltrado | filter:{ estado:'abierta'} | filter: $ctrl.filtro track by $index">
           <div class="list-group-item solicitudFiltrada">
             <h4 class="tituloSolicitudAbierta"><span class="leyenda">{{elem.nombre}}</span><span class="glyphicon glyphicon-align-justify"
             ui-draggable="true"
             drag="elem"
-            on-drop-success="$ctrl.dropSuccessHandler($event,$ctrl.arrayFiltrado.indexOf(elem),$ctrl.arrayFiltrado, elem.id)"></span></h4>
+            on-drop-success="$ctrl.dropSuccessHandler($event,$ctrl.arrayFiltrado.indexOf(elem),$ctrl.arrayFiltrado)"></span></h4>
             <hr />
             <h5><span class="glyphicon glyphicon-briefcase"></span><b> Cliente:</b> <span class="leyenda">{{elem.cliente}}</span></h5>
             <h5><span class="glyphicon glyphicon-user"></span><b> Candidato:</b> <span class="leyenda">{{ elem.candidato.nombre}}</span></h5>
-            <h5>Estado: {{ elem.estado }}</h5>
             <div ng-repeat = "contacto in elem.candidato.contactos">
               <h5 ng-if="contacto.tipo == 'Teléfono'"><span class="glyphicon glyphicon-earphone"></span><b> Telefono:</b> <span class="leyenda">{{contacto.valor}}</span></h5>
               <h5 ng-if="contacto.tipo == 'Correo' "><span class="glyphicon glyphicon-envelope"></span><b> Correo:</b> <span class="leyenda">{{contacto.valor}}</span></h5>
@@ -37,17 +36,16 @@
     <div dnd-list="list" class="col-sm-4 columnaFiltrada">
       <h3>Solicitudes en espera <span class="glyphicon glyphicon-hourglass"></span></h3>
       <ul class="list-group" ui-on-Drop="$ctrl.onDrop($event,$data,$ctrl.arrayFiltrado,'standby')">
-        <li
-          ng-repeat="elem in $ctrl.arrayFiltrado | filter:{ estado:'standby'} track by $index">
+        <li drag-channel="A" drop-channel="A" drop-validate="$ctrl.dropValidate($data,'standby')"
+          ng-repeat="elem in $ctrl.arrayFiltrado | filter:{ estado:'standby'} | filter: $ctrl.filtro track by $index">
           <div class="list-group-item solicitudFiltrada">
             <h4 class="tituloSolicitudEspera"><span class="leyenda">{{elem.nombre}}</span><span class="glyphicon glyphicon-align-justify"
             ui-draggable="true"
             drag="elem"
-            on-drop-success="$ctrl.dropSuccessHandler($event,$ctrl.arrayFiltrado.indexOf(elem),$ctrl.arrayFiltrado, elem.id)"></span></h4>
+            on-drop-success="$ctrl.dropSuccessHandler($event,$ctrl.arrayFiltrado.indexOf(elem),$ctrl.arrayFiltrado)"></span></h4>
             <hr />
             <h5><span class="glyphicon glyphicon-briefcase"></span><b> Cliente:</b> <span class="leyenda">{{elem.cliente}}</span></h5>
             <h5><span class="glyphicon glyphicon-user"></span><b> Candidato:</b> <span class="leyenda">{{ elem.candidato.nombre}}</span></h5>
-            <h5>Estado: {{ elem.estado }}</h5>
             <div ng-repeat = "contacto in elem.candidato.contactos">
               <h5 ng-if="contacto.tipo == 'Teléfono'"><span class="glyphicon glyphicon-earphone"></span><b> Telefono:</b> <span class="leyenda">{{contacto.valor}}</span></h5>
               <h5 ng-if="contacto.tipo == 'Correo' "><span class="glyphicon glyphicon-envelope"></span><b> Correo:</b> <span class="leyenda">{{contacto.valor}}</span></h5>
@@ -62,17 +60,16 @@
     <div dnd-list="list" class="col-sm-4">
       <h3>Solicitudes cerradas <span class="glyphicon glyphicon-ban-circle"></span></h3>
       <ul class="list-group" ui-on-Drop="$ctrl.onDrop($event,$data,$ctrl.arrayFiltrado,'cerrada')">
-        <li
-          ng-repeat="elem in $ctrl.arrayFiltrado | filter:{ estado: 'cerrada'} track by $index">
+        <li drag-channel="A" drop-channel="A" drop-validate="$ctrl.dropValidate($data,'cerrada')"
+          ng-repeat="elem in $ctrl.arrayFiltrado | filter:{ estado: 'cerrada'} | filter: $ctrl.filtro track by $index">
           <div class="list-group-item solicitudFiltrada">
             <h4 class="tituloSolicitudCerrada"><span class="leyenda">{{elem.nombre}}</span><span class="glyphicon glyphicon-align-justify"
             ui-draggable="true"
             drag="elem"
-            on-drop-success="$ctrl.dropSuccessHandler($event,$ctrl.arrayFiltrado.indexOf(elem),$ctrl.arrayFiltrado, elem.id)"></span></h4>
+            on-drop-success="$ctrl.dropSuccessHandler($event,$ctrl.arrayFiltrado.indexOf(elem),$ctrl.arrayFiltrado)"></span></h4>
             <hr />
             <h5><span class="glyphicon glyphicon-briefcase"></span><b> Cliente:</b> <span class="leyenda">{{elem.cliente}}</span></h5>
             <h5><span class="glyphicon glyphicon-user"></span><b> Candidato:</b> <span class="leyenda">{{ elem.candidato.nombre}}</span></h5>
-            <h5>Estado: {{ elem.estado }}</h5>
             <div ng-repeat = "contacto in elem.candidato.contactos">
               <h5 ng-if="contacto.tipo == 'Teléfono'"><span class="glyphicon glyphicon-earphone"></span><b> Telefono:</b> <span class="leyenda">{{contacto.valor}}</span></h5>
               <h5 ng-if="contacto.tipo == 'Correo' "><span class="glyphicon glyphicon-envelope"></span><b> Correo:</b> <span class="leyenda">{{contacto.valor}}</span></h5>

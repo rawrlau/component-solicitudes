@@ -64,7 +64,7 @@ angular
         update: function update(id, solicitud) {
           return $http({
             method: 'PATCH',
-            url: serviceUrl + '/' + id,
+            url: 'http://localhost:3003/api/solicitudes/' + id,
             data: solicitud
           }).then(function onSuccess(response) {
             toastr.success('¡Solicitud modificada satisfactoriamente!', '¡Ok!');
@@ -397,22 +397,37 @@ function dashboardSolicitudesController(toastr, $uibModal, solicitudesFactory, $
 };
 
   //Metodos dragAndDrop
-  vm.dropSuccessHandler = function ($event, index, array) {
+  vm.dropSuccessHandler = function ($event, index, array, $data) {
     array.splice(index, 1);
   };
 
-  vm.onDrop = function ($event, $data, array, estado) {
-    if(estado == "cerrada") {
-      vm.openComponentModalEstado($data);
-      array.unshift($data);
-    }
-    else{
-      $data.estado = estado;
-      array.unshift($data);
-      toastr.success('¡El estado de la solicitud ha sido cambiado!', '¡Ok!');
-    }
+  // vm.dropValidate = function(target, source) {
+  //       return target !== source;
+  // };
 
+  vm.dropValidate = function($data,estado){
+      console.log($data.estado + " el estado enviado es" + estado)
+      return $data.estado !== estado;
+  }
+  vm.onDrop = function ($event, $data, array, estado) {
+    //if(vm.dropValidate()) {
+    // if(vm.dropValidate($data,estado)) {
+      if(estado == "cerrada") {
+        vm.openComponentModalEstado($data);
+        array.unshift($data);
+      }
+      else{
+        if($data.estado == estado){
+          toastr.info('¡Esta modificando una solicitud en el mismo estado!', '¡Cuidado!')
+        }
+        $data.estado = estado;
+        array.unshift($data);
+        toastr.success('¡El estado de la solicitud ha sido cambiado!', '¡Ok!');
+      }
+    //}
+    //}
   };
+
 
   //Recogemos las solicitudes con sus candidatos y contactos correspondientes
   solicitudesFactory.getAll(filter).then(function (res2) {
