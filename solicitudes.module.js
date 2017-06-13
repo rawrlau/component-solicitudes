@@ -22,14 +22,17 @@ angular
     })
     .constant('solBaseUrl', 'http://localhost:3003/api/')
     .constant('solEntidad', 'solicitudes')
-    .factory('solicitudesFactory', function solicitudesFactory(toastr, $http, solBaseUrl, solEntidad, candidatoFactory, caracteristicasFactory, requisitosFactory) {
+    .factory('solicitudesFactory', function solicitudesFactory($state, toastr, $http, solBaseUrl, solEntidad, candidatoFactory, caracteristicasFactory, requisitosFactory) {
         var serviceUrl = solBaseUrl + solEntidad;
         return {
             // Read and return all entities
-            getAll: function getAll() {
+            getAll: function getAll(filter) {
                 return $http({
                     method: 'GET',
-                    url: serviceUrl
+                    url: serviceUrl,
+                    params: {
+                        "filter": filter
+                    }
                 }).then(function onSuccess(response) {
                     return response.data;
                 }, function onFailure(reason) {
@@ -55,6 +58,7 @@ angular
                 }).then(function onSuccess(response) {
                     return response.data;
                 }, function onFailure(reason) {
+                    $state.go('app.solicitudes')
                     toastr.error('No se ha podido realizar la operacion, por favor compruebe su conexion a internet e intentelo más tarde.', '¡Error!');
                 });
             },
@@ -84,7 +88,7 @@ angular
                     toastr.error('No se ha podido realizar la operacion, por favor compruebe su conexion a internet e intentelo más tarde.', '¡Error!');
                 });
             },
-            // Devuelve el candidato seleccionado de la solicitud
+            // Devuelve el candidato seleccioncado de la solicitud
             getCandidato: function getCandidato(id) {
                 return $http({
                     method: 'GET',
@@ -94,7 +98,7 @@ angular
                 }, function onFailure(reason) {
                     toastr.error('No se ha podido realizar la operacion, por favor compruebe su conexion a internet e intentelo más tarde.', '¡Error!');
                 });
-            }
+            },
         };
     });
 // Controller para generar nuestras solicitudes y gestionar el borrado de la solicitud
@@ -139,7 +143,6 @@ function solicitudesListController($uibModal, $log, solicitudesFactory, $filter,
 // Controller que se encarga de gestionar nuestro formulario de solicitudes
 function controladorFormulario(toastr, solicitudesFactory, candidatoFactory, caracteristicasFactory, requisitosFactory, $stateParams, $log, $state) {
     const vm = this;
-
     vm.mode = $stateParams.mode;
     vm.estados = ['abierta', 'cerradaCliente', 'cerradaIncorporacion', 'standby'];
 
@@ -187,17 +190,6 @@ function controladorFormulario(toastr, solicitudesFactory, candidatoFactory, car
     vm.reset();
 
     /**
-     * Lee la solicitud pasada por el $stateParams
-     * @return {[type]} [description]
-     */
-    vm.getSolicitud = function() {
-        solicitudesFactory.read($stateParams.id)
-            .then(function onSuccess(solicitud) {
-                vm.solicitud = angular.copy(vm.original = vm.formatearFecha(solicitud));
-            });
-    };
-
-    /**
      * Devuelve el candidato seleccionado de la solicitud
      * @return {[type]} [description]
      */
@@ -209,57 +201,63 @@ function controladorFormulario(toastr, solicitudesFactory, candidatoFactory, car
     };
 
     /**
-     * Devuelve la lista con los candidatos recomendados
+     * Lee la solicitud pasada por el $stateParams
      * @return {[type]} [description]
      */
-    vm.setCandidatosRecomendados = function() {
-        candidatoFactory.getAll().then(function onSuccess(response) {
-            vm.candidatos = response.filter(function(candidato) {
-                return candidato.id != vm.candidatoSeleccionado.id;
+    vm.getSolicitud = function() {
+        return solicitudesFactory.read($stateParams.id)
+            .then(function addReqObl(solicitud) {
+                vm.solicitud = angular.copy(vm.original = vm.formatearFecha(solicitud));
+                return vm.reqObligatorios = requisitosFactory.read(vm.original.idReqObligatorios);
+            })
+            .then(function addReqDes(response) {
+                return vm.reqDeseables = requisitosFactory.read(vm.original.idReqDeseables)
+            })
+            .then(function(reqObl) {
+                vm.reqObligatorios = reqObl;
+                console.log(vm.reqObligatorios);
+                var arrayIdsCaracteristicas = [];
+                angular.forEach(vm.reqObligatorios, function(requisito) {
+                    arrayIdsCaracteristicas.push(requisito.caracteristicaId);
+                })
+                var filter = {
+                    "fields": {
+                        "nombre": true,
+                        "apellido": true,
+                        "id": true,
+                        "listaDeRequisitoId": true
+                    },
+                    "include": {
+                        "listaDeRequisito": {
+                            "relation": "requisitos",
+                            "scope": {
+                                "where": {
+                                    "caracteristicaId": {
+                                        "inq": arrayIdsCaracteristicas
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                return candidatoFactory.getAll(filter);
+            })
+            .then(function(response) {
+                vm.candidatos = response.filter(function(candidato) {
+                    if (candidato.listaDeRequisito != undefined) {
+                        return candidato.listaDeRequisito.requisitos.length >= vm.reqObligatorios.length && candidato.id != vm.candidatoSeleccionado.id
+                    } else {
+                        return false;
+                    }
+                });
             });
-        });
-        // solicitudesFactory.read($stateParams.id).then(function(solicitud) {
-        //     return requisitosFactory.read(solicitud.idReqObligatorios);
-        // }).then(function(reqObligatorios) {
-        //     candidatoFactory.getAll().then(function(candidatos) {
-        //         vm.arrayCandidatos = candidatos;
-        //         vm.candidatos = [];
-        //         for (var i = 0; i < vm.arrayCandidatos.length; i++) {
-        //             requisitosFactory.read(vm.arrayCandidatos[i].listaDeRequisitoId).then(function(reqCandidato) {
-        //                 console.log(vm.arrayCandidatos[i]);
-        //                 if (comprobarCandidato(reqCandidato, reqObligatorios)) {
-        //                     vm.candidatos.push(vm.arrayCandidatos[i]);
-        //                 }
-        //             });
-        //         }
-        //     });
-        // });
-    }
-
-    // function comprobarCandidato(reqCandidato, reqObl) {
-    //     for (var i = 0; i < reqCandidato.length; i++) {
-    //         var idCarCan = reqCandidato[i].caracteristicaId;
-    //         for (var j = 0; j < reqObl.length; j++) {
-    //             var idCarObl = reqObl[i].caracteristicaId;
-    //             if (idCarCan == idCarObl)
-    //                 return true;
-    //         }
-    //     }
-    //     return false;
-    // }
-
-    vm.elemInArray = function(elem, array) {
-        for (var i = 0; i < array.length; i++)
-            if (elem == i)
-                return true;
-        return false;
-    }
+    };
 
     // Lee la solicitud, el candidato seleccionado y los candidatos recomendados
     if ($stateParams.id != 0) {
         vm.getSolicitud();
         vm.getCandidatoSeleccionado();
-        vm.setCandidatosRecomendados();
     }
 
     /**
@@ -277,10 +275,10 @@ function controladorFormulario(toastr, solicitudesFactory, candidatoFactory, car
         solicitudesFactory.update($stateParams.id, solicitudMod)
             .then(function(response) {
                 vm.solicitud = angular.copy(vm.solicitud);
+            }).then(function() {
+                vm.getCandidatoSeleccionado();
+                vm.getSolicitud();
             });
-
-        vm.getCandidatoSeleccionado();
-        vm.setCandidatosRecomendados();
     };
 
     /**
