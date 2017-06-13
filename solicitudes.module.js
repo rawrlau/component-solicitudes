@@ -235,10 +235,11 @@ function controladorFormulario(toastr, solicitudesFactory, candidatoFactory, car
                 return vm.reqObligatorios = requisitosFactory.read(vm.original.idReqObligatorios);
             })
             .then(function addReqDes(response) {
-                return vm.reqDeseables = requisitosFactory.read(vm.original.idReqDeseables)
+                vm.reqObligatorios = response;
+                return vm.reqDeseables = requisitosFactory.read(vm.original.idReqDeseables);
             })
             .then(function(reqObl) {
-                vm.reqObligatorios = reqObl;
+                vm.reqDeseables = reqObl;
                 var arrayIdsCaracteristicas = [];
                 angular.forEach(vm.reqObligatorios, function(requisito) {
                     arrayIdsCaracteristicas.push(requisito.caracteristicaId);
