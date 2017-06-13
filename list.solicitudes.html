@@ -1,5 +1,6 @@
 <div class="container-fluid">
-    <h1 class="h1">Lista de Solicitudes</h1>
+    <h1 class="h1">Lista de solicitudes</h1>
+
     <div class="row form-group">
         <div class="col-md-offset-6 col-sm-offset-3 col-md-5 col-sm-7 col-xs-9">
           <div class="input-group">
@@ -8,9 +9,12 @@
           </div>
         </div>
         <div class="col-sm-1 col-xs-1">
+
             <a ui-sref="app.solicitudesForm({id: 0,mode: 'editar'})"><button  type="button" class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span></button></a>
+
         </div>
     </div>
+
     <table class="table table-responsive table-striped">
         <thead>
             <tr ng-init="$ctrl.orderByPropiedad=''; cabeceras=['id','nombre','cliente']">

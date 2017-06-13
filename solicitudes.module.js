@@ -227,8 +227,35 @@ function controladorFormulario(toastr, solicitudesFactory, candidatoFactory, car
      * Lee la solicitud pasada por el $stateParams
      * @return {[type]} [description]
      */
+     vm.getListaRequisitos = function (solicitudCompleta) {
+       vm.listaRequisitosObligatorios = [];
+       vm.listaRequisitosDeseados = [];
+       console.log(solicitudCompleta);
+       for (var i = 0; i < solicitudCompleta.reqObligatorios.requisitos.length; i++) {
+         vm.listaRequisitosObligatorios[i] = solicitudCompleta.reqObligatorios.requisitos[i];
+       }
+       for (var i = 0; i < solicitudCompleta.reqDeseables.requisitos.length; i++) {
+         vm.listaRequisitosDeseados[i] = solicitudCompleta.reqDeseables.requisitos[i];
+       }
+       console.log(vm.listaRequisitosDeseados);
+       console.log(vm.listaRequisitosObligatorios);
+     }
+
     vm.getSolicitud = function() {
-        return solicitudesFactory.read($stateParams.id)
+        var filtro = {
+          "include": [
+            {"reqObligatorios": {
+              "requisitos": "caracteristica"
+            }
+          },
+          {"reqDeseables": {
+            "requisitos": "caracteristica"
+          }
+        },
+        "candidato"
+        ]
+      };
+        return solicitudesFactory.read($stateParams.id, filtro)
             .then(function addReqObl(solicitud) {
                 vm.solicitud = angular.copy(vm.original = vm.formatearFecha(solicitud));
                 if (vm.solicitud.candidatoId) {
@@ -239,6 +266,7 @@ function controladorFormulario(toastr, solicitudesFactory, candidatoFactory, car
                         id: null
                     }
                 }
+                vm.getListaRequisitos(vm.solicitud);
                 return vm.reqObligatorios = requisitosFactory.read(vm.original.idReqObligatorios);
             })
             .then(function addReqDes(response) {
@@ -299,7 +327,6 @@ function controladorFormulario(toastr, solicitudesFactory, candidatoFactory, car
     if ($stateParams.id != 0) {
         vm.getSolicitud();
     }
-
     /**
      * Formata la fecha de la solicitud para que sea compatible con la vista
      * @param  {[type]} response [description]
