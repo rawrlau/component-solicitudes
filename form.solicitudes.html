@@ -157,20 +157,16 @@
                   <div class="col-md-6">
                     <span class="form-control">Nivel {{ requisitoDeseado.nivel }}</span>
                   </div>
-
                 </div>
-
               </div>
             </div>
-
-              </div>
-                <center>
+            <div class="col-md-12">
+              <span ng-if="$ctrl.mode === 'edit'" class="leyenda">Los campos con asterisco (<span ng-if="$ctrl.mode === 'edit'" class="glyphicon glyphicon-asterisk"></span>) son obligatorios.</span>
+            </div>
+          </div>
+                    <div class="botonera" >
+                    <div ng-if="$ctrl.mode==='edit'" class="col-md-8"></div>
                     <div class="form-group col-md-12" ng-if="$ctrl.mode === 'editar'">
-                        <br />
-
-                        <button type="button" ng-click="$ctrl.changeMode()" value="Cancelar edición" class="reset btn btn-warning ">
-                            Volver <span class ="glyphicon glyphicon-ban-circle"></span>
-                        </button>
                         <button type="button" ng-click="$ctrl.reset()" value="Descartar cambios" class="reset btn btn-default ">
                             Descartar Cambios <span class ="glyphicon glyphicon-remove"></span>
                         </button>
@@ -178,20 +174,13 @@
                             Guardar <span class="glyphicon glyphicon-send"></span>
                         </button>
                     </div>
-                    <div class="form-group col-md-12"></div>
-                    <div class="form-group col-md-12" ng-if="$ctrl.mode === 'view'">
+                  </div>
+                    <div ng-if="$ctrl.mode === 'view'" class="col-md-offset-11">
                         <button type="submit" ng-click="$ctrl.changeMode()" ng-disabled="formSolicitudes.$invalid || formContacto.$invalid" class="submit btn btn-primary">
                             Editar&nbsp;&nbsp; <span class="glyphicon glyphicon-pencil"></span>
                         </button>
                     </div>
-                    <br>
-                    <p class="col-md-12" ng-hide="$ctrl.mode !== 'editar'">
-                        Los campos con el simbolo <span class="glyphicon glyphicon-asterisk"></span> son obligatorios.
-                    </p>
-                    <br>
-                </center>
             </form>
         </div>
-
     </div>
 </div>
