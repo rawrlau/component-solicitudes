@@ -419,10 +419,16 @@ function dashboardSolicitudesController(toastr, $uibModal, solicitudesFactory, $
       else{
         if($data.estado == estado){
           toastr.info('¡Esta modificando una solicitud en el mismo estado!', '¡Cuidado!')
+        }else{
+          $data.estado = estado;
+          solicitudesFactory.update($data.id, $data).then(function onSuccess() {
+            solicitudesFactory.getAll().then(function (solicitudes) {
+              vm.arrayFiltrado = solicitudes;
+            });
+          });
+          array.unshift($data);
         }
-        $data.estado = estado;
-        array.unshift($data);
-        toastr.success('¡El estado de la solicitud ha sido cambiado!', '¡Ok!');
+
       }
     //}
     //}
