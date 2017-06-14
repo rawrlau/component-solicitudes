@@ -90,6 +90,57 @@ angular
                     toastr.error('No se ha podido realizar la operacion, por favor compruebe su conexion a internet e intentelo más tarde.', '¡Error!');
                 });
             },
+            create: function create(solicitud) {
+                return $http({
+                    method: 'POST',
+                    url: serviceUrl,
+                    data: solicitud
+                }).then(function onSuccess(response) {
+                    toastr.success('¡Solicitud creada satisfactoriamente!', '¡Ok!');
+                    return response.data;
+                }, function onFailure(reason) {
+                    toastr.error('No se ha podido realizar la operacion, por favor compruebe su conexion a internet e intentelo más tarde.', '¡Error!');
+                });
+            },
+            read: function read(id, filter) {
+                return $http({
+                    method: 'GET',
+                    url: serviceUrl + '/' + id,
+                    params: {
+                        'filter': filter
+                    }
+                }).then(function onSuccess(response) {
+                    return response.data;
+                }, function onFailure(reason) {
+                    toastr.error('No se ha podido realizar la operacion, por favor compruebe su conexion a internet e intentelo más tarde.', '¡Error!');
+                });
+            },
+            update: function update(id, solicitud) {
+                return $http({
+                    method: 'PATCH',
+                    url: 'http://localhost:3003/api/solicitudes/' + id,
+                    data: solicitud
+                }).then(function onSuccess(response) {
+                    toastr.success('¡Solicitud modificada satisfactoriamente!', '¡Ok!');
+                    return response.data;
+                }, function onFailure(reason) {
+                    toastr.error('No se ha podido realizar la operacion, por favor compruebe su conexion a internet e intentelo más tarde.', '¡Error!');
+                });
+            },
+            delete: function _delete(id) {
+                if (!id) {
+                    throw solEntidad + 'invalida.';
+                }
+                return $http({
+                    method: 'DELETE',
+                    url: serviceUrl + '/' + id
+                }).then(function onSuccess(response) {
+                    toastr.success('¡Solicitud eliminada satisfactoriamente!', '¡Ok!');
+                    return response.data;
+                }, function onFailure(reason) {
+                    toastr.error('No se ha podido realizar la operacion, por favor compruebe su conexion a internet e intentelo más tarde.', '¡Error!');
+                });
+            },
             // Devuelve el candidato seleccionado de la solicitud
             getCandidato: function getCandidato(id) {
                 return $http({
@@ -495,10 +546,11 @@ function dashboardSolicitudesController(toastr, $uibModal, solicitudesFactory, $
                 $data.estado = estado;
                 solicitudesFactory.update($data.id, $data).then(function onSuccess() {
                     solicitudesFactory.getAll().then(function(solicitudes) {
-                        vm.arrayFiltrado = solicitudes;
+                        //vm.arrayFiltrado = solicitudes;
+                        array.unshift($data);
                     });
                 });
-                array.unshift($data);
+                //array.unshift($data);
             }
 
         }
