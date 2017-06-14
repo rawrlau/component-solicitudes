@@ -51,10 +51,13 @@ angular
             toastr.error('No se ha podido realizar la operacion, por favor compruebe su conexion a internet e intentelo más tarde.', '¡Error!');
           });
         },
-        read: function read(id) {
+        read: function read(id, filter) {
           return $http({
             method: 'GET',
-            url: serviceUrl + '/' + id
+            url: serviceUrl + '/' + id,
+            params: {
+              'filter': filter
+            }
           }).then(function onSuccess(response) {
             return response.data;
           }, function onFailure(reason) {
