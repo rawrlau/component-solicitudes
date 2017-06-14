@@ -15,7 +15,7 @@
         <li drag-channel="A" drop-channel="A" drop-validate="$ctrl.dropValidate($data,'abierta')"
           ng-repeat="elem in $ctrl.arrayFiltrado | filter:{ estado:'abierta'} | filter: $ctrl.filtro track by $index">
           <div class="list-group-item solicitudFiltrada">
-            <h4 class="tituloSolicitudAbierta"><a class="leyenda" ui-sref="app.solicitudesForm({id: elem.id,mode: 'view'})">{{elem.nombre}}</a></span><span class="glyphicon glyphicon-align-justify"
+            <h4 class="tituloSolicitudAbierta"><a class="leyenda" ui-sref="app.solicitudesForm({id: elem.id,mode: 'view'})">{{elem.nombre}}</a></span><span class="glyphicon glyphicon-align-justify drag-and-drop"
             ui-draggable="true"
             drag="elem"
             on-drop-success="$ctrl.dropSuccessHandler($event,$ctrl.arrayFiltrado.indexOf(elem),$ctrl.arrayFiltrado)"></span></h4>
@@ -39,7 +39,7 @@
         <li drag-channel="A" drop-channel="A" drop-validate="$ctrl.dropValidate($data,'standby')"
           ng-repeat="elem in $ctrl.arrayFiltrado | filter:{ estado:'standby'} | filter: $ctrl.filtro track by $index">
           <div class="list-group-item solicitudFiltrada">
-            <h4 class="tituloSolicitudEspera"><a class="leyenda" ui-sref="app.solicitudesForm({id: elem.id,mode: 'view'})">{{elem.nombre}}</a></span><span class="glyphicon glyphicon-align-justify"
+            <h4 class="tituloSolicitudEspera"><a class="leyenda" ui-sref="app.solicitudesForm({id: elem.id,mode: 'view'})">{{elem.nombre}}</a></span><span class="glyphicon glyphicon-align-justify drag-and-drop"
             ui-draggable="true"
             drag="elem"
             on-drop-success="$ctrl.dropSuccessHandler($event,$ctrl.arrayFiltrado.indexOf(elem),$ctrl.arrayFiltrado)"></span></h4>
@@ -63,7 +63,7 @@
         <li drag-channel="A" drop-channel="A" drop-validate="$ctrl.dropValidate($data,'cerrada')"
           ng-repeat="elem in $ctrl.arrayFiltrado | filter:{ estado: 'cerrada'} | filter: $ctrl.filtro track by $index">
           <div class="list-group-item solicitudFiltrada">
-            <h4 class="tituloSolicitudCerrada"><a class="leyenda" ui-sref="app.solicitudesForm({id: elem.id,mode: 'view'})">{{elem.nombre}}</a></span><span class="glyphicon glyphicon-align-justify"
+            <h4 class="tituloSolicitudCerrada"><a class="leyenda" ui-sref="app.solicitudesForm({id: elem.id,mode: 'view'})">{{elem.nombre}}</a></span><span class="glyphicon glyphicon-align-justify drag-and-drop"
             ui-draggable="true"
             drag="elem"
             on-drop-success="$ctrl.dropSuccessHandler($event,$ctrl.arrayFiltrado.indexOf(elem),$ctrl.arrayFiltrado)"></span></h4>

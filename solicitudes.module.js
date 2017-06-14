@@ -196,15 +196,24 @@ function controladorFormulario(toastr, solicitudesFactory, candidatoFactory, car
      * Devuelve el candidato seleccionado de la solicitud
      * @return {[type]} [description]
      */
-    vm.getCandidatoSeleccionado = function() {
-        filter = {
-            "include": "candidato"
-        }
-        solicitudesFactory.read($stateParams.id, filter)
-            .then(function onSuccess(response) {
-                vm.candidatoSeleccionado = response.candidato
-            });
-    };
+     vm.getCandidatoSeleccionado = function() {
+         filter = {
+             "include": {
+                 "candidato": {
+                     "listaDeRequisito": "requisitos"
+                 }
+             }
+         }
+         solicitudesFactory.read($stateParams.id, filter)
+             .then(function onSuccess(response) {
+                 var points = 0;
+                 angular.forEach(response.candidato.listaDeRequisito.requisitos, function(req) {
+                     points += req.nivel;
+                 })
+                 vm.candidatoSeleccionado = response.candidato
+                 vm.candidatoSeleccionado.points = points;
+             });
+     };
 
     /**
      * Setea el candidato seleccionado de la solicitud
