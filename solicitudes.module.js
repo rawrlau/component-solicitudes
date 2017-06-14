@@ -490,10 +490,11 @@ function dashboardSolicitudesController(toastr, $uibModal, solicitudesFactory, $
           $data.estado = estado;
           solicitudesFactory.update($data.id, $data).then(function onSuccess() {
             solicitudesFactory.getAll().then(function (solicitudes) {
-              vm.arrayFiltrado = solicitudes;
+              //vm.arrayFiltrado = solicitudes;
+              array.unshift($data);
             });
           });
-          array.unshift($data);
+          //array.unshift($data);
         }
 
       }
